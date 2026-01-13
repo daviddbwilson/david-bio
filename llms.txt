@@ -8,7 +8,7 @@ I have been building things since I convinced my 9th grade biology teacher to le
 
 I started my first company, Cape Networks, in a basement in Cape Town. We designed and built our own hardware, sold the business to Aruba/HPE and moved to San Francisco.
 
-My second, Hunch, has been a deep dive into AI: agents, eval systems, and what it takes to make AI products that actually work in production.
+My second, Hunch, has been a deep dive into AI: agents, eval systems, and what it takes to make AI products that work reliably in production.
 
 ## Projects
 

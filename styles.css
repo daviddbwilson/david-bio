@@ -1,7 +1,7 @@
 :root {
   --color-text: #111;
-  --color-text-secondary: #555;
-  --color-bg: #fff;
+  --color-text-secondary: #7c7b74;
+  --color-bg: #fdfdfc;
   --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'Geist Mono', monospace;
   --max-width: 640px;
@@ -196,4 +196,119 @@ footer {
 
 .llms-link:hover {
   border-bottom-color: var(--color-text-secondary);
+}
+
+/* Toolbox */
+.toolbox-card {
+  background: #f5f5f4;
+  border-radius: 8px;
+  padding: calc(var(--spacing-unit) * 1.25);
+  position: relative;
+}
+
+.toolbox-card table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.toolbox-card td {
+  padding: calc(var(--spacing-unit) * 0.35) 0;
+  vertical-align: top;
+}
+
+.toolbox-card td:first-child {
+  color: var(--color-text-secondary);
+  padding-right: var(--spacing-unit);
+}
+
+.toolbox-card td:last-child {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.toolbox-updated {
+  display: block;
+  margin-top: calc(var(--spacing-unit) * 0.75);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #7c7b74;
+  text-align: right;
+}
+
+/* Link icons */
+.icon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: 3px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  color: #908e86;
+}
+
+/* Toolkit */
+.toolkit-intro {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: calc(var(--spacing-unit) * 0.75);
+}
+
+.toolkit-box {
+  background: #f5f5f4;
+  border-radius: 8px;
+  padding: calc(var(--spacing-unit) * 1.25);
+}
+
+.toolkit-list {
+  list-style: none;
+}
+
+.toolkit-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: calc(var(--spacing-unit) * 0.35) 0;
+  font-size: 0.9rem;
+}
+
+.toolkit-use {
+  color: var(--color-text-secondary);
+  padding-right: var(--spacing-unit);
+}
+
+.toolkit-tool {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.toolkit-updated {
+  margin-top: calc(var(--spacing-unit) * 0.75);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #7c7b74;
+  text-align: right;
+}
+
+
+/* Keep last word with icon */
+.nowrap {
+  white-space: nowrap;
+}
+
+
+/* Next section links */
+.next a {
+  color: var(--color-text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-text-secondary);
+  transition: border-color 0.15s ease;
+}
+
+.next a:hover {
+  border-bottom-color: var(--color-text);
 }
