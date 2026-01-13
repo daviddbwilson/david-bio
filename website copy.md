@@ -4,9 +4,17 @@
 
 I've been building things since I convinced my 9th grade biology teacher to let my friend and me mod a video game instead of doing our assignment. Only one problem: neither of us could code! We learned quickly – and later founded two startups together.
 
-I started my first company, Cape Networks, in a basement in Cape Town. We designed and built our own hardware, sold the business to Aruba/HPE and moved to San Francisco. 
+I started my first company, Cape Networks, in a basement in Cape Town. We designed and built our own hardware, sold the business to Aruba/HPE and moved to San Francisco.
 
 My second, Hunch, has been a deep dive into AI: agents, eval systems, and what it takes to make AI products that work reliably in production.
+
+---
+
+## What's next
+
+I'm looking for my next challenge: a place to be hands-on shaping product and design at a company building something ambitious with AI. Could be a new product, a 0→1 initiative, or a team that needs someone who can do both.
+
+If that sounds interesting, I'd love to talk.
 
 ---
 
@@ -26,11 +34,19 @@ Hardware + SaaS for network performance management. Founder/CEO. Acquired by HPE
 
 ---
 
-## What's next
+## AI tools I'm using most
 
-I'm looking for my next challenge: a place to be hands-on shaping product and design at a company building something ambitious with AI. Could be a new product, a 0→1 initiative, or a team that needs someone who can do both.
+| Use case | Tool |
+|----------|------|
+| A thinking partner for hard problems | Claude Opus 4.5 |
+| Working with a ton of content fast & cheaply | Gemini 2.5 Flash |
+| Visual analysis or huge context | Gemini 3 Pro |
+| Long-running or research-intensive tasks | GPT-5.2 Pro |
+| Wrangling messy, iterative projects | Hunch |
+| Async coding from my phone | Codex |
+| Agentic coding at my desk | Claude Code |
 
-If that sounds interesting, I'd love to talk.
+*Updated January 2026*
 
 ---
 
