@@ -2,8 +2,6 @@
   --color-text: #111;
   --color-text-secondary: #555;
   --color-bg: #fff;
-  --color-link: #111;
-  --color-link-hover: #666;
   --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'Geist Mono', monospace;
   --max-width: 640px;
@@ -57,8 +55,10 @@ h1 {
 }
 
 .tagline {
-  font-size: 1.125rem;
-  color: var(--color-text-secondary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
 }
 
 /* Sections */
@@ -67,7 +67,7 @@ section {
 }
 
 h2 {
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -99,14 +99,23 @@ h2 {
   margin-bottom: calc(var(--spacing-unit) * 0.5);
 }
 
+.project h3 a {
+  color: var(--color-text);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease;
+}
+
+.project h3 a:hover {
+  border-bottom-color: var(--color-text);
+}
+
 .project p {
-  color: var(--color-text-secondary);
+  color: var(--color-text);
 }
 
 .stat {
-  font-family: var(--font-mono);
-  font-weight: 500;
-  color: var(--color-text);
+  font-weight: 600;
 }
 
 /* Next */
@@ -128,14 +137,26 @@ h2 {
 }
 
 .contact a {
-  color: var(--color-link);
+  color: var(--color-text);
   text-decoration: none;
   border-bottom: 1px solid transparent;
   transition: border-color 0.15s ease;
 }
 
 .contact a:hover {
-  border-bottom-color: var(--color-link);
+  border-bottom-color: var(--color-text);
+}
+
+/* Project links */
+.project p a {
+  color: var(--color-text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-text-secondary);
+  transition: border-color 0.15s ease;
+}
+
+.project p a:hover {
+  border-bottom-color: var(--color-text);
 }
 
 /* Responsive */
@@ -148,19 +169,12 @@ h2 {
     font-size: 1.75rem;
   }
 
+  .tagline {
+    font-size: 1.125rem;
+  }
+
   .profile-photo {
     width: 100px;
     height: 100px;
   }
-}
-/* Project links */
-.project a {
-  color: var(--color-text);
-  text-decoration: none;
-  border-bottom: 1px solid var(--color-text-secondary);
-  transition: border-color 0.15s ease;
-}
-
-.project a:hover {
-  border-bottom-color: var(--color-text);
 }
