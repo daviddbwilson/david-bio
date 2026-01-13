@@ -38,4 +38,4 @@ If that sounds interesting, I'd love to talk.
 
 - Email: daviddbwilson@gmail.com (obfuscated via JS on site)
 - LinkedIn: https://www.linkedin.com/in/daviddbwilson/
-- Twitter/X: https://www.x.com/daviddbwilson/
+- Twitter/X: https://x.com/daviddbwilson
