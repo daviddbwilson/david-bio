@@ -34,7 +34,7 @@ If that sounds interesting, I'd love to talk.
 
 ---
 
-## Contact
+## Get in touch
 
 - Email: daviddbwilson@gmail.com (obfuscated via JS on site)
 - LinkedIn: https://www.linkedin.com/in/daviddbwilson/
