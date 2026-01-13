@@ -10,14 +10,17 @@ That's been the pattern ever since. My first company, Cape Networks, started in 
 
 ## Some things I've built
 
-### Cape Networks
-Hardware + SaaS for network monitoring. Designed the product and industrial hardware. Grew to $10M/yr, acquired by HPE/Aruba. Customers included Disney, Apple, Microsoft, Amazon, Home Depot.
-
-### LinkedIn Rewind
-Viral year-in-review product. 300K users in two weeks (2024). Rebuilt it in 2025, charged for it, and drove $150K ARR to Co-Author in two weeks. Shipped 60+ versions in 17 days.
-
 ### Hunch / Overclock
-AI workspace and agent tools. Built production systems that processed millions of LLM calls. Learned what it takes to make AI agents reliable—eval systems, orchestration, the unsexy infrastructure that makes things work.
+Visual AI workspace that became background AI agents. Started with Hunch, a canvas to create workflows with any AI models. Evolved into Overclock: agents that review each other's work, learn from feedback, and actually stay reliable. [Hunch](https://app.hunch.tools) is still used by thousands of people – here's a [demo](hunch-demo-link) from when we won the Latent Space AI UX award.
+
+### LinkedIn Rewind / Coauthor
+[Rewind](https://rewind.coauthor.studio) is a viral year-in-review product. 300K users in two weeks (2024). From idea to production in 4 days, then [60+ versions in 17 days](youtube-link). Rebuilt it in 2025, charged for it, and drove $150K ARR to [Coauthor](https://coauthor.studio) in two weeks. Also designed & shipped a free [LinkedIn carousel generator](https://coauthor.studio/carousel) in about 2 days.
+
+### Neon Data
+Super fast data exploration for regular humans. [Demo](https://neon.ac/preview) of automatic visualization, instant cross-filtering, auto-joins. More about our inspiration: [Latency is the Mind Killer](youtube-link).
+
+### Cape Networks
+Hardware + SaaS for network performance management. Founder/CEO. Acquired by HPE/Aruba. $10M/y revenue. I'm proudest of how beloved our product was by 2,000+ customers including Microsoft, Amazon, Home Depot, and Disney. Disney even shot a [testimonial video in front of the Falcon](video-link), a big moment for the little boy in me from Cape Town!
 
 ---
 

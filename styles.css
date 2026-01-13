@@ -153,3 +153,14 @@ h2 {
     height: 100px;
   }
 }
+/* Project links */
+.project a {
+  color: var(--color-text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-text-secondary);
+  transition: border-color 0.15s ease;
+}
+
+.project a:hover {
+  border-bottom-color: var(--color-text);
+}
