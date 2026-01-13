@@ -2,7 +2,7 @@
 
 **Product founder who designs and ships.**
 
-I've been building things since I convinced my 9th grade biology teacher to let my friend and me mod a video game instead of doing the assignment. Neither of us could code. We figured it out – and later founded two companies together.
+I've been building things since I convinced my 9th grade biology teacher to let my friend and me mod a video game instead of doing the assignment. Neither of us could code. We figured it out – and later founded two startups together.
 
 I started my first company, Cape Networks, in a basement in Cape Town. We designed and built our own hardware, sold the business to Aruba/HPE and moved to San Francisco. 
 

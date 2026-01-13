@@ -178,3 +178,22 @@ h2 {
     height: 100px;
   }
 }
+
+/* Footer */
+footer {
+  margin-top: calc(var(--spacing-unit) * 2);
+  padding-top: calc(var(--spacing-unit) * 2);
+}
+
+.llms-link {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease;
+}
+
+.llms-link:hover {
+  border-bottom-color: var(--color-text-secondary);
+}
