@@ -12,9 +12,9 @@ My second, Hunch, has been a deep dive into AI: agents, eval systems, and what i
 
 ## What's next
 
-I'm looking for my next challenge: a place to be hands-on shaping product and design at a company building something ambitious with AI. Could be a new product, a 0→1 initiative, or a team that needs someone who can do both.
+I want to be hands-on building products. I love designing and shipping myself, and directing teams that do the same. 
 
-If that sounds interesting, I'd love to talk.
+AI is rewriting how every product works, which means a lot of product teams are back in 0→1 mode whether they expected to be or not. Navigating ambiguity and shipping fast is where I'm at my best.
 
 ---
 
