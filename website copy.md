@@ -21,7 +21,7 @@ AI is rewriting how every product works, which means a lot of product teams are 
 ## Some things I've built
 
 ### [Hunch](https://app.hunch.tools) / Overclock
-Visual AI workspace that became background AI agents. Started with Hunch, a canvas to create workflows with any AI models. Evolved into Overclock: agents that review each other's work, learn from feedback, and actually stay reliable. Hunch is still used by thousands of people – here's a [demo](https://x.com/Scobleizer/status/1784743064541757913) from when we won the Latent Space AI UX award.
+Visual AI workspace and background AI agents. Started with Hunch, a canvas to create workflows with any AI models. Evolved into Overclock: agents that review each other's work, learn from feedback, and actually stay reliable. Hunch is still used by thousands of people – here's a [demo](https://x.com/Scobleizer/status/1784743064541757913) from when we won the Latent Space AI UX award.
 
 ### [LinkedIn Rewind](https://rewind.coauthor.studio) / [Coauthor](https://coauthor.studio)
 Viral year-in-review product. **300K users** in two weeks (2024). **Idea to production in 4 days**, then [60+ versions in 17 days](https://www.youtube.com/watch?v=gTQG0SfJb9Y). Rebuilt it in 2025, charged for it, and drove **$150K ARR** to Coauthor in two weeks. Also designed and shipped a free [carousel generator](https://coauthor.studio/carousel) in less than 2 days.
