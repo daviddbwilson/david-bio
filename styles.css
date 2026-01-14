@@ -15,7 +15,7 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 17px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -71,7 +71,6 @@ h2 {
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #44687E;
   margin-bottom: calc(var(--spacing-unit) * 1.5);
 }
 
@@ -103,12 +102,11 @@ h2 {
   color: var(--color-text);
   text-decoration: none;
   border-bottom: 1px solid transparent;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.09s ease;
 }
 
 .project h3 a:hover {
   border-bottom-color: #44687E;
-  color: #44687E;
 }
 
 .project p {
@@ -141,12 +139,11 @@ h2 {
   color: var(--color-text);
   text-decoration: none;
   border-bottom: 1px solid transparent;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.09s ease;
 }
 
 .contact a:hover {
   border-bottom-color: #44687E;
-  color: #44687E;
 }
 
 /* Project links */
@@ -154,12 +151,11 @@ h2 {
   color: var(--color-text);
   text-decoration: none;
   border-bottom: 1px solid var(--color-text-secondary);
-  transition: border-color 0.15s ease;
+  transition: border-color 0.09s ease;
 }
 
 .project p a:hover {
   border-bottom-color: #44687E;
-  color: #44687E;
 }
 
 /* Responsive */
@@ -194,7 +190,7 @@ footer {
   color: var(--color-text-secondary);
   text-decoration: none;
   border-bottom: 1px solid transparent;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.09s ease;
 }
 
 .llms-link:hover {
@@ -309,16 +305,94 @@ footer {
   color: var(--color-text);
   text-decoration: none;
   border-bottom: 1px solid var(--color-text-secondary);
-  transition: border-color 0.15s ease;
+  transition: border-color 0.09s ease;
 }
 
 .next a:hover {
   border-bottom-color: #44687E;
-  color: #44687E;
 }
 
 
 /* Icon hover color */
 a:hover .icon {
   color: rgba(69, 101, 120, 0.75);
+}
+
+
+/* Show arrow icon on project title links hover */
+
+
+/* Toolkit intro links */
+.toolkit-intro a {
+  color: var(--color-text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-text-secondary);
+  transition: border-color 0.09s ease, color 0.09s ease;
+}
+
+.toolkit-intro a:hover {
+  border-bottom-color: #44687E;
+}
+
+
+/* Show arrow icon on project title links hover */
+.project h3 a {
+  position: relative;
+}
+
+.project h3 a::after {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: 4px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  opacity: 0;
+  width: 0;
+  transition: opacity 0.09s ease, width 0.09s ease;
+  background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.5 9.39362V2.5M11.5 2.5H4.60638M11.5 2.5L2.5 11.5' stroke='%2344687E' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.project h3 a:hover::after {
+  opacity: 1;
+  width: 14px;
+}
+
+
+
+/* Show icons on contact links hover */
+.contact a {
+  position: relative;
+}
+
+.contact a::after {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 14px;
+  margin-left: 4px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  opacity: 0;
+  transition: opacity 0.09s ease, width 0.09s ease;
+}
+
+.contact a:hover::after {
+  opacity: 1;
+  width: 14px;
+}
+
+#email-link::after {
+  background-image: url('assets/mail.svg');
+}
+
+#linkedin-link::after {
+  background-image: url('assets/IconLinkedin.svg');
+}
+
+#x-link::after {
+  background-image: url('assets/IconX.svg');
 }

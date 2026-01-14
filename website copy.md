@@ -2,7 +2,7 @@
 
 **Product founder who designs and ships.**
 
-I've been building things since I convinced my 9th grade biology teacher to let my friend and me mod a video game instead of doing our assignment. Only one problem: neither of us could code! We spent months of long nights figuring it out – and later founded two startups together.
+I've been building things since I convinced my 9th grade teacher to let my friend and me mod a video game instead of doing our biology assignment. Only one problem: neither of us could code! We spent months of long nights figuring it out – and later founded two startups together.
 
 I started my first company, Cape Networks, in a basement in Cape Town. We designed and built our own hardware, sold to Aruba/HPE, and moved to San Francisco. After growing the business to $10M/y, Aruba's founder offered me a Chief Design Officer role to stay, but my cofounders and I wanted to build something new.
 
@@ -12,7 +12,7 @@ My second company, Hunch, was a deep dive into AI: agents, eval systems, and wha
 
 ## What's next
 
-I want to be hands-on building products. Designing and shipping myself, and directing teams that do the same.
+I want to be hands-on building products people love to use. Designing and shipping myself, and directing teams that do the same.
 
 Two themes run through my career:
 
@@ -30,7 +30,7 @@ If you're working on an interesting problem, I'd love to hear about it.
 Visual AI workspace and background AI agents. Started with Hunch, a beautiful canvas to create workflows with any AI models. Evolved into Overclock: agents that review each other's work, learn from feedback, and are actually reliable in production. Hunch is still used by thousands of people – here's a [demo](https://x.com/Scobleizer/status/1784743064541757913) from when we won the Latent Space AI UX award.
 
 ### [LinkedIn Rewind](https://rewind.coauthor.studio) / [Coauthor](https://coauthor.studio)
-Viral year-in-review product. **300K users** in two weeks (2024). **Idea to production in 4 days**, then [60+ versions in 17 days](https://www.youtube.com/watch?v=gTQG0SfJb9Y). Rebuilt it in 2025, charged for it, and drove **$150K ARR** to Coauthor in two weeks. Also designed and shipped a free [carousel generator](https://coauthor.studio/carousel) in less than 2 days.
+Viral year-in-review product. **300K users** in two weeks (2024). **Idea to production in 4 days**, then [60+ versions in 17 days](https://www.youtube.com/watch?v=gTQG0SfJb9Y). Rebuilt it in 2025, charged for it, and drove $150K ARR to Coauthor in two weeks. Also designed and shipped a free [carousel generator](https://coauthor.studio/carousel) in less than 2 days.
 
 ### Neon Data
 Super fast data exploration for regular humans. [Demo](https://neon.ac/preview) of automatic visualization, instant cross-filtering, auto-joins. More about the inspiration: [Latency is the Mind Killer](https://www.youtube.com/watch?v=B6qqvzac4z0).
@@ -42,14 +42,14 @@ Hardware + SaaS for network performance management. Founder/CEO. Acquired by HPE
 
 ## AI tools I'm using most
 
-In addition to my Cursor/Claude Code use, I run ~1,000 prompts per week across different models. It's how I develop intuition for what each is good at.
+In addition to using Cursor Agent and Claude Code, I run ~1,000 prompts per week across different models, mostly in Hunch and ChatGPT. It's how I develop intuition for what each is good at.
 
 | Use case | Tool |
 |----------|------|
-| A thinking partner for hard problems | Claude Opus 4.5 |
+| A thinking partner for hard or nuanced problems | Claude Opus 4.5 |
 | Research-intensive or "boil the ocean" tasks | GPT-5.2 Pro |
 | Working with a ton of content fast & cheaply | Gemini 2.5 Flash |
-| Visual analysis or huge context | Gemini 3 Pro |
+| Complex/precise image analysis | Gemini 3 Pro |
 | Wrangling messy, iterative projects | Hunch |
 | Async coding from my phone | Codex |
 | Agentic coding at my desk | Claude Code |
