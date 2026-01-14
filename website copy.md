@@ -26,7 +26,7 @@ Visual AI workspace and background AI agents. Started with Hunch, a canvas to cr
 ### [LinkedIn Rewind](https://rewind.coauthor.studio) / [Coauthor](https://coauthor.studio)
 Viral year-in-review product. **300K users** in two weeks (2024). **Idea to production in 4 days**, then [60+ versions in 17 days](https://www.youtube.com/watch?v=gTQG0SfJb9Y). Rebuilt it in 2025, charged for it, and drove **$150K ARR** to Coauthor in two weeks. Also designed and shipped a free [carousel generator](https://coauthor.studio/carousel) in less than 2 days.
 
-### [Neon Data](https://neon.ac/preview)
+### Neon Data
 Super fast data exploration for regular humans. [Demo](https://neon.ac/preview) of automatic visualization, instant cross-filtering, auto-joins. More about the inspiration: [Latency is the Mind Killer](https://www.youtube.com/watch?v=B6qqvzac4z0).
 
 ### Cape Networks

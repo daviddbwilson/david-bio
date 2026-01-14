@@ -71,7 +71,7 @@ h2 {
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-text-secondary);
+  color: #44687E;
   margin-bottom: calc(var(--spacing-unit) * 1.5);
 }
 
@@ -107,7 +107,8 @@ h2 {
 }
 
 .project h3 a:hover {
-  border-bottom-color: var(--color-text);
+  border-bottom-color: #44687E;
+  color: #44687E;
 }
 
 .project p {
@@ -144,7 +145,8 @@ h2 {
 }
 
 .contact a:hover {
-  border-bottom-color: var(--color-text);
+  border-bottom-color: #44687E;
+  color: #44687E;
 }
 
 /* Project links */
@@ -156,7 +158,8 @@ h2 {
 }
 
 .project p a:hover {
-  border-bottom-color: var(--color-text);
+  border-bottom-color: #44687E;
+  color: #44687E;
 }
 
 /* Responsive */
@@ -310,5 +313,12 @@ footer {
 }
 
 .next a:hover {
-  border-bottom-color: var(--color-text);
+  border-bottom-color: #44687E;
+  color: #44687E;
+}
+
+
+/* Icon hover color */
+a:hover .icon {
+  color: rgba(69, 101, 120, 0.75);
 }
