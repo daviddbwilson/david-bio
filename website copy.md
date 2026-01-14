@@ -2,26 +2,31 @@
 
 **Product founder who designs and ships.**
 
-I've been building things since I convinced my 9th grade biology teacher to let my friend and me mod a video game instead of doing our assignment. Only one problem: neither of us could code! We learned quickly – and later founded two startups together.
+I've been building things since I convinced my 9th grade biology teacher to let my friend and me mod a video game instead of doing our assignment. Only one problem: neither of us could code! We spent months of long nights figuring it out—and later founded two startups together.
 
-I started my first company, Cape Networks, in a basement in Cape Town. We designed and built our own hardware, sold the business to Aruba/HPE and moved to San Francisco.
+I started my first company, Cape Networks, in a basement in Cape Town. We designed and built our own hardware, sold to Aruba/HPE, and moved to San Francisco. After growing the business to $10M/y, Aruba's founder offered me a Chief Design Officer role to stay—but my cofounders and I wanted to build something new.
 
-My second, Hunch, has been a deep dive into AI: agents, eval systems, and what it takes to make AI products that work reliably in production.
+My second company, Hunch, was a deep dive into AI: agents, eval systems, and what it takes to make AI products that actually work in production. We had wild traction – 300K users in two weeks on one project – but ultimately wound it down.
 
 ---
 
 ## What's next
 
-I want to be hands-on building products. I love designing and shipping myself, and directing teams that do the same. 
+I want to be hands-on building products. Designing and shipping myself, and directing small teams that do the same.
 
-AI is rewriting how every product works, which means a lot of product teams are back in 0→1 mode whether they expected to be or not. Navigating ambiguity and shipping fast is where I'm at my best.
+Two themes run through my career:
+
+**Making complex work accessible.** Cape gave non-experts instant visibility into network health. Neon Data (pre-Hunch) made data exploration fluid for non-analysts. Hunch put multiple AI models in one place anyone could use. I keep finding myself in the gap between technical capability and human experience, trying to close it.
+
+**Shipping under pressure.** AI is rewriting how every product works, which means a lot of product teams are back in 0→1 mode whether they expected to be or not. Navigating ambiguity and iterating fast is where I'm at my best.
+
 
 ---
 
-## Some things I've built
+## What I've built
 
 ### [Hunch](https://app.hunch.tools) / Overclock
-Visual AI workspace and background AI agents. Started with Hunch, a canvas to create workflows with any AI models. Evolved into Overclock: agents that review each other's work, learn from feedback, and actually stay reliable. Hunch is still used by thousands of people – here's a [demo](https://x.com/Scobleizer/status/1784743064541757913) from when we won the Latent Space AI UX award.
+Visual AI workspace and background AI agents. Started with Hunch, a beautiful canvas to create workflows with any AI models. Evolved into Overclock: agents that review each other's work, learn from feedback, and are actually reliable in production. Hunch is still used by thousands of people – here's a [demo](https://x.com/Scobleizer/status/1784743064541757913) from when we won the Latent Space AI UX award.
 
 ### [LinkedIn Rewind](https://rewind.coauthor.studio) / [Coauthor](https://coauthor.studio)
 Viral year-in-review product. **300K users** in two weeks (2024). **Idea to production in 4 days**, then [60+ versions in 17 days](https://www.youtube.com/watch?v=gTQG0SfJb9Y). Rebuilt it in 2025, charged for it, and drove **$150K ARR** to Coauthor in two weeks. Also designed and shipped a free [carousel generator](https://coauthor.studio/carousel) in less than 2 days.
@@ -36,12 +41,14 @@ Hardware + SaaS for network performance management. Founder/CEO. Acquired by HPE
 
 ## AI tools I'm using most
 
+In addition to my Cursor/Claude Code use, I run ~1,000 prompts per week across different models. It's how I develop intuition for what each is good at.
+
 | Use case | Tool |
 |----------|------|
 | A thinking partner for hard problems | Claude Opus 4.5 |
+| Research-intensive or "boil the ocean" tasks | GPT-5.2 Pro |
 | Working with a ton of content fast & cheaply | Gemini 2.5 Flash |
 | Visual analysis or huge context | Gemini 3 Pro |
-| Long-running or research-intensive tasks | GPT-5.2 Pro |
 | Wrangling messy, iterative projects | Hunch |
 | Async coding from my phone | Codex |
 | Agentic coding at my desk | Claude Code |
