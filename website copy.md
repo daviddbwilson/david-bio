@@ -30,7 +30,7 @@ If you're working on an interesting problem, I'd love to hear about it.
 Visual AI workspace and background AI agents. Started with Hunch, a beautiful canvas to create workflows with any AI models. Evolved into Overclock: agents that review each other's work, learn from feedback, and are actually reliable in production. Hunch is still used by thousands of people – here's a [demo](https://x.com/Scobleizer/status/1784743064541757913) from when we won the Latent Space AI UX award.
 
 ### [LinkedIn Rewind](https://rewind.coauthor.studio) / [Coauthor](https://coauthor.studio)
-Viral year-in-review product. **300K users** in two weeks (2024). **Idea to production in 4 days**, then [60+ versions in 17 days](https://www.youtube.com/watch?v=gTQG0SfJb9Y). Rebuilt it in 2025, charged for it, and drove $150K ARR to Coauthor in two weeks. Also designed and shipped a free [carousel generator](https://coauthor.studio/carousel) in less than 2 days.
+Viral year-in-review product. **300K users** in two weeks (2024). **Idea to production in 4 days**, then [60+ versions in 17 days](https://www.youtube.com/watch?v=gTQG0SfJb9Y). Rebuilt it in 2025, charged for it, and drove $150K ARR to Coauthor, an AI writing partner, in two weeks. Also designed and shipped a free [carousel generator](https://coauthor.studio/carousel) in less than 2 days.
 
 ### Neon Data
 Super fast data exploration for regular humans. [Demo](https://neon.ac/preview) of automatic visualization, instant cross-filtering, auto-joins. More about the inspiration: [Latency is the Mind Killer](https://www.youtube.com/watch?v=B6qqvzac4z0).
