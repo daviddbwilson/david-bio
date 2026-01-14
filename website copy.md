@@ -12,7 +12,7 @@ My second company, Hunch, was a deep dive into AI: agents, eval systems, and wha
 
 ## What's next
 
-I want to be hands-on building products. Designing and shipping myself, and directing small teams that do the same.
+I want to be hands-on building products. Designing and shipping myself, and directing teams that do the same.
 
 Two themes run through my career:
 
