@@ -2,9 +2,9 @@
 
 **Product founder who designs and ships.**
 
-I've been building things since I convinced my 9th grade biology teacher to let my friend and me mod a video game instead of doing our assignment. Only one problem: neither of us could code! We spent months of long nights figuring it out—and later founded two startups together.
+I've been building things since I convinced my 9th grade biology teacher to let my friend and me mod a video game instead of doing our assignment. Only one problem: neither of us could code! We spent months of long nights figuring it out – and later founded two startups together.
 
-I started my first company, Cape Networks, in a basement in Cape Town. We designed and built our own hardware, sold to Aruba/HPE, and moved to San Francisco. After growing the business to $10M/y, Aruba's founder offered me a Chief Design Officer role to stay—but my cofounders and I wanted to build something new.
+I started my first company, Cape Networks, in a basement in Cape Town. We designed and built our own hardware, sold to Aruba/HPE, and moved to San Francisco. After growing the business to $10M/y, Aruba's founder offered me a Chief Design Officer role to stay, but my cofounders and I wanted to build something new.
 
 My second company, Hunch, was a deep dive into AI: agents, eval systems, and what it takes to make AI products that actually work in production. We had wild traction – 300K users in two weeks on one project – but ultimately wound it down.
 
@@ -20,6 +20,7 @@ Two themes run through my career:
 
 **Shipping under pressure.** AI is rewriting how every product works, which means a lot of product teams are back in 0→1 mode whether they expected to be or not. Navigating ambiguity and iterating fast is where I'm at my best.
 
+If you're working on an interesting problem, I'd love to hear about it.
 
 ---
 
