@@ -4,7 +4,7 @@
 
 I've been building things since I convinced my 9th grade teacher to let my friend and me mod a video game instead of doing our biology assignment. Only one problem: neither of us could code! We spent months of long nights figuring it out – and later founded two startups together.
 
-I started my first company, Cape Networks, in a basement in Cape Town. We designed and built our own hardware, sold to Aruba/HPE, and moved to San Francisco. After growing the business to $10M/y, Aruba's founder offered me a Chief Design Officer role to stay, but my cofounders and I wanted to build something new.
+I started my first company, Cape Networks, in a basement in Cape Town. We designed and built our own hardware, sold to Aruba/HPE, and moved to San Francisco. After growing the business to $10M/y, the pull to build something new was stronger than the pull to stay as Chief Design Officer. My cofounders and I left to start something new.
 
 My second company, Hunch, was a deep dive into AI: agents, eval systems, and what it takes to make AI products that actually work in production. We had wild traction – 300K users in two weeks on one project – but ultimately wound it down.
 
