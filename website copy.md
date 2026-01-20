@@ -2,21 +2,21 @@
 
 **Product founder who designs and ships.**
 
-I've been building things since I convinced my 9th grade teacher to let my friend and me mod a video game instead of doing our biology assignment. Only one problem: neither of us could code! We spent months of long nights figuring it out – and later founded two startups together.
+I've been building things since I convinced my 9th grade teacher to let my friend Ross and me mod a video game instead of doing our biology assignment. Only one problem: neither of us could code! We spent months of long nights figuring it out – and later founded two startups together.
 
-I started my first company, Cape Networks, in a basement in Cape Town. We designed and built our own hardware, sold to Aruba/HPE, and moved to San Francisco. After growing the business to $10M/y, the pull to build something new was stronger than the pull to stay as Chief Design Officer. My cofounders and I left to start something new.
+The first company, Cape Networks, started in a basement in Cape Town. We designed and built our first hundred hardware units by hand – team-building consisted of smashing rubble in the backyard with a sledgehammer. We sold to Aruba/HPE and moved to San Francisco. I led about fifty people at peak, including product, design, engineering, and sales – and grew the business to $10M/y revenue. Aruba's founder offered me a Chief Design Officer role to stay, but my cofounders and I wanted to build something new.
 
-My second company, Hunch, was a deep dive into AI: agents, eval systems, and what it takes to make AI products that actually work in production. We had wild traction – 300K users in two weeks on one project – but ultimately wound it down.
+My second company, Hunch, was a deep dive into AI: agents, eval systems, and what it takes to make AI products that actually work in production. We had real traction – 300K users in two weeks on one project – but couldn't find a venture-scale business model and wound it down.
 
 ---
 
 ## What's next
 
-I want to be hands-on building products people love to use. Designing and shipping myself, and directing teams that do the same.
+I want to be hands-on building products people love to use – and leading teams that move just as fast.
 
 Two themes run through my career:
 
-**Making complex work accessible.** Cape gave non-experts instant visibility into network health. Neon Data (pre-Hunch) made data exploration fluid for non-analysts. Hunch put multiple AI models in one place anyone could use. I keep finding myself in the gap between technical capability and human experience, trying to close it.
+**Making complex work accessible.** Cape gave non-experts instant visibility into network health. Neon Data (pre-Hunch) made data exploration fluid for non-analysts. Hunch put multiple AI models and tools in one place anyone could use. I love making powerful tools feel simple and fun.
 
 **Shipping under pressure.** AI is rewriting how every product works, which means a lot of product teams are back in 0→1 mode whether they expected to be or not. Navigating ambiguity and iterating fast is where I'm at my best.
 
@@ -55,6 +55,12 @@ In addition to using Cursor Agent and Claude Code, I run ~1,000 prompts per week
 | Agentic coding at my desk | Claude Code |
 
 *Updated January 2026*
+
+---
+
+## Personal
+
+I live in San Francisco with my wife and two daughters. Outside work: piano, Star Wars LEGO and other projects with my kids, sneaking in cricket and rugby highlights when I can, and movies at the Alamo Drafthouse.
 
 ---
 
