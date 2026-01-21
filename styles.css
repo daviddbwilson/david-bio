@@ -414,7 +414,9 @@ a:hover .icon {
 }
 
 .contact a:hover,
-.project p a.shiny-link:hover {
+.project h3 a:hover,
+.project p a:hover,
+.next a:hover {
     background: linear-gradient(
         90deg,
         #44687e 0%,
