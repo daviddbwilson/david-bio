@@ -76,6 +76,34 @@ h2 {
     margin-bottom: calc(var(--spacing-unit) * 1.5);
 }
 
+/* tl;dr */
+.tldr {
+    margin-bottom: calc(var(--spacing-unit) * 2.5);
+    padding: calc(var(--spacing-unit) * 1.25);
+    background: #f5f5f4;
+    border-radius: 8px;
+}
+
+.tldr h2 {
+    font-family: var(--font-mono);
+    text-transform: lowercase;
+    letter-spacing: 0;
+    margin-bottom: calc(var(--spacing-unit) * 0.75);
+}
+
+.tldr ul {
+    list-style: disc;
+    padding-left: 1.2em;
+}
+
+.tldr li {
+    margin-bottom: 0.25em;
+}
+
+.tldr li:last-child {
+    margin-bottom: 0;
+}
+
 /* Intro */
 .intro p {
     margin-bottom: var(--spacing-unit);

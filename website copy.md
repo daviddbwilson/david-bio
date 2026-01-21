@@ -2,6 +2,13 @@
 
 **Product founder who designs and ships.**
 
+## tl;dr
+- Cofounder/CEO of Cape Networks (acq. by HPE/Aruba), grew to $10M/y
+- 3 years building AI products: agents, evals, 300K+ users
+- Next: hands-on product builder & leader at an AI-first company
+
+---
+
 I've been building things since I convinced my 9th grade teacher to let my friend Ross and me mod a video game instead of doing our biology assignment. Only one problem: neither of us could code! We spent months of long nights figuring it out – and later founded two startups together.
 
 The first company, Cape Networks, started in a basement in Cape Town. We designed and built our first hundred hardware units by hand – team-building consisted of smashing rubble in the backyard with a sledgehammer. We sold to Aruba/HPE and moved to San Francisco. I led about fifty people at peak, including product, design, engineering, and sales – and grew the business to $10M/y revenue. Aruba's founder offered me a Chief Design Officer role to stay, but my cofounders and I wanted to build something new.

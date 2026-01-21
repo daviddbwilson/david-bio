@@ -14,17 +14,38 @@ Two themes run through my career:
 
 Making complex work accessible. Cape gave non-experts instant visibility into network health. Neon Data (pre-Hunch) made data exploration fluid for non-analysts. Hunch put multiple AI models and tools in one place anyone could use. I love making powerful tools feel simple and fun.
 
-Shipping under pressure. AI is rewriting how every product works, which means a lot of product teams are back in 0→1 mode whether they expected to be or not. Navigating ambiguity and iterating fast is where I'm at my best.
+**Shipping under pressure.** AI is rewriting how every product works, which means a lot of product teams are back in 0→1 mode whether they expected to be or not. I've built agentic systems, eval pipelines, and products that went viral—all while navigating the ambiguity of what "AI product" even means. Iterating fast in uncertain territory is where I'm at my best.
+
+## How I Work Now
+
+I use AI as a force multiplier for product development. My current stack:
+
+- **Claude Code / Cursor**: For prototyping and shipping code directly
+- **Claude Opus**: Thinking partner for hard product and strategy problems
+- **Figma**: Design work, still hands-on
+- **Hunch**: Orchestrating complex AI workflows across models
+
+This approach accelerates development by collapsing the idea → artifact → feedback loop from weeks to hours.
 
 ## Work
 
 ### Hunch / Overclock
-Visual AI workspace and background AI agents. Started with Hunch, a canvas to create workflows with any AI models. Evolved into Overclock: agents that review each other's work, learn from feedback, and stay reliable in production. Hunch is still used by thousands of people.
+
+Visual AI workspace and background AI agents. Started with Hunch, a visual canvas for creating workflows with any AI models—still used by thousands.
+
+Evolved into Overclock: production system where AI agents review each other's work, learn from human feedback, and maintain reliability at scale. Built the eval pipelines and feedback loops that kept agent output quality high.
+
+This taught me what most AI products get wrong: they ship demos, not systems. Evals and reliability are the hard part—and I know how to build them.
+
 - Hunch: https://app.hunch.tools
 - Demo (Latent Space AI UX award): https://x.com/Scobleizer/status/1784743064541757913
 
 ### LinkedIn Rewind / Coauthor
-Viral year-in-review product. 300K users in two weeks (2024). Idea to production in 4 days, then 60+ versions in 17 days. Rebuilt it in 2025, charged for it, and drove $150K ARR to Coauthor in two weeks.
+
+Viral year-in-review product. 300K users in two weeks (2024). Idea to production in 4 days, then 60+ versions in 17 days—most of which I personally shipped using Claude Code and Cursor, iterating multiple times per day. Rebuilt it in 2025, charged for it, and drove $150K ARR to Coauthor in two weeks.
+
+This is my operating model now: AI tools as force multipliers, fast cycles, direct ownership of what ships.
+
 - Rewind: https://rewind.coauthor.studio
 - Coauthor: https://coauthor.studio
 - Carousel Generator: https://coauthor.studio/carousel
@@ -50,4 +71,12 @@ I live in San Francisco with my wife and two daughters. Grew up in Cape Town. Al
 
 ## What I Am Looking For
 
-I want to be hands-on building products people love to use – and leading teams that move just as fast. Looking for a product leadership role at a company building something ambitious with AI. Could be a new product, a 0-to-1 initiative, or a team that needs someone who can design, ship, and lead.
+I'm a product leader who ships. Using AI tools (Claude Code, Cursor, Figma), I prototype, iterate, and deliver production-quality work at a pace that used to require a team. I want a role where building is a part of the job, not only leading others.
+
+**The ideal role:**
+- 0-to-1 or early-stage product within a Series B–C+ company
+- High autonomy to prototype and ship using AI-native workflows
+- Scope spanning product, design, and early engineering decisions
+- Fast cycles, ambitious problems, ownership
+
+**Open to:** Product Builder, AI Builder PM, Head of Product (hands-on), or Director/VP roles where I'm expected to personally ship, not just manage.
