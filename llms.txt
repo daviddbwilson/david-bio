@@ -4,16 +4,22 @@
 
 ## About
 
-I have been building things since I convinced my 9th grade biology teacher to let my friend and me mod a video game instead of doing the assignment. Neither of us could code. We figured it out - and later founded two startups together.
+I have been building things since I convinced my 9th grade teacher to let my friend Ross and me mod a video game instead of doing our biology assignment. Neither of us could code. We figured it out – and later founded two startups together.
 
-I started my first company, Cape Networks, in a basement in Cape Town. We designed and built our own hardware, sold the business to Aruba/HPE and moved to San Francisco.
+I started my first company, Cape Networks, in a basement in Cape Town. We designed and built our own hardware, sold to Aruba/HPE, and moved to San Francisco. I led about fifty people at peak – product, design, engineering, and sales – and grew the business to $10M/y revenue. Aruba's founder offered me a Chief Design Officer role to stay, but my cofounders and I wanted to build something new.
 
-My second, Hunch, has been a deep dive into AI: agents, eval systems, and what it takes to make AI products that work reliably in production.
+My second company, Hunch, was a deep dive into AI: agents, eval systems, and what it takes to make AI products that work reliably in production. We had real traction – 300K users in two weeks on one project – but couldn't find a venture-scale business model and wound it down.
 
-## Projects
+Two themes run through my career:
+
+Making complex work accessible. Cape gave non-experts instant visibility into network health. Neon Data (pre-Hunch) made data exploration fluid for non-analysts. Hunch put multiple AI models and tools in one place anyone could use. I love making powerful tools feel simple and fun.
+
+Shipping under pressure. AI is rewriting how every product works, which means a lot of product teams are back in 0→1 mode whether they expected to be or not. Navigating ambiguity and iterating fast is where I'm at my best.
+
+## Work
 
 ### Hunch / Overclock
-Visual AI workspace that became background AI agents. Started with Hunch, a canvas to create workflows with any AI models. Evolved into Overclock: agents that review each other's work, learn from feedback, and actually stay reliable. Hunch is still used by thousands of people.
+Visual AI workspace and background AI agents. Started with Hunch, a canvas to create workflows with any AI models. Evolved into Overclock: agents that review each other's work, learn from feedback, and stay reliable in production. Hunch is still used by thousands of people.
 - Hunch: https://app.hunch.tools
 - Demo (Latent Space AI UX award): https://x.com/Scobleizer/status/1784743064541757913
 
@@ -33,6 +39,10 @@ Super fast data exploration for regular humans. Automatic visualization, instant
 Hardware + SaaS for network performance management. Founder/CEO. Acquired by HPE/Aruba. $10M/y revenue. 2,000+ customers including Microsoft, Amazon, Home Depot, and Disney.
 - Disney testimonial: https://vimeo.com/738368274
 
+## Personal
+
+I live in San Francisco with my wife and two daughters. Grew up in Cape Town. Also lived in Windsor, Johannesburg, and Dubai. Outside work: piano, Star Wars LEGO and other projects with my kids, sneaking in cricket and rugby highlights when I can, and movies at the Alamo Drafthouse.
+
 ## Get in touch
 
 - LinkedIn: https://www.linkedin.com/in/daviddbwilson/
@@ -40,4 +50,4 @@ Hardware + SaaS for network performance management. Founder/CEO. Acquired by HPE
 
 ## What I Am Looking For
 
-I am looking for a new challenge. Somewhere to be hands-on shaping product and design at a company building something ambitious with AI. Could be a new product, a 0-to-1 initiative, or a team that needs someone who can do both.
+I want to be hands-on building products people love to use – and leading teams that move just as fast. Looking for a product leadership role at a company building something ambitious with AI. Could be a new product, a 0-to-1 initiative, or a team that needs someone who can design, ship, and lead.
