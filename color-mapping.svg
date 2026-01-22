@@ -1,0 +1,113 @@
+<svg width="900" height="520" viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .label { font-family: system-ui, -apple-system, sans-serif; font-size: 11px; fill: #21201c; }
+    .header { font-family: system-ui, -apple-system, sans-serif; font-size: 14px; font-weight: 600; fill: #21201c; }
+    .section { font-family: system-ui, -apple-system, sans-serif; font-size: 12px; font-weight: 500; fill: #63635e; }
+  </style>
+
+  <!-- Background -->
+  <rect width="900" height="520" fill="#ffffff"/>
+
+  <!-- Headers -->
+  <text x="120" y="30" class="header" text-anchor="middle">Current</text>
+  <text x="350" y="30" class="header" text-anchor="middle">Radix Light</text>
+  <text x="580" y="30" class="header" text-anchor="middle">Radix Dark</text>
+  <text x="780" y="30" class="section" text-anchor="middle">Token Name</text>
+
+  <!-- Row 1: Page Background -->
+  <text x="20" y="75" class="section">Page BG</text>
+  <rect x="80" y="55" width="80" height="32" fill="#fdfdfc" stroke="#e0e0e0"/>
+  <text x="120" y="105" class="label" text-anchor="middle">#fdfdfc</text>
+
+  <rect x="310" y="55" width="80" height="32" fill="#fdfdfc" stroke="#e0e0e0"/>
+  <text x="350" y="105" class="label" text-anchor="middle">Sand 1</text>
+
+  <rect x="540" y="55" width="80" height="32" fill="#111110" stroke="#e0e0e0"/>
+  <text x="580" y="105" class="label" text-anchor="middle" fill="#a1a09a">Sand Dark 1</text>
+
+  <text x="780" y="75" class="label" text-anchor="middle">--color-bg</text>
+
+  <!-- Row 2: Card Background -->
+  <text x="20" y="145" class="section">Card BG</text>
+  <rect x="80" y="125" width="80" height="32" fill="#f5f5f4" stroke="#e0e0e0"/>
+  <text x="120" y="175" class="label" text-anchor="middle">#f5f5f4</text>
+
+  <rect x="310" y="125" width="80" height="32" fill="#f1f0ef" stroke="#e0e0e0"/>
+  <text x="350" y="175" class="label" text-anchor="middle">Sand 3</text>
+
+  <rect x="540" y="125" width="80" height="32" fill="#222221" stroke="#e0e0e0"/>
+  <text x="580" y="175" class="label" text-anchor="middle" fill="#a1a09a">Sand Dark 3</text>
+
+  <text x="780" y="145" class="label" text-anchor="middle">--color-card</text>
+
+  <!-- Row 3: Primary Text -->
+  <text x="20" y="215" class="section">Text</text>
+  <rect x="80" y="195" width="80" height="32" fill="#111111" stroke="#e0e0e0"/>
+  <text x="120" y="245" class="label" text-anchor="middle">#111</text>
+
+  <rect x="310" y="195" width="80" height="32" fill="#21201c" stroke="#e0e0e0"/>
+  <text x="350" y="245" class="label" text-anchor="middle">Sand 12</text>
+
+  <rect x="540" y="195" width="80" height="32" fill="#eeeeec" stroke="#e0e0e0"/>
+  <text x="580" y="245" class="label" text-anchor="middle">Sand Dark 12</text>
+
+  <text x="780" y="215" class="label" text-anchor="middle">--color-text</text>
+
+  <!-- Row 4: Secondary Text -->
+  <text x="20" y="285" class="section">Text 2</text>
+  <rect x="80" y="265" width="80" height="32" fill="#7c7b74" stroke="#e0e0e0"/>
+  <text x="120" y="315" class="label" text-anchor="middle">#7c7b74</text>
+
+  <rect x="310" y="265" width="80" height="32" fill="#63635e" stroke="#e0e0e0"/>
+  <text x="350" y="315" class="label" text-anchor="middle">Sand 11</text>
+
+  <rect x="540" y="265" width="80" height="32" fill="#a1a09a" stroke="#e0e0e0"/>
+  <text x="580" y="315" class="label" text-anchor="middle">Sand Dark 11</text>
+
+  <text x="780" y="285" class="label" text-anchor="middle">--color-text-secondary</text>
+
+  <!-- Row 5: Icon -->
+  <text x="20" y="355" class="section">Icon</text>
+  <rect x="80" y="335" width="80" height="32" fill="#908e86" stroke="#e0e0e0"/>
+  <text x="120" y="385" class="label" text-anchor="middle">#908e86</text>
+
+  <rect x="310" y="335" width="80" height="32" fill="#8d8d86" stroke="#e0e0e0"/>
+  <text x="350" y="385" class="label" text-anchor="middle">Sand 9</text>
+
+  <rect x="540" y="335" width="80" height="32" fill="#8d8d86" stroke="#e0e0e0"/>
+  <text x="580" y="385" class="label" text-anchor="middle">Sand Dark 9</text>
+
+  <text x="780" y="355" class="label" text-anchor="middle">--color-icon</text>
+
+  <!-- Row 6: Accent -->
+  <text x="20" y="425" class="section">Accent</text>
+  <rect x="80" y="405" width="80" height="32" fill="#44687e" stroke="#e0e0e0"/>
+  <text x="120" y="455" class="label" text-anchor="middle">#44687e</text>
+
+  <rect x="310" y="405" width="80" height="32" fill="#44687e" stroke="#e0e0e0"/>
+  <text x="350" y="455" class="label" text-anchor="middle">#44687e (custom)</text>
+
+  <rect x="540" y="405" width="80" height="32" fill="#7eb3d1" stroke="#e0e0e0"/>
+  <text x="580" y="455" class="label" text-anchor="middle">#7eb3d1 (custom)</text>
+
+  <text x="780" y="425" class="label" text-anchor="middle">--color-accent</text>
+
+  <!-- Row 7: Shiny Gradient -->
+  <text x="20" y="495" class="section">Shiny</text>
+  <rect x="80" y="475" width="26" height="32" fill="#44687e"/>
+  <rect x="106" y="475" width="27" height="32" fill="#6a9ab8"/>
+  <rect x="133" y="475" width="27" height="32" fill="#a8c9dc"/>
+  <text x="120" y="525" class="label" text-anchor="middle">gradient</text>
+
+  <rect x="310" y="475" width="26" height="32" fill="#44687e"/>
+  <rect x="336" y="475" width="27" height="32" fill="#6a9ab8"/>
+  <rect x="363" y="475" width="27" height="32" fill="#a8c9dc"/>
+  <text x="350" y="525" class="label" text-anchor="middle">(keep)</text>
+
+  <rect x="540" y="475" width="26" height="32" fill="#7eb3d1"/>
+  <rect x="566" y="475" width="27" height="32" fill="#8fc4e0"/>
+  <rect x="593" y="475" width="27" height="32" fill="#c5dff0"/>
+  <text x="580" y="525" class="label" text-anchor="middle">(lightened)</text>
+
+  <text x="780" y="495" class="label" text-anchor="middle">--color-shine-*</text>
+</svg>

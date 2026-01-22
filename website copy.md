@@ -5,7 +5,7 @@
 ## tl;dr
 - Cofounder/CEO of Cape Networks (acq. by HPE/Aruba), grew to $10M/y
 - 3 years building AI products: agents, evals, 300K+ users
-- Next: hands-on product builder & leader at an AI-first company
+- Next: hands-on product builder/leader at an AI-first company
 
 ---
 
@@ -19,7 +19,7 @@ My second company, Hunch, was a deep dive into AI: agents, eval systems, and wha
 
 ## What's next
 
-I want to be hands-on building products people love to use – and leading teams that move just as fast.
+I want to lead and build, hands-on, making products people love. Every product leader should be building with the best AI tools right now, to get more done and keep up with where the frontier is.
 
 Two themes run through my career:
 
