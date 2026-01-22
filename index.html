@@ -15,7 +15,7 @@
         />
         <meta
             property="og:image"
-            content="https://david.bio/assets/profile.jpg"
+            content="https://david.bio/assets/profile_sq.jpg"
         />
         <meta property="og:url" content="https://david.bio" />
         <meta property="og:type" content="profile" />
@@ -27,7 +27,7 @@
         />
         <meta
             name="twitter:image"
-            content="https://david.bio/assets/profile.jpg"
+            content="https://david.bio/assets/profile_sq.jpg"
         />
         <script type="application/ld+json">
         {
@@ -35,7 +35,7 @@
             "@type": "Person",
             "name": "David Wilson",
             "url": "https://david.bio",
-            "image": "https://david.bio/assets/profile.jpg",
+            "image": "https://david.bio/assets/profile_sq.jpg",
             "description": "Product founder who designs and ships. Cofounder/CEO of Cape Networks (acquired by HPE/Aruba).",
             "jobTitle": "Product Founder",
             "sameAs": [
@@ -423,8 +423,11 @@
             <section class="contact" id="contact">
                 <h2>Get in touch</h2>
                 <ul>
-                    <li>
+                    <li id="email-item">
                         <a href="#" id="email-link">Email</a>
+                        <noscript>
+                            <style>#email-item { display: none; }</style>
+                        </noscript>
                     </li>
                     <li>
                         <a
