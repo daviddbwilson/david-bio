@@ -6,11 +6,12 @@
     --color-bg: #fdfdfc;
     --color-card: #f1f0ef;
     --color-icon: #8d8d86;
-    --color-accent: #44687e;
-    --color-accent-hover: #44687e;
-    --color-shine-1: #44687e;
-    --color-shine-2: #6a9ab8;
-    --color-shine-3: #a8c9dc;
+    --color-accent: #3d6b84;
+    --color-accent-hover: #3d6b84;
+    --color-accent-subtle: rgba(61, 107, 132, 0.08);
+    --color-shine-1: #3d6b84;
+    --color-shine-2: #5a9aba;
+    --color-shine-3: #98c5dc;
 
     /* Typography */
     --font-sans: "Geist", -apple-system, BlinkMacSystemFont, sans-serif;
@@ -26,13 +27,14 @@
         --color-text-heading: #c4c3bd;
         --color-text-secondary: #a1a09a;
         --color-bg: #111110;
-        --color-card: #222221;
+        --color-card: #1c1c1b;
         --color-icon: #8d8d86;
-        --color-accent: #7eb3d1;
-        --color-accent-hover: #7eb3d1;
-        --color-shine-1: #7eb3d1;
-        --color-shine-2: #8fc4e0;
-        --color-shine-3: #c5dff0;
+        --color-accent: #7eb8d6;
+        --color-accent-hover: #7eb8d6;
+        --color-accent-subtle: rgba(126, 184, 214, 0.1);
+        --color-shine-1: #7eb8d6;
+        --color-shine-2: #9dcbe5;
+        --color-shine-3: #c8e4f2;
     }
 }
 
@@ -84,11 +86,10 @@ h1 {
 }
 
 .tagline {
-    font-weight: 500;
     font-size: 1.25rem;
     font-weight: 500;
     color: var(--color-text-heading);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
 }
 
 /* Sections */
@@ -97,10 +98,10 @@ section {
 }
 
 h2 {
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: 0.8125rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
     color: var(--color-accent);
     margin-bottom: calc(var(--spacing-unit) * 1.5);
 }
@@ -111,13 +112,16 @@ h2 {
     top: 5px;
     margin-bottom: calc(var(--spacing-unit) * 2.5 + 22px);
     padding: calc(var(--spacing-unit) * 1.25);
+    padding-left: calc(var(--spacing-unit) * 1.5);
     background: var(--color-card);
     border-radius: 8px;
+    border-left: 3px solid var(--color-accent);
 }
 
 .tldr h2 {
     text-transform: lowercase;
     font-size: 1rem;
+    font-weight: 600;
     letter-spacing: 0;
     color: var(--color-text);
     margin-bottom: 0;
@@ -153,7 +157,8 @@ h2 {
 
 .project h3 {
     font-size: 1.125rem;
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: -0.01em;
     margin-bottom: calc(var(--spacing-unit) * 0.5);
 }
 
@@ -174,12 +179,17 @@ h2 {
 }
 
 .stat {
-    font-weight: 500;
+    font-weight: 600;
 }
 
 /* Next */
 .next p {
     margin-bottom: var(--spacing-unit);
+}
+
+.next strong {
+    font-weight: 600;
+    color: var(--color-text-heading);
 }
 
 .next p:last-child {
