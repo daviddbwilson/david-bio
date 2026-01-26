@@ -44,6 +44,14 @@
     box-sizing: border-box;
 }
 
+a, button {
+    touch-action: manipulation;
+}
+
+[id] {
+    scroll-margin-top: 2rem;
+}
+
 html {
     font-size: 17px;
     -webkit-font-smoothing: antialiased;
@@ -83,6 +91,7 @@ h1 {
     letter-spacing: -0.02em;
     margin-bottom: calc(var(--spacing-unit) * 0.5 + 6px);
     color: var(--color-text-heading);
+    text-wrap: balance;
 }
 
 .tagline {
@@ -90,6 +99,7 @@ h1 {
     font-weight: 500;
     color: var(--color-text-heading);
     letter-spacing: -0.015em;
+    text-wrap: balance;
 }
 
 /* Sections */
@@ -104,6 +114,7 @@ h2 {
     letter-spacing: 0.08em;
     color: var(--color-accent);
     margin-bottom: calc(var(--spacing-unit) * 1.5);
+    text-wrap: balance;
 }
 
 /* tl;dr */
@@ -308,6 +319,43 @@ footer {
     font-size: 0.7rem;
     color: var(--color-text-secondary);
     text-align: right;
+}
+
+/* Focus styles */
+a:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+.contact a:focus-visible,
+.project h3 a:focus-visible,
+.project p a:focus-visible,
+.next a:focus-visible {
+    border-bottom-color: var(--color-accent);
+    color: var(--color-accent);
+}
+
+.llms-link:focus-visible {
+    border-bottom-color: var(--color-text-secondary);
+}
+
+/* Skip to content */
+.skip-link {
+    position: absolute;
+    top: -100%;
+    left: 1rem;
+    padding: 0.5rem 1rem;
+    background: var(--color-accent);
+    color: var(--color-bg);
+    border-radius: 4px;
+    font-size: 0.875rem;
+    z-index: 100;
+    text-decoration: none;
+}
+
+.skip-link:focus {
+    top: 1rem;
 }
 
 /* Link icons */
@@ -516,4 +564,17 @@ a:hover .icon {
     background-clip: text;
     color: transparent;
     animation: shine 1.2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .contact a:hover,
+    .project h3 a:hover,
+    .project p a:hover,
+    .next a:hover {
+        animation: none;
+        background: none;
+        color: var(--color-accent);
+        -webkit-background-clip: unset;
+        background-clip: unset;
+    }
 }

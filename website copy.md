@@ -54,7 +54,7 @@ In addition to using Cursor Agent and Claude Code, I run ~1,000 prompts per week
 | Use case | Tool |
 |----------|------|
 | A thinking partner for hard or nuanced problems | Claude Opus 4.5 |
-| Research-intensive or "boil the ocean" tasks | GPT-5.2 Pro |
+| Research-intensive or “boil the ocean” tasks | GPT-5.2 Pro |
 | Working with a ton of content fast & cheaply | Gemini 2.5 Flash |
 | Complex/precise image analysis | Gemini 3 Pro |
 | Wrangling messy, iterative projects | Hunch |
