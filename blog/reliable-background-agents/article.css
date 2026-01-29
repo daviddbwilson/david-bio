@@ -1,0 +1,271 @@
+/* Article Typography
+   A carefully considered typographic system for long-form reading.
+   Serif body (Source Serif 4) + sans headings (Geist) for contrast.
+*/
+
+:root {
+    --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --article-width: 680px;
+    --article-line-height: 1.72;
+}
+
+/* Article container */
+.article {
+    max-width: var(--article-width);
+    margin: 0 auto;
+    padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 4);
+}
+
+/* Header */
+.article-header {
+    margin-bottom: calc(var(--spacing-unit) * 3);
+}
+
+.back-link {
+    display: inline-block;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    margin-bottom: calc(var(--spacing-unit) * 2);
+    transition: color 0.09s ease;
+}
+
+.back-link:hover {
+    color: var(--color-accent);
+}
+
+.article-header h1 {
+    font-family: var(--font-sans);
+    font-size: 2.25rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    color: var(--color-text-heading);
+    margin-bottom: calc(var(--spacing-unit) * 0.75);
+    text-wrap: balance;
+}
+
+.reading-time {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+/* Body text */
+.article-body {
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    line-height: var(--article-line-height);
+    color: var(--color-text);
+    font-feature-settings: "kern" 1, "liga" 1, "onum" 1;
+}
+
+.article-body p {
+    margin-bottom: 1.5em;
+}
+
+/* Lede paragraph */
+.lede {
+    font-size: 1.375rem;
+    line-height: 1.55;
+    letter-spacing: -0.01em;
+    color: var(--color-text-heading);
+    margin-bottom: 1.75em !important;
+}
+
+/* Emphasis */
+.article-body em {
+    font-style: italic;
+}
+
+.article-body strong {
+    font-weight: 600;
+    color: var(--color-text-heading);
+}
+
+/* Links */
+.article-body a {
+    color: var(--color-text);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-text-secondary);
+    transition: border-color 0.09s ease, color 0.09s ease;
+}
+
+.article-body a:hover {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+}
+
+/* Section headings */
+.article-body h2 {
+    font-family: var(--font-sans);
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--color-text-heading);
+    margin-top: 2.5em;
+    margin-bottom: 1em;
+    text-transform: none;
+}
+
+/* Horizontal rules - hidden, spacing only */
+.article-body hr {
+    border: none;
+    height: 0;
+    margin: 2.5em 0;
+}
+
+/* Regular lists */
+.article-body ul,
+.article-body ol {
+    margin-bottom: 1.5em;
+    padding-left: 1.5em;
+}
+
+.article-body li {
+    margin-bottom: 0.5em;
+}
+
+.article-body li:last-child {
+    margin-bottom: 0;
+}
+
+/* Thesis list (the key learnings) */
+.thesis {
+    background: var(--color-card);
+    border-radius: 8px;
+    padding: calc(var(--spacing-unit) * 1.5);
+    padding-left: calc(var(--spacing-unit) * 2.5);
+    margin-bottom: 1.75em !important;
+    border-left: 3px solid var(--color-accent);
+}
+
+.thesis li {
+    margin-bottom: 0.75em;
+}
+
+.thesis li:last-child {
+    margin-bottom: 0;
+}
+
+/* Summary list at the end */
+.summary {
+    background: var(--color-card);
+    border-radius: 8px;
+    padding: calc(var(--spacing-unit) * 1.5);
+    padding-left: calc(var(--spacing-unit) * 2.5);
+}
+
+.summary li {
+    margin-bottom: 0.75em;
+}
+
+.summary li:last-child {
+    margin-bottom: 0;
+}
+
+/* Inline code */
+.article-body code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--color-card);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-feature-settings: normal;
+}
+
+/* Citation (for Memento) */
+.article-body cite {
+    font-style: italic;
+}
+
+/* Article footer */
+.article-footer {
+    margin-top: 0;
+    padding-top: calc(var(--spacing-unit) * 2);
+}
+
+.article-footer p {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0;
+}
+
+/* Focus states */
+.article-body a:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+.back-link:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .article {
+        padding: calc(var(--spacing-unit) * 1.5) var(--spacing-unit) calc(var(--spacing-unit) * 3);
+    }
+
+    .article-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .lede {
+        font-size: 1.2rem;
+    }
+
+    .article-body {
+        font-size: 1.0625rem;
+    }
+
+    .article-body h2 {
+        font-size: 1.25rem;
+    }
+}
+
+/* Dark mode refinements for serif */
+@media (prefers-color-scheme: dark) {
+    .article-body {
+        /* Slightly lighter text for serif in dark mode - improves readability */
+        color: #e0e0dc;
+    }
+
+    .lede {
+        color: var(--color-text-heading);
+    }
+}
+
+/* Print styles */
+@media print {
+    .article {
+        max-width: none;
+        padding: 0;
+    }
+
+    .back-link {
+        display: none;
+    }
+
+    .article-body a {
+        border-bottom: none;
+        text-decoration: underline;
+    }
+
+    .article-body a::after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+        color: #666;
+    }
+
+    .thesis,
+    .summary {
+        border: 1px solid #ccc;
+        background: #f9f9f9;
+    }
+}

@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en" style="color-scheme: light dark">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#fdfdfc" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#111110" media="(prefers-color-scheme: dark)" />
+        <title>Lessons from Building Background Agents in Production – David Wilson</title>
+        <meta
+            name="description"
+            content="Background agents need to be extremely reliable. Here's what we learned building agents that automate recurring work for dozens of organizations."
+        />
+        <meta property="og:title" content="Lessons from Building Background Agents in Production" />
+        <meta
+            property="og:description"
+            content="Background agents need to be extremely reliable. Here's what we learned building agents that automate recurring work for dozens of organizations."
+        />
+        <meta property="og:image" content="https://david.bio/assets/profile_sq.jpg" />
+        <meta property="og:url" content="https://david.bio/blog/reliable-background-agents" />
+        <meta property="og:type" content="article" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Lessons from Building Background Agents in Production" />
+        <meta
+            name="twitter:description"
+            content="Background agents need to be extremely reliable. Here's what we learned building agents that automate recurring work for dozens of organizations."
+        />
+        <meta name="twitter:image" content="https://david.bio/assets/profile_sq.jpg" />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            href="https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/style.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-mono/style.css"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="../../styles.css" />
+        <link rel="stylesheet" href="article.css" />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="../../assets/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="../../assets/favicon-16x16.png"
+        />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="../../assets/apple-touch-icon.png"
+        />
+    </head>
+    <body>
+        <a href="#article" class="skip-link">Skip to content</a>
+        <article id="article" class="article">
+            <header class="article-header">
+                <a href="/" class="back-link">← David Wilson</a>
+                <h1>Lessons from Building Background Agents in&nbsp;Production</h1>
+                <p class="reading-time">15 min read</p>
+            </header>
+
+            <div class="article-body">
+                <p class="lede">When ChatGPT or Claude Code makes a mistake, you're there to fix&nbsp;it.</p>
+
+                <p>But background agents are on their own. They analyze data, monitor competitors, or respond to support emails while you're doing other things. If they make mistakes&nbsp;– hallucinate data, loop on the same task, send garbage to production&nbsp;– you won't know until the damage is&nbsp;done.</p>
+
+                <p>So background agents need to be <em>extremely reliable</em>. Much more reliable than interactive&nbsp;agents.</p>
+
+                <p>And they need to be reliable within real-world constraints:</p>
+                <ul>
+                    <li>not too deterministic (hello, brittle n8n workflows)</li>
+                    <li>not too hard to set up or edit (or users don't bother)</li>
+                    <li>not ruinously expensive (Opus in a loop watching Opus in a&nbsp;loop…)</li>
+                </ul>
+
+                <p>Fortunately, because they're not chatting with users, they can also be much slower, allowing for more careful execution and&nbsp;checks.</p>
+
+                <p>We built background agents that automate recurring work for people in dozens of organizations. One media org ran their entire content operation on our system: monitoring primary sources, selecting stories, doing additional research, writing in their house style, finding or creating images, and publishing daily. They paid thousands a month for work that would have cost many times more with&nbsp;staff.</p>
+
+                <p>Here's what we learned about how to make background agents reliable:</p>
+
+                <ul class="thesis">
+                    <li><strong>Make everything a tool call</strong>&nbsp;– including stopping. This means you always know what state the agent is in at&nbsp;3am.</li>
+                    <li><strong>Treat tool metadata as prompts</strong>&nbsp;– names and descriptions have outsized impact on agent&nbsp;behavior.</li>
+                    <li><strong>Use different models for different jobs</strong>&nbsp;– orchestration, polish, and review each need different cost v. quality trade-offs (latency matters&nbsp;less).</li>
+                    <li><strong>Design around failure modes</strong>&nbsp;– repetition and omission were our "cardinal sins" and we built our quality control, memory, and everything else to prevent&nbsp;them.</li>
+                    <li><strong>Have mandatory and optional quality controls</strong>&nbsp;– fast binary checks that always run plus optional review that the agent can choose to call and/or&nbsp;ignore.</li>
+                    <li><strong>Take multiple (simple) approaches to memory</strong>&nbsp;– key-value storage, successful execution traces, and "feedback chains" from human&nbsp;reviews.</li>
+                </ul>
+
+                <p>Here are the details:</p>
+
+                <hr />
+
+                <h2>1. The Basic Setup</h2>
+
+                <p>Our agent is just an LLM&nbsp;– Claude Sonnet&nbsp;– in a loop. The core loop is around 50&nbsp;lines of Python: call the LLM, execute any tool calls, repeat until it stops itself. Everything described in this post was built on top of that&nbsp;loop.</p>
+
+                <p>Every time we've tried building with an existing agent framework, we've ended up abandoning it to change something important about how it works with tools, memory, or&nbsp;context.</p>
+
+                <p>We give the agent access to ~40&nbsp;tools: web search, URL scraping, code sandboxes, image generation, plus OAuth integrations for Gmail, Slack, Sheets, Linear, GitHub, Notion, and more from&nbsp;Composio.dev.</p>
+
+                <p>The agent's task definition is a "playbook"&nbsp;– basically identical to a Claude Code skill. It reads like a job description, not code. (We shipped this before Claude Code existed; otherwise we'd have just called it a "skill.") Text-based playbooks/skills are easier to create, understand, and edit than more deterministic node-based flows. (We originally built a node-based AI editor: <a href="https://app.hunch.tools">app.hunch.tools</a>.)</p>
+
+                <p>Text-based playbooks also give ever-smarter AI models more room to make their own decisions… and more room to go off&nbsp;track.</p>
+
+                <hr />
+
+                <h2>2. Make Everything a Tool Call</h2>
+
+                <p>When a background agent stops at 3am, you need to know: Is it done? Is it waiting for something? Is it&nbsp;stuck?</p>
+
+                <p>We solve this by making the agent a state machine where every state was preceded by a tool&nbsp;call.</p>
+
+                <p>Want to tell the user something? Call <code>send_message</code>. Need to think through a problem? Call <code>think</code>. Done with the task? Call <code>stop</code> with a&nbsp;reason.</p>
+
+                <p>Because everything the agent does happens through a tool call, we always know exactly what state it is in and can easily deal with it if it goes off&nbsp;track.</p>
+
+                <p>Our <code>stop</code> tool requires a reason: <code>COMPLETE</code>, <code>ABORT</code>, or <code>WAITING_INPUT</code>. Each triggers different&nbsp;behavior:</p>
+                <ul>
+                    <li>Completed work gets published</li>
+                    <li>Waiting states escalate to users for input via Slack or email&nbsp;– including when the agent needs an OAuth integration it doesn't have access&nbsp;to</li>
+                    <li>Aborts log why the task was impossible</li>
+                </ul>
+
+                <p>Having <code>ABORT</code> as an explicit option turned out to be critical. It lets the agent fail gracefully rather than hallucinating a solution to an impossible&nbsp;problem.</p>
+
+                <p>Before the agent can stop, we check for pending work. If the agent tries to call <code>stop</code> while other tool calls are still in flight, or before expected output was produced, we reject the stop and tell it to finish first. This catches a whole class of bugs where agents quit&nbsp;early.</p>
+
+                <p>We enforce this through the system prompt: "You MUST terminate with the stop tool or you'll iterate forever wasting resources." Some models handle this better than others&nbsp;– Sonnet took to it&nbsp;naturally.</p>
+
+                <hr />
+
+                <h2>3. Tool Metadata Are Prompts</h2>
+
+                <p>One of the agent's tools is a "Polish" tool for refining written output: a different LLM (Gemini Pro) with its own custom prompt. But we saw that the agent would hand over rough notes and expect the Polish tool to do way too much work. Adding paragraphs of instructions to the system prompt barely improved the&nbsp;behavior.</p>
+
+                <p>Renaming the Polish tool's input parameter from <code>draft</code> to <code>final_draft</code> solved the problem instantly. The agent did much more work on drafts before calling the tool, without any of the additional&nbsp;prompting.</p>
+
+                <p>Tool metadata&nbsp;– names, descriptions, parameter names&nbsp;– <em>are</em> prompts. They're text loaded into your agent's context. They're easy to overlook because they might come from a third-party service. But they have outsized impact on agent&nbsp;behavior.</p>
+
+                <p>We audited and rewrote all of our tool metadata, proxying third-party tools where&nbsp;needed.</p>
+
+                <p>A caution: be careful with generic API wrappers as tools. We connected an agent to Gmail through an MCP server. By default, the API returns base64-encoded attachments. The first time someone's inbox had a PDF, the agent dumped megabytes of garbage into the context window and crashed. You can't just hand an agent an API and hope for the&nbsp;best.</p>
+
+                <hr />
+
+                <h2>4. The Cardinal Sins</h2>
+
+                <p>Our work with early customers showed us how easily background agents slip into two unforgivable failure&nbsp;modes:</p>
+                <ul>
+                    <li><strong>repetition</strong>&nbsp;– sending the same news digest two days in a&nbsp;row</li>
+                    <li><strong>omission</strong>&nbsp;– forgetting to include a critical source or step of&nbsp;work</li>
+                </ul>
+
+                <p>Almost everything else is fixable: tone can be adjusted, details can be added, formatting can be tweaked. But these two "cardinal sins" destroy&nbsp;trust.</p>
+
+                <p>This framing shaped how we designed the surrounding system. The agent doesn't store memories because "learning makes it better." It stores memories to avoid the sins. We added checks and reviews specifically to catch sins that slipped&nbsp;through.</p>
+
+                <p>The system prompt emphasizes the sins by name: "Avoid the cardinal sins: repetition [when monitoring resources and when creating content] and omission [of expected work]." This worked better than vague instructions about "being thorough" or "maintaining&nbsp;quality."</p>
+
+                <hr />
+
+                <h2>5. Two Layers of Quality Control</h2>
+
+                <p>One of our first ideas was obvious: use a separate "Reviewer LLM" to gate all output until the reviewer confirms the task is done&nbsp;properly.</p>
+
+                <p>But if you tell an LLM to find problems, it will <em>always</em> find&nbsp;problems!</p>
+
+                <p>Even after tons of iterations on the prompts, the mandatory Reviewer would nitpick endlessly. The agent would produce good output, the Reviewer would flag something minor, the agent would fix it, the Reviewer would find something else. Back and forth forever, consuming tokens, taking time, often producing worse output than the&nbsp;original.</p>
+
+                <p>We solve this by splitting quality control into two&nbsp;layers.</p>
+
+                <p><strong>Binary checks that always run.</strong> Fast, cheap, pass or fail. GPT-4.1 mini works great for&nbsp;this.</p>
+
+                <p>Our checks:</p>
+                <ul>
+                    <li><strong>No plagiarism</strong>: Compare output to source material. Original or regurgitated?</li>
+                    <li><strong>URL validity</strong>: Does this URL appear in search history, or was it hallucinated?</li>
+                    <li><strong>No repetition</strong>: Compare to memory. E.g. same item we researched yesterday?</li>
+                    <li><strong>No-op detection</strong>: Is the agent trying to send "I completed the task" as actual output?</li>
+                </ul>
+
+                <p>These checks were initially part of our eval suite for testing new prompts. We built an eval system that enabled us to add more checks&nbsp;easily.</p>
+
+                <p>Running the same checks in-line while the agent was working is incredibly effective. More agent builders should try this&nbsp;pattern!</p>
+
+                <p>By the way, this is another benefit of forcing the agent to call specific tools for every action: we deterministically run these checks when the agent uses the <code>send_output</code>&nbsp;tool.</p>
+
+                <p><strong>Optional review.</strong> We let the agent <em>choose</em> whether to call the Reviewer as a tool. The Reviewer's instructions: "You're a helpful peer, not a critic"… "Don't be a dick. We just want to make sure the output is good, complete, and correct." Because the agent decided whether to act on feedback, the loop can't run&nbsp;forever.</p>
+
+                <hr />
+
+                <h2>6. Memory: Keep It Simple</h2>
+
+                <p>Our usual approach is: try the simplest thing first, because it often&nbsp;works.</p>
+
+                <p>I'm not sure why we were seduced by complex memory systems early on. We tried graph databases, JSON objects, structured updates, diff operations. Each was overwrought. The agent would lose track of schemas, make conflicting changes, generate malformed data. When something went wrong, debugging was&nbsp;hard.</p>
+
+                <p>Simple key-value storage works: natural keys like <code>2025-11-15-competitor-pricing</code> or <code>github-pr-query-success</code>. The agent can recall and add entries, but can't freely edit existing ones. In our initial testing, we found the agent easily became like Lenny from <cite>Memento</cite>: losing useful memories and replacing them with over-fitted, selective&nbsp;ones.</p>
+
+                <p>A separate background job periodically compresses and prunes memories with a cheap&nbsp;model.</p>
+
+                <hr />
+
+                <h2>7. Memory: Successful Execution Traces</h2>
+
+                <p>One agent needed to create GitHub pull requests via GraphQL. That API is finicky&nbsp;– easy to get queries subtly wrong. Other agents searched Google Drive for meeting transcripts but initially used wrong search&nbsp;terms.</p>
+
+                <p>The agents are good at retrying and they eventually figured out how to do these things. But you don't want them re-learning how to tie their shoelaces every&nbsp;run.</p>
+
+                <p>When an agent fails initially but eventually succeeds, we have it save the successful tool calls as "traces." We inject successful traces directly into context on subsequent&nbsp;runs.</p>
+
+                <p>After a few runs, agents have working examples of every query or action they need. More reliable execution, fewer iterations, less junk in the context window, lower&nbsp;costs.</p>
+
+                <hr />
+
+                <h2>8. Memory: The Oracle Pattern</h2>
+
+                <p>For agents dealing with lots of source material&nbsp;– user history, company docs, past conversations&nbsp;– we built an "Oracle"&nbsp;tool.</p>
+
+                <p>The Oracle is a separate LLM with all relevant information in context. We use Gemini Flash: fast, cheap, handles huge context well. The agent asks questions in natural language: "What's this user's LinkedIn URL?" or "What topics have we covered this&nbsp;week?"</p>
+
+                <p>The Oracle has one critical constraint: it <strong>must back up every answer with verbatim quotes from sources.</strong></p>
+
+                <p>If it can't quote a source, it has to say "I don't&nbsp;know."</p>
+
+                <p>This sidesteps typical RAG headaches: no chunking strategy to tune, no embedding model to choose, no retrieval relevance to debug. Just a big context window and a requirement to show your work. For our dataset sizes, it just&nbsp;worked.</p>
+
+                <p>Again: try the simple thing&nbsp;first.</p>
+
+                <hr />
+
+                <h2>9. Memory: Feedback from Humans in the Loop</h2>
+
+                <p>Users can review every output. When they give feedback, three things&nbsp;happen:</p>
+
+                <p>First, the specific output gets fixed.</p>
+
+                <p>Second, we capture the chain: original output → feedback → revised output. These chains get injected into future runs as context. The prompt frames them carefully: "These are examples of previous feedback that may or may not be relevant. Defer to the main task definition if there's&nbsp;conflict."</p>
+
+                <p>This matters. Maybe the user wanted a shorter summary that one time. Doesn't mean all summaries should be shorter. By framing past feedback as context rather than instruction, the agent can use judgment about when to apply&nbsp;it.</p>
+
+                <p>Over time, agents internalized preferences they were never explicitly taught&nbsp;– tone, formatting, edge case handling&nbsp;– all from accumulated feedback&nbsp;chains.</p>
+
+                <p>Third, if feedback indicated a consistent pattern, the agent updates the playbook itself, making the change&nbsp;permanent.</p>
+
+                <hr />
+
+                <h2>10. Different Models for Different Jobs</h2>
+
+                <p>I've mentioned this already, but it's worth stating clearly: we use different models for different&nbsp;sub-tasks.</p>
+
+                <p>The main agent is Sonnet. The Polish tool uses Gemini Pro&nbsp;– we found it better at natural-sounding prose. The Reviewer also uses Gemini Pro, because a different model family seemed less blind to Sonnet's particular tics&nbsp;– although I think Opus would do well now. Memory compression and fast checks use cheap models like Gemini Flash and GPT-4.1 mini (and even GPT-4o&nbsp;mini).</p>
+
+                <p>We chose each model for its specific job based mostly on the tradeoff between quality and cost&nbsp;– latency was less of a concern. Sonnet is great at orchestration and tool use, but overkill for binary pass/fail checks&nbsp;– and ten times more&nbsp;expensive.</p>
+
+                <p>This also meant we could upgrade or downgrade individual components without touching the&nbsp;others.</p>
+
+                <hr />
+
+                <h2>11. Guardrails</h2>
+
+                <p>Not groundbreaking, but every agent needs hard limits. Here's what we&nbsp;use:</p>
+
+                <ul>
+                    <li><strong>Max iterations</strong>: 30 per run standard, 50 for power users. Without a ceiling, confused agents burn through budgets overnight.</li>
+                    <li><strong>Timeout</strong>: 8&nbsp;minutes per run.</li>
+                    <li><strong>Token caps on tool outputs</strong>: ~30-50K&nbsp;tokens. An API that returns unbounded data will overflow your context.</li>
+                    <li><strong>Prompt caching</strong>: Anthropic's cache control to cache the system prompt across iterations. Cuts costs significantly on long runs.</li>
+                    <li><strong>Parallel tool calls</strong>: The system prompt instructed agents to make multiple independent tool calls in a single response. Check three websites at once, not one by one.</li>
+                </ul>
+
+                <hr />
+
+                <h2>What We Didn't Solve</h2>
+
+                <p>We built this in a three-month sprint at the end of our runway. The patterns worked&nbsp;– we had paying customers running real workflows in production&nbsp;– but we ran out of time before solving&nbsp;everything.</p>
+
+                <p><strong>Time to first value was too long.</strong></p>
+
+                <p>Setting up useful background agents takes work: permissions, integrations, configuration. It's pretty high&nbsp;friction.</p>
+
+                <p>What's worse is many useful agents are monitors—they watch for changes. First run just establishes a baseline. So users would start setup, wait through a boring first run, then see nothing useful. Or they'd tab away during setup and forget to come&nbsp;back.</p>
+
+                <p>We tried front-loading configuration versus just-in-time setup. Neither cracked the Day Zero&nbsp;problem.</p>
+
+                <p><strong>Users didn't know what to automate.</strong></p>
+
+                <p>Users struggled to form a mental model of what the agent could do, and found it hard to figure out what to delegate. We could show them tools, but that didn't translate to "here's what I should&nbsp;delegate."</p>
+
+                <p>We built onboarding that looked at their LinkedIn profile, inferred their role, suggested relevant agents. It helped, but not enough. The users who got the most value came in with a specific workflow already in mind. Most people don't have that&nbsp;clarity.</p>
+
+                <hr />
+
+                <h2>The Core Lesson</h2>
+
+                <p>You can't prompt your way to reliable background agents. You need the right&nbsp;architecture.</p>
+
+                <p>Background agents need:</p>
+                <ul class="summary">
+                    <li><strong>Explicit state management</strong>: make everything a tool call, require clear stop reasons, guard against premature exit</li>
+                    <li><strong>Quality control that doesn't loop forever</strong>: binary checks that always run, plus optional review the agent controls</li>
+                    <li><strong>Memory patterns that accumulate learnings</strong>: successful execution traces, feedback chains as context, simple key-value storage that doesn't corrupt itself</li>
+                    <li><strong>The right model for each job</strong>: orchestration, polish, review, and checks don't all need the same LLM</li>
+                </ul>
+
+                <p>The underlying AI models will keep improving. Some of this architecture will become less necessary, or better approaches will&nbsp;emerge.</p>
+
+                <p>But right now, if you're building background agents, these patterns will help make them&nbsp;reliable.</p>
+
+                <hr />
+
+                <footer class="article-footer">
+                    <p>This is based on work building <a href="https://overclock.work">Overclock.work</a>'s background agents in late 2025. The team included Ross Douglas and Alex&nbsp;Leibhammer.</p>
+                </footer>
+            </div>
+        </article>
+    </body>
+</html>
