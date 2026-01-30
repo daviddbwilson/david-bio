@@ -131,7 +131,7 @@
 
                 <p>When a background agent stops at 3am, you need to know: Is it done? Is it waiting for something? Is it&nbsp;stuck?</p>
 
-                <p>We solve this by making the agent a state machine where every state was preceded by a tool&nbsp;call.</p>
+                <p>We solve this by making the agent a state machine where every state is preceded by a tool&nbsp;call.</p>
 
                 <p>Want to tell the user something? Call <code>send_message</code>. Need to think through a problem? Call <code>think</code>. Done with the task? Call <code>stop</code> with a&nbsp;reason.</p>
 
@@ -176,7 +176,7 @@
 
                 <p>First, and most indispensable, pre-deployment evals. We were iterating on the agent prompt multiple times a day during the first few weeks&nbsp;– tweaking how it thought and communicated, tools, memory, and more&nbsp;– and our suite of ~35&nbsp;evals caught regressions before they hit&nbsp;production.</p>
 
-                <p>Second, production evals. These were mostly light-weight automated quality checks that ran on every set of agent logs. We ran more in-depth evaluations (more expensive models!) on the first few runs of new playbooks too, just to make sure the agent was adapting well to new use&nbsp;cases.</p>
+                <p>Second, production evals. These were mostly lightweight automated quality checks that ran on every set of agent logs. We ran more in-depth evaluations (more expensive models!) on the first few runs of new playbooks too, just to make sure the agent was adapting well to new use&nbsp;cases.</p>
 
                 <p>Our UI let us define test cases for the background agent (playbook or initial user request + context info + expected behavior), assign which checks should run, and batch-run everything when we changed prompts. We made it super easy to add new evals for both the background agent and chat&nbsp;agent.</p>
 
