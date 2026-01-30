@@ -87,15 +87,17 @@
 
                 <p>We built background agents that automate recurring work for people in dozens of organizations. One media org ran their entire content operation on our system: monitoring primary sources, selecting stories, doing additional research, writing in their house style, finding or creating images, and publishing daily. They paid thousands a month for work that would have cost many times more with&nbsp;staff.</p>
 
-                <p>Here's what we learned about how to make background agents reliable:</p>
+                <p>Here's what we did to make background agents reliable:</p>
 
                 <ul class="thesis">
-                    <li><strong>Make everything a tool call</strong>&nbsp;– including stopping. This means you always know what state the agent is in at&nbsp;3am.</li>
-                    <li><strong>Treat tool metadata as prompts</strong>&nbsp;– names and descriptions have outsized impact on agent behavior; use evals to iterate on prompts&nbsp;fast.</li>
-                    <li><strong>Use different models for different jobs</strong>&nbsp;– orchestration, polish, and review each need different cost/quality/latency&nbsp;trade-offs.</li>
-                    <li><strong>Design around failure modes</strong>&nbsp;– repetition (same "news" two days in a row) and omission (missing a key step) were our "cardinal sins" and we built quality control, memory, and much more to prevent&nbsp;them.</li>
-                    <li><strong>Have mandatory and optional quality controls</strong>&nbsp;– fast binary checks that always run plus optional review that the agent can choose to call and/or&nbsp;ignore.</li>
-                    <li><strong>Take multiple (simple) approaches to memory</strong>&nbsp;– key-value storage, an "ask the oracle" tool, successful execution traces injected as context, and "feedback chains" from human&nbsp;reviews.</li>
+                    <li><strong>Make everything a tool call</strong>&nbsp;– including stopping. You always know what state the agent is in at&nbsp;3am.</li>
+                    <li><strong>Treat tool metadata as prompts</strong>&nbsp;– Renaming a tool parameter from <code>draft</code> to <code>final_draft</code> changed behavior more than paragraphs of&nbsp;instructions.</li>
+                    <li><strong>Use evals to iterate fast</strong>&nbsp;– We spent 2.5&nbsp;days building evals infrastructure. It paid for itself in 24&nbsp;hours.</li>
+                    <li><strong>Design around known failure modes</strong>&nbsp;– Repetition and omission were our "cardinal sins". We built quality control, memory, and everything else specifically to prevent&nbsp;them.</li>
+                    <li><strong>Split quality control into two layers</strong>&nbsp;– Fast and cheap binary checks that always run, plus optional review the agent&nbsp;controls.</li>
+                    <li><strong>Use multiple (simple) memory approaches</strong>&nbsp;– Key-value storage, successful execution traces injected into context, an "ask the oracle" tool, and "feedback chains" from human&nbsp;reviews.</li>
+                    <li><strong>Match models to tasks</strong>&nbsp;– orchestration, polish, and review each need different cost/quality/latency&nbsp;trade-offs.</li>
+                    <li><strong>Set hard guardrails</strong>&nbsp;– Max iterations, timeouts, token caps. Without them, agents burn resources&nbsp;overnight.</li>
                 </ul>
 
                 <p>Here are the details:</p>
@@ -325,14 +327,16 @@
 
                 <h2>The Core Lesson</h2>
 
-                <p>You can't prompt your way to reliable background agents. You need the right&nbsp;architecture.</p>
+                <p>You can't prompt your way to reliable background agents. You need the right architecture around the&nbsp;LLM.</p>
 
-                <p>Background agents need:</p>
+                <p>In our experience, background agents need:</p>
                 <ul class="summary">
-                    <li><strong>Explicit state management</strong>: make everything a tool call, require clear stop reasons, guard against premature exit</li>
-                    <li><strong>Quality control that doesn't loop forever</strong>: binary checks that always run, plus optional review the agent controls</li>
-                    <li><strong>Memory patterns that accumulate learnings</strong>: successful execution traces, feedback chains as context, simple key-value storage that doesn't corrupt itself</li>
-                    <li><strong>The right model for each job</strong>: orchestration, polish, review, and checks don't all need the same LLM</li>
+                    <li><strong>Observable state</strong>&nbsp;– You need to know what happened at&nbsp;3am.</li>
+                    <li><strong>Graceful failure paths</strong>&nbsp;– Without explicit abort or escalation options, agents hallucinate solutions to impossible&nbsp;problems.</li>
+                    <li><strong>Sensible quality control</strong>&nbsp;– Catching mistakes matters, but mandatory reviews can loop&nbsp;forever.</li>
+                    <li><strong>Memory that doesn't corrupt itself</strong>&nbsp;– Multiple simple approaches can work&nbsp;well.</li>
+                    <li><strong>The right model for each subtask</strong>&nbsp;– Orchestration, polish, review, and checks have different cost/quality&nbsp;trade-offs.</li>
+                    <li><strong>Hard limits</strong>&nbsp;– Without guardrails on iterations, time, and tokens, agents burn through budgets&nbsp;overnight.</li>
                 </ul>
 
                 <p>The underlying AI models will keep improving. Some of this architecture will become less necessary, or better approaches will&nbsp;emerge.</p>
