@@ -106,7 +106,14 @@
 
                 <h2>1. The Basic Setup</h2>
 
-                <p>Our agent is just an LLM&nbsp;– Claude Sonnet&nbsp;– in a loop. The core loop is around 50&nbsp;lines of Python: call the LLM, execute any tool calls, repeat until it stops itself. Everything described in this post was built on top of that&nbsp;loop.</p>
+                <p>Our agent is just an LLM&nbsp;– Claude Sonnet&nbsp;– in a loop. The core loop is around 50&nbsp;lines of Python: call the LLM, execute any tool calls, repeat until it stops&nbsp;itself.</p>
+
+<pre><code>while should_continue():
+    response = call_llm(messages, tools)
+    results = await execute_tool_calls(response.tool_calls)
+    messages.append(response, results)</code></pre>
+
+                <p>Everything described in this post was built on top of that&nbsp;loop.</p>
 
                 <p>Every time we've tried building with an existing agent framework, we've ended up abandoning it to change something important about how it works with tools, memory, or&nbsp;context.</p>
 

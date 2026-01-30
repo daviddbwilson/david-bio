@@ -176,6 +176,24 @@
     font-feature-settings: normal;
 }
 
+/* Code blocks */
+.article-body pre {
+    background: var(--color-card);
+    border-radius: 8px;
+    padding: 1.25em 1.5em;
+    margin-bottom: 1.5em;
+    overflow-x: auto;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.article-body pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+}
+
 /* Citation (for Memento) */
 .article-body cite {
     font-style: italic;
