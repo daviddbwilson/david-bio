@@ -74,18 +74,16 @@
 
                 <p>Most agents need to be smarter and faster. But <strong>background agents need to be&nbsp;reliable</strong>.</p>
 
-                <p>Here's the problem:</p>
+                <p>How do you make agents reliable?</p>
                 <ul>
-                    <li>Better prompts aren't enough</li>
-                    <li>Deterministic workflows are too inflexible (hello, my brittle little n8n&nbsp;flow)</li>
-                    <li>Supervision by other LLMs&nbsp;– Opus watching Opus watching Opus&nbsp;– isn't practical&nbsp;either</li>
+                    <li>Better prompts aren't enough: models have blind spots and are non-deterministic&nbsp;– some runs will&nbsp;fail</li>
+                    <li>Deterministic workflows are too inflexible for many real-world tasks (hello, my brittle little n8n&nbsp;flow)</li>
+                    <li>Supervision by other LLMs (Opus watching Opus) can create infinite review loops, and ballooning context gets expensive and&nbsp;unreliable</li>
                 </ul>
 
-                <p>So how do you make background agents reliable?</p>
+                <p>We learned a lot by building background agents that automate recurring work for dozens of organizations. One media org ran their entire content operation on our system: monitoring primary sources, selecting stories, doing additional research, writing in their house style, finding or creating images, and publishing daily. They paid thousands a month for work that would have cost many times more with&nbsp;staff.</p>
 
-                <p>We built background agents that automate recurring work for dozens of organizations and learned a lot in the process. One media org ran their entire content operation on our system: monitoring primary sources, selecting stories, doing additional research, writing in their house style, finding or creating images, and publishing daily. They paid thousands a month for work that would have cost many times more with&nbsp;staff.</p>
-
-                <p>Here's what we did:</p>
+                <p>Here's how we made our agents reliable:</p>
 
                 <ul class="thesis">
                     <li><strong>Make everything a tool call</strong>&nbsp;– including stopping. You always know what state the agent is in at&nbsp;3am.</li>
