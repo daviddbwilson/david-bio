@@ -6,16 +6,15 @@ When a background agent starts hallucinating at 3am, there's nobody around to fi
 
 Most agents need to be smarter and faster. But **background agents need to be reliable**.
 
-Here's the problem:
-- Better prompts aren't enough
-- Deterministic workflows are too inflexible (hello, my brittle little n8n flow)
-- Supervision by other LLMs – Opus watching Opus watching Opus – isn't practical either
+How do you make agents reliable?
 
-So how do you make background agents reliable?
+- Better prompts aren't enough: models have blind spots and are non-deterministic – some runs will fail
+- Deterministic workflows are too inflexible for many real-world tasks (hello, my brittle little n8n flow)
+- Supervision by other LLMs (Opus watching Opus) can create infinite review loops, and ballooning context gets expensive and unreliable
 
-We built background agents that automate recurring work for dozens of organizations and learned a lot in the process. One media org ran their entire content operation on our system: monitoring primary sources, selecting stories, doing additional research, writing in their house style, finding or creating images, and publishing daily. They paid thousands a month for work that would have cost many times more with staff.
+We learned a lot by building background agents that automate recurring work for dozens of organizations. One media org ran their entire content operation on our system: monitoring primary sources, selecting stories, doing additional research, writing in their house style, finding or creating images, and publishing daily. They paid thousands a month for work that would have cost many times more with staff.
 
-Here's what we did:
+Here's how we made our agents reliable:
 
 - **Make everything a tool call** – including stopping. You always know what state the agent is in at 3am.
 - **Treat tool metadata as prompts** – Renaming a tool parameter from `draft` to `final_draft` changed behavior more than paragraphs of instructions.
