@@ -70,24 +70,22 @@
             </header>
 
             <div class="article-body">
-                <p class="lede">When ChatGPT or Claude Code makes a mistake, you're there to fix&nbsp;it.</p>
+                <p class="lede">When a background agent starts hallucinating at 3am, there's nobody around to fix&nbsp;it.</p>
 
-                <p>But background agents are on their own. They analyze data, monitor competitors, or respond to support emails while you're doing other things. If they make mistakes&nbsp;– hallucinate data, loop on the same task, send garbage to production&nbsp;– you won't know until the damage is&nbsp;done.</p>
+                <p>Most agents need to be smarter and faster. But <strong>background agents need to be&nbsp;reliable</strong>.</p>
 
-                <p>So background agents need to be <em>extremely reliable</em>. Much more reliable than interactive&nbsp;agents.</p>
-
-                <p>And they need to be reliable within real-world constraints:</p>
+                <p>Here's the problem:</p>
                 <ul>
-                    <li>not too deterministic (hello, brittle n8n workflows)</li>
-                    <li>not too hard to set up or edit (or users don't bother)</li>
-                    <li>not ruinously expensive (Opus in a loop watching Opus in a&nbsp;loop…)</li>
+                    <li>Better prompts aren't enough</li>
+                    <li>Deterministic workflows are too inflexible (hello, my brittle little n8n&nbsp;flow)</li>
+                    <li>Supervision by other LLMs&nbsp;– Opus watching Opus watching Opus&nbsp;– isn't practical&nbsp;either</li>
                 </ul>
 
-                <p>Fortunately, because they're not chatting with users, they can also be much slower, allowing for more careful execution and&nbsp;checks.</p>
+                <p>So how do you make background agents reliable?</p>
 
-                <p>We built background agents that automate recurring work for people in dozens of organizations. One media org ran their entire content operation on our system: monitoring primary sources, selecting stories, doing additional research, writing in their house style, finding or creating images, and publishing daily. They paid thousands a month for work that would have cost many times more with&nbsp;staff.</p>
+                <p>We built background agents that automate recurring work for dozens of organizations and learned a lot in the process. One media org ran their entire content operation on our system: monitoring primary sources, selecting stories, doing additional research, writing in their house style, finding or creating images, and publishing daily. They paid thousands a month for work that would have cost many times more with&nbsp;staff.</p>
 
-                <p>Here's what we did to make background agents reliable:</p>
+                <p>Here's what we did:</p>
 
                 <ul class="thesis">
                     <li><strong>Make everything a tool call</strong>&nbsp;– including stopping. You always know what state the agent is in at&nbsp;3am.</li>
@@ -99,8 +97,6 @@
                     <li><strong>Match models to tasks</strong>&nbsp;– orchestration, polish, and review each need different cost/quality/latency&nbsp;trade-offs.</li>
                     <li><strong>Set hard guardrails</strong>&nbsp;– Max iterations, timeouts, token caps. Without them, agents burn resources&nbsp;overnight.</li>
                 </ul>
-
-                <p>Here are the details:</p>
 
                 <hr />
 
