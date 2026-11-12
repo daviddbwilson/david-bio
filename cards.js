@@ -81,8 +81,7 @@ window.DB_CARDS = {
         url: "https://hex.tech/blog/introducing-generative-data-apps/",
         badge: "Blog post",
         icon: "post",
-        // DRAFT caption.
-        caption: "Describe an app. An agent builds it.",
+        caption: "My first product launch at Hex",
         // Placeholder image: has a play button overlaid; clean frame to come.
         image: "assets/cards/07-hex-gda-title-card.webp",
         width: 800,
