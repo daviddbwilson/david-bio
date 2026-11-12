@@ -52,8 +52,8 @@
             ]
         }
         </script>
-        <link rel="stylesheet" href="assets/fonts/geist.css" />
-        <link rel="stylesheet" href="styles.css" />
+        <link rel="stylesheet" href="assets/fonts/geist.css?v=20261112" />
+        <link rel="stylesheet" href="styles.css?v=20261112" />
         <link
             rel="icon"
             type="image/png"
@@ -74,6 +74,11 @@
     </head>
     <body>
         <a href="#main" class="skip-link">Skip to content</a>
+        <!--
+            The ?v= on the stylesheets and scripts above and below makes
+            browsers fetch them again after a change. Bump it whenever
+            styles.css, cards.js, card-preview.js or the fonts change.
+        -->
         <!--
             Links with data-card get a preview (hover card on desktop, bottom
             drawer on touch). Their caption, image and URL live in cards.js;
@@ -224,7 +229,7 @@
                 link.href = "mailto:" + e + "@" + d;
             })();
         </script>
-        <script src="cards.js" defer></script>
-        <script src="card-preview.js" defer></script>
+        <script src="cards.js?v=20261112" defer></script>
+        <script src="card-preview.js?v=20261112" defer></script>
     </body>
 </html>
