@@ -2,8 +2,9 @@
  * Link previews for the home page.
  *
  * Any element with data-card="key", where key exists in cards.js, gets a
- * preview: a tilted card in the right margin on desktop, and a drawer at the
- * bottom of the screen on touch devices and in windows too narrow for the card.
+ * preview. With a mouse, an image card rises out of the hovered word and
+ * sways on a springy stem as the pointer moves. On touch devices, a tap opens
+ * the same card in a drawer at the bottom of the screen.
  *
  * Without this script every link is still an ordinary link.
  */
@@ -19,15 +20,21 @@
     );
     if (!triggers.length) return;
 
-    var column = document.querySelector("main");
     var canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    // Desktop card geometry, in px.
-    var GAP = 36; // between the text column and the card
-    var EDGE = 20; // between the card and the window edge
-    var CARD_MIN = 220;
-    var CARD_MAX = 300;
+    var ICONS = {
+        video:
+            '<svg viewBox="0 0 14 14" width="14" height="14" fill="none" stroke="currentColor" stroke-linejoin="round" aria-hidden="true">' +
+            '<path d="M1.5 3.79c0-.71.52-1.29 1.17-1.29h4.66c.65 0 1.17.58 1.17 1.29v6.42c0 .71-.52 1.29-1.17 1.29H2.67c-.65 0-1.17-.58-1.17-1.29V3.79Z"/>' +
+            '<path d="m8.87 5.7 2.67-1.14c.44-.19.96.09.96.51v3.86c0 .42-.52.7-.96.51L8.87 8.3a.56.56 0 0 1-.37-.51V6.21c0-.22.14-.41.37-.51Z"/>' +
+            "</svg>",
+        post:
+            '<svg viewBox="0 0 14 14" width="14" height="14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+            '<path d="M3.5 1.5h7a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z"/>' +
+            '<path d="M5 4.75h4M5 7h4M5 9.25h2.25"/>' +
+            "</svg>",
+    };
 
     function cardFor(el) {
         return cards[el.getAttribute("data-card")];
@@ -37,17 +44,19 @@
         return el.tagName === "A";
     }
 
-    // True when there is a hover-capable pointer and the right margin is wide
-    // enough for the card to sit beside the text without covering it.
+    // A mouse or trackpad gets the hover card; everything else gets the drawer.
     function useCard() {
-        if (!canHover.matches) return false;
-        var margin =
-            document.documentElement.clientWidth -
-            column.getBoundingClientRect().right;
-        return margin >= GAP + CARD_MIN + EDGE;
+        return canHover.matches;
     }
 
     /* ---- Set up each trigger ---------------------------------------- */
+
+    // What the link is, in words, for screen readers: "Demo video", "Blog post".
+    function kindOf(card) {
+        if (!card.url || !card.badge) return "";
+        var isVideo = card.icon === "video" && !/video/i.test(card.badge);
+        return card.badge + (isVideo ? " video" : "");
+    }
 
     // Captions for screen readers, referenced with aria-describedby.
     var descriptions = document.createElement("div");
@@ -65,9 +74,7 @@
         }
         el.classList.add("card-link");
 
-        var text = [card.url && card.badge, card.caption]
-            .filter(Boolean)
-            .join(": ");
+        var text = [kindOf(card), card.caption].filter(Boolean).join(": ");
         if (text) {
             var desc = document.createElement("span");
             desc.id = "card-desc-" + key;
@@ -77,13 +84,16 @@
         }
 
         el.addEventListener("pointerenter", function (e) {
-            if (e.pointerType === "mouse" && useCard()) showCard(el);
+            if (e.pointerType === "mouse" && useCard()) showCard(el, e);
+        });
+        el.addEventListener("pointermove", function (e) {
+            if (shown === el && e.pointerType === "mouse") aim(e);
         });
         el.addEventListener("pointerleave", function () {
             if (shown === el) hideCard();
         });
         el.addEventListener("focus", function () {
-            if (useCard() && el.matches(":focus-visible")) showCard(el);
+            if (useCard() && el.matches(":focus-visible")) showCard(el, null);
         });
         el.addEventListener("blur", function () {
             if (shown === el) hideCard();
@@ -120,13 +130,27 @@
         });
     }
 
-    // Put a card's image, badge and caption into a card or drawer element.
-    function fill(root, card, onResize) {
-        var media = root.querySelector(".preview-media");
-        var img = media.querySelector("img");
-        var badge = root.querySelector(".preview-badge");
-        var caption = root.querySelector(".preview-caption");
+    // The picture itself: image, with the badge and caption laid over it.
+    function figureMarkup() {
+        return (
+            '<div class="preview-figure">' +
+            '<div class="preview-media"><img alt="" decoding="async" /></div>' +
+            '<span class="preview-badge"></span>' +
+            '<p class="preview-caption"></p>' +
+            "</div>"
+        );
+    }
 
+    // Put a card's image, badge and caption into a figure.
+    function fill(root, card, onResize) {
+        var figure = root.querySelector(".preview-figure");
+        var media = figure.querySelector(".preview-media");
+        var img = media.querySelector("img");
+        var badge = figure.querySelector(".preview-badge");
+        var caption = figure.querySelector(".preview-caption");
+
+        figure.style.setProperty("--tone", card.tone || "#161616");
+        figure.classList.toggle("no-image", !card.image);
         media.classList.remove("is-loaded");
         img.removeAttribute("src");
         if (card.image) {
@@ -142,6 +166,7 @@
             };
             img.onerror = function () {
                 media.hidden = true;
+                figure.classList.add("no-image");
                 if (onResize) onResize();
             };
             img.src = card.image;
@@ -151,67 +176,218 @@
 
         var showBadge = Boolean(card.url && card.badge);
         badge.hidden = !showBadge;
-        badge.textContent = showBadge ? card.badge : "";
+        badge.innerHTML = "";
+        if (showBadge) {
+            badge.appendChild(document.createTextNode(card.badge));
+            if (ICONS[card.icon]) {
+                badge.insertAdjacentHTML("beforeend", ICONS[card.icon]);
+            }
+        }
         caption.textContent = card.caption || "";
     }
 
-    function previewMarkup() {
-        return (
-            '<div class="preview-media"><img alt="" decoding="async" /></div>' +
-            '<div class="preview-text">' +
-            '<span class="preview-badge"></span>' +
-            '<p class="preview-caption"></p>' +
-            "</div>"
-        );
-    }
+    /* ---- Mouse: a card on a springy stem ------------------------------
+     *
+     * The card stands on a point just above the hovered word (the "foot").
+     * The foot is pulled toward a spot between the word and the pointer by a
+     * spring, so it keeps close to the word and follows the pointer loosely.
+     * The card pivots about the foot: when the foot moves, the top of the card
+     * lags behind and then swings back, like a reed. Moving to another word
+     * carries the same card across, with the same momentum.
+     */
 
-    /* ---- Desktop: card in the right margin --------------------------- */
+    var GAP = 12; // px between the word and the card
+    var EDGE = 10; // px kept clear of the window edge
+    var FOLLOW = 0.55; // how far the foot goes toward the pointer (0 = stays put)
+    var FOOT = { stiffness: 210, damping: 21 }; // settles quickly, tiny overshoot
+    var SWAY = { stiffness: 150, damping: 9 }; // looser: a couple of swings
+    var POP = { stiffness: 320, damping: 24 }; // growing out of the word
+    var LEAN_PER_SPEED = 0.014; // degrees of lean per px/s of foot speed
+    var MAX_LEAN = 13; // degrees
+    var FADE = 160; // ms; matches the opacity transition in styles.css
 
     var cardEl = null;
-    var shown = null;
+    var shown = null; // the trigger the card is showing for
+    var pointer = null; // last pointer position over the trigger, or null
+    var frame = 0;
+    var lastTime = 0;
+    var below = false; // card sits under the word when there's no room above
+    var restTilt = 0;
+    var hiddenAt = -1e9; // when the card was last put away
+    var size = { w: 0, h: 0 };
+    // Spring state: foot position, sway angle and scale, each with a velocity.
+    var s = { x: 0, y: 0, vx: 0, vy: 0, a: 0, va: 0, k: 1, vk: 0 };
+    var goal = { x: 0, y: 0 };
 
-    function showCard(el) {
-        if (!cardEl) {
-            cardEl = document.createElement("div");
-            cardEl.className = "preview-card";
-            // The caption reaches screen readers through aria-describedby.
-            cardEl.setAttribute("aria-hidden", "true");
-            cardEl.innerHTML = previewMarkup();
-            document.body.appendChild(cardEl);
+    function buildCard() {
+        cardEl = document.createElement("div");
+        cardEl.className = "preview-card";
+        // The caption reaches screen readers through aria-describedby.
+        cardEl.setAttribute("aria-hidden", "true");
+        cardEl.innerHTML = figureMarkup();
+        document.body.appendChild(cardEl);
+    }
+
+    // The part of the word under the pointer (a link can wrap over two lines).
+    function lineOf(el) {
+        var rects = el.getClientRects();
+        if (pointer) {
+            for (var i = 0; i < rects.length; i++) {
+                if (pointer.y >= rects[i].top - 2 && pointer.y <= rects[i].bottom + 2) {
+                    return rects[i];
+                }
+            }
         }
+        return rects[0] || el.getBoundingClientRect();
+    }
+
+    // Work out where the foot should come to rest.
+    function setGoal() {
+        if (!shown || !cardEl) return;
+        var word = lineOf(shown);
+        var viewWidth = document.documentElement.clientWidth;
+        size.w = cardEl.offsetWidth;
+        size.h = cardEl.offsetHeight;
+
+        var centre = word.left + word.width / 2;
+        var x = pointer ? centre + (pointer.x - centre) * FOLLOW : centre;
+        var half = size.w / 2;
+        x = Math.max(EDGE + half, Math.min(x, viewWidth - EDGE - half));
+
+        below = word.top - GAP - size.h < EDGE;
+        goal.x = x;
+        goal.y = below ? word.bottom + GAP : word.top - GAP;
+        cardEl.classList.toggle("is-below", below);
+    }
+
+    function aim(e) {
+        pointer = { x: e.clientX, y: e.clientY };
+        setGoal();
+        wake();
+    }
+
+    function showCard(el, e) {
+        if (!cardEl) buildCard();
+        // Coming from another word a moment ago counts as still being out.
+        var arriving =
+            !cardEl.classList.contains("is-visible") &&
+            performance.now() - hiddenAt > FADE;
         shown = el;
-        fill(cardEl, cardFor(el), placeCard);
-        // Alternate the tilt so neighbouring cards lean different ways.
-        var tilt = triggers.indexOf(el) % 2 ? 2 : -2.5;
-        cardEl.style.setProperty("--tilt", tilt + "deg");
-        placeCard();
+        pointer = e ? { x: e.clientX, y: e.clientY } : null;
+        fill(cardEl, cardFor(el), function () {
+            setGoal();
+            wake();
+        });
+        // Alternate the resting tilt so neighbouring cards lean different ways.
+        restTilt = triggers.indexOf(el) % 2 ? 1.5 : -2;
+        setGoal();
+
+        if (reduceMotion.matches) {
+            s.x = goal.x;
+            s.y = goal.y;
+            s.a = 0;
+            s.k = 1;
+            s.vx = s.vy = s.va = s.vk = 0;
+            draw();
+        } else if (arriving) {
+            // Start small, at the word, and grow out of it.
+            var word = lineOf(el);
+            s.x = pointer ? pointer.x : word.left + word.width / 2;
+            s.y = goal.y;
+            s.vx = s.vy = 0;
+            s.a = restTilt * 3;
+            s.va = 0;
+            s.k = 0.6;
+            s.vk = 0;
+            draw();
+        } else {
+            // Already out: carry on from where it is, with a small nudge.
+            s.vk -= 1.2;
+        }
         cardEl.classList.add("is-visible");
+        wake();
         warmImages();
     }
 
-    // Beside the text column, vertically centred on the hovered word and kept
-    // inside the window.
-    function placeCard() {
-        if (!shown || !cardEl) return;
-        var col = column.getBoundingClientRect();
-        var word = shown.getBoundingClientRect();
-        var viewWidth = document.documentElement.clientWidth;
-        var width = Math.min(CARD_MAX, viewWidth - col.right - GAP - EDGE);
-        cardEl.style.width = width + "px";
-        var height = cardEl.offsetHeight;
-        var top = word.top + word.height / 2 - height / 2;
-        top = Math.min(top, window.innerHeight - height - EDGE);
-        top = Math.max(top, EDGE);
-        cardEl.style.left = col.right + GAP + window.scrollX + "px";
-        cardEl.style.top = top + window.scrollY + "px";
-    }
-
     function hideCard() {
+        if (!shown) return;
         shown = null;
+        pointer = null;
+        hiddenAt = performance.now();
         if (cardEl) cardEl.classList.remove("is-visible");
     }
 
-    /* ---- Touch and narrow windows: drawer ---------------------------- */
+    // Start the animation loop if it isn't running.
+    function wake() {
+        if (reduceMotion.matches) {
+            if (shown) {
+                s.x = goal.x;
+                s.y = goal.y;
+                draw();
+            }
+            return;
+        }
+        if (!frame) {
+            lastTime = 0;
+            frame = requestAnimationFrame(tick);
+        }
+    }
+
+    function spring(value, velocity, target, config, dt) {
+        var force = (target - value) * config.stiffness - velocity * config.damping;
+        velocity += force * dt;
+        return [value + velocity * dt, velocity];
+    }
+
+    function tick(now) {
+        frame = 0;
+        var dt = lastTime ? Math.min((now - lastTime) / 1000, 1 / 30) : 1 / 60;
+        lastTime = now;
+
+        // Two small steps per frame keep the springs stable on slow frames.
+        for (var i = 0; i < 2; i++) {
+            var h = dt / 2;
+            var r = spring(s.x, s.vx, goal.x, FOOT, h);
+            s.x = r[0];
+            s.vx = r[1];
+            r = spring(s.y, s.vy, goal.y, FOOT, h);
+            s.y = r[0];
+            s.vy = r[1];
+
+            // The top lags behind the foot: lean away from the direction of travel.
+            var lean = -s.vx * LEAN_PER_SPEED * (below ? -1 : 1);
+            lean = Math.max(-MAX_LEAN, Math.min(MAX_LEAN, lean));
+            r = spring(s.a, s.va, restTilt + lean, SWAY, h);
+            s.a = r[0];
+            s.va = r[1];
+
+            r = spring(s.k, s.vk, 1, POP, h);
+            s.k = r[0];
+            s.vk = r[1];
+        }
+        draw();
+
+        var moving =
+            Math.abs(s.vx) + Math.abs(s.vy) > 2 ||
+            Math.abs(s.va) > 0.5 ||
+            Math.abs(s.vk) > 0.01 ||
+            Math.abs(goal.x - s.x) + Math.abs(goal.y - s.y) > 0.3 ||
+            Math.abs(restTilt - s.a) > 0.05;
+        // Keep going until the card has settled, or has finished fading out.
+        var fading = !shown && now - hiddenAt < FADE;
+        if (moving && (shown || fading)) frame = requestAnimationFrame(tick);
+    }
+
+    // The foot is the card's bottom centre (or top centre when it sits below).
+    function draw() {
+        var left = s.x - size.w / 2;
+        var top = below ? s.y : s.y - size.h;
+        cardEl.style.transform =
+            "translate3d(" + left.toFixed(2) + "px," + top.toFixed(2) + "px,0) " +
+            "rotate(" + s.a.toFixed(2) + "deg) scale(" + s.k.toFixed(3) + ")";
+    }
+
+    /* ---- Touch: drawer ------------------------------------------------ */
 
     var drawer = null;
     var openLink = null;
@@ -229,9 +405,7 @@
             '<div class="preview-drawer-bar">' +
             '<button type="button" class="preview-close" aria-label="Close preview">&times;</button>' +
             "</div>" +
-            '<div class="preview-drawer-body">' +
-            previewMarkup() +
-            "</div>" +
+            figureMarkup() +
             '<a class="preview-open">Open</a>';
         document.body.appendChild(drawer);
         openLink = drawer.querySelector(".preview-open");
@@ -368,7 +542,7 @@
         var target = e.target;
         var el = target.closest ? target.closest("[data-card]") : null;
         if (el && triggers.indexOf(el) !== -1) {
-            // Desktop with room for the card: the link behaves as a link.
+            // With a mouse the link behaves as a link.
             if (useCard()) return;
             // Let people open a link in a new tab or window the usual way.
             if (e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
@@ -409,6 +583,10 @@
         }
     });
 
+    // The card is placed against the window, so anything that moves the page
+    // under it puts it away.
+    window.addEventListener("scroll", hideCard, { passive: true });
+    window.addEventListener("blur", hideCard);
     window.addEventListener("resize", function () {
         hideCard();
         if (!active) return;

@@ -17,14 +17,14 @@ Email · [LinkedIn](https://www.linkedin.com/in/daviddbwilson/) · [X](https://x
 
 ## Link previews
 
-Each of these links shows a preview: a card beside the text on desktop, a drawer at the bottom of the screen on a phone. The captions, images and URLs live in `cards.js`.
+Each of these links shows a preview picture with a short caption and a badge on it: beside the word when you hover with a mouse, in a drawer at the bottom of the screen on a phone. The captions, badges, images and URLs live in `cards.js`.
 
 | Link text | Badge | Caption |
 |---|---|---|
-| Disney | Video | They shot a testimonial in front of the Millennium Falcon. A big moment for the kid from Cape Town. |
-| data tool | Video | Neon. Filter one chart and every other chart responds instantly. |
-| AI workflow builder | Video | Hunch. A canvas for chaining AI models together. Won Latent Space's AI UX award. |
-| agents | Blog post | Before OpenClaw and GrokBot. Early is still wrong. |
-| project | Video | LinkedIn Rewind. Idea to production in four days, then 60+ versions in 17. |
-| generative data apps | Blog post | (Draft) Launched in beta, May 2026. Describe an app and an agent builds it on your governed data. |
-| evals | Blog post | (Draft) I wrote up how we used evals to take wrong chart edits from 21% to 3%. Most of the gain came from the code around the model, not the prompt. |
+| Disney | Testimonial (video) | Disney's testimonial. In front of the Falcon! |
+| data tool | Demo (video) | (Draft) Neon. Filter one chart and they all respond. |
+| AI workflow builder | Demo (video) | (Draft) Hunch. A canvas for chaining AI models. |
+| agents | Blog post | (Draft) Before OpenClaw. Early is still wrong. |
+| project | Talk (video) | (Draft) LinkedIn Rewind. Idea to production in four days. |
+| generative data apps | Blog post | (Draft) Describe an app. An agent builds it. |
+| evals | Blog post | (Draft) Wrong chart edits: 21% down to 3%. |
