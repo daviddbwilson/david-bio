@@ -35,8 +35,7 @@ window.DB_CARDS = {
         url: "https://neon.ac/preview",
         badge: "Demo",
         icon: "video",
-        // DRAFT caption.
-        caption: "Neon. Filter one chart and they all respond.",
+        caption: "Instant data exploration to stay in flow",
         image: "assets/cards/02-neon-canvas.webp",
         width: 800,
         height: 547,

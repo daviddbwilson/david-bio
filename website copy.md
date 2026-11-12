@@ -22,7 +22,7 @@ Each of these links shows a preview picture with a short caption and a badge on 
 | Link text | Badge | Caption |
 |---|---|---|
 | Disney | Testimonial (video) | Disney's testimonial. In front of the Falcon! |
-| data tool | Demo (video) | (Draft) Neon. Filter one chart and they all respond. |
+| data tool | Demo (video) | Instant data exploration to stay in flow |
 | AI workflow builder | Demo (video) | (Draft) Hunch. A canvas for chaining AI models. |
 | agents | Blog post | (Draft) Before OpenClaw. Early is still wrong. |
 | project | Talk (video) | (Draft) LinkedIn Rewind. Idea to production in four days. |
