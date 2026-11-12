@@ -17,6 +17,13 @@
     --font-mono: "Geist Mono", monospace;
     --max-width: 640px;
     --spacing-unit: 1rem;
+
+    /* One line of body text on the home page. Every gap there is a whole
+       number of lines, so all text sits on a 27px baseline grid. It is set in
+       px because the root size is a fixed 17px, and because the 1.588235
+       multiplier used elsewhere lands a hair under 27px and drifts off the
+       grid as the page goes on. */
+    --line: 27px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -142,29 +149,59 @@ button:focus-visible {
    ------------------------------------------------------------------ */
 
 .home {
+    /* The body's top padding is not a whole number of lines; this starts the
+       column on a grid line, three lines down. */
+    margin-top: calc(var(--line) * 3 - var(--spacing-unit) * 4);
+    line-height: var(--line);
     /* Room for the page to scroll while the preview drawer is open. */
     padding-bottom: var(--drawer-space, 0px);
 }
 
+/* Vertical rhythm, counted baseline to baseline in 27px lines:
+     name -> tagline              2
+     tagline -> first paragraph   3
+     paragraph -> paragraph       2  (one blank line; same between bullets)
+     last paragraph -> footer     3
+   To check it, add class="show-grid" to <html>: see the end of this file. */
+
 .home-header {
-    margin-bottom: calc(var(--spacing-unit) * 2.5);
+    margin-bottom: calc(var(--line) * 2);
 }
 
 .home h1 {
     font-size: 1.5rem;
-    margin-bottom: calc(var(--spacing-unit) * 0.75);
+    line-height: var(--line);
+    margin-bottom: var(--line);
 }
 
 .tagline {
     font-size: 1.125rem;
+    line-height: var(--line);
     color: var(--color-text-secondary);
     letter-spacing: -0.01em;
     text-wrap: balance;
 }
 
+/* Larger type sits lower in a line of the same height. In Geist the name's
+   baseline lands 3px below the grid line and the tagline's 1px below, at both
+   the desktop and phone sizes, so lift each by that much. If a size or the
+   typeface changes, turn on the grid overlay and re-measure. */
+.home h1,
+.tagline {
+    position: relative;
+}
+
+.home h1 {
+    top: -3px;
+}
+
+.tagline {
+    top: -1px;
+}
+
 .home > p,
 .companies {
-    margin-bottom: var(--spacing-unit);
+    margin-bottom: var(--line);
 }
 
 .companies {
@@ -177,7 +214,7 @@ button:focus-visible {
 }
 
 .companies li + li {
-    margin-top: calc(var(--spacing-unit) * 0.5);
+    margin-top: var(--line);
 }
 
 .companies li::before {
@@ -237,7 +274,7 @@ button:focus-visible {
 }
 
 .home-footer {
-    margin-top: calc(var(--spacing-unit) * 3.5);
+    margin-top: calc(var(--line) * 2);
     padding-top: 0;
 }
 
@@ -258,6 +295,11 @@ button:focus-visible {
 }
 
 @media (max-width: 480px) {
+    .home {
+        /* The body's top padding is smaller here; start two lines down. */
+        margin-top: calc(var(--line) * 2 - var(--spacing-unit) * 2);
+    }
+
     .home h1 {
         font-size: 1.375rem;
     }
@@ -474,4 +516,35 @@ button:focus-visible {
     .preview-drawer {
         display: none;
     }
+}
+
+/* ------------------------------------------------------------------
+   Baseline grid overlay, for checking vertical rhythm on the home page.
+   Add class="show-grid" to <html> (in dev tools) to draw a line under
+   every 27px baseline. Nothing on the site turns it on.
+   ------------------------------------------------------------------ */
+
+html.show-grid body {
+    position: relative;
+}
+
+html.show-grid body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    min-height: 100vh;
+    z-index: 5;
+    pointer-events: none;
+    /* Body text's baseline is 19px below the top of its 27px line. */
+    background-image: linear-gradient(
+        to bottom,
+        transparent 19px,
+        rgba(255, 60, 120, 0.55) 19px,
+        rgba(255, 60, 120, 0.55) 20px,
+        transparent 20px
+    );
+    background-size: 100% var(--line);
 }

@@ -1,0 +1,25 @@
+/* Geist Sans, served from this site. The files are from the geist npm package
+   (v1.0.0), under the SIL Open Font License: see Geist-LICENSE.txt. */
+@font-face {
+    font-family: "Geist";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("Geist-Regular.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Geist";
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url("Geist-Medium.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Geist";
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url("Geist-SemiBold.woff2") format("woff2");
+}
