@@ -12,11 +12,15 @@
  *            "Testimonial", "Blog post".
  *   icon     "video" or "post": the icon shown beside the badge.
  *   caption  A few words, shown on the image. Keep it to one short line.
+ *            Leave it out to show the image on its own.
  *   image    Path to the image (WebP, about 800px on the long edge).
  *   width, height  The image's pixel size, so the card is the right shape
  *            before the image has loaded.
  *   tone     A dark colour taken from the bottom edge of the image. The image
  *            fades into it so the caption stays readable.
+ *   focus    Optional. Which part of the image to keep when it has to be
+ *            cropped (the drawer crops tall images), as a CSS object-position
+ *            value such as "50% 10%" for "the top middle".
  *   alt      Describes the image for people who can't see it.
  */
 window.DB_CARDS = {
@@ -101,5 +105,15 @@ window.DB_CARDS = {
         height: 495,
         tone: "#1d1320",
         alt: "The evals post's header: a mountain road of switchbacks on a purple background",
+    },
+    // No url: this one is a picture only, on the word "family".
+    // The children's faces are covered in the image file itself.
+    family: {
+        image: "assets/cards/09-family-cards.webp",
+        width: 800,
+        height: 929,
+        tone: "#1a1a19",
+        focus: "50% 8%",
+        alt: "My family dressed as playing cards: a king, a queen and two jokers. The children's faces are covered with emoji.",
     },
 };

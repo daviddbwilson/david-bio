@@ -406,6 +406,16 @@ button:focus-visible {
     text-wrap: balance;
 }
 
+/* No caption: just the picture, with nothing faded or added below it. */
+.preview-figure.no-caption {
+    padding-bottom: 0;
+}
+
+.preview-figure.no-caption::after,
+.preview-figure.no-caption .preview-caption {
+    display: none;
+}
+
 /* No image (or it failed to load): the caption stands on its own. */
 .preview-figure.no-image {
     padding: 44px 14px 12px;
@@ -544,6 +554,11 @@ button:focus-visible {
 
 .preview-drawer .preview-caption {
     font-size: 0.9375rem;
+}
+
+/* With no Open button there is room for a taller picture. */
+.preview-drawer.no-link .preview-media {
+    max-height: 31vh;
 }
 
 .preview-open {

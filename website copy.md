@@ -9,7 +9,7 @@ I've been designing and building software since 9th grade, when my friend Ross a
 
 Today I'm at [Hex](https://hex.tech), where I work on our [generative data apps](https://hex.tech/blog/introducing-generative-data-apps/) and [evals](https://hex.tech/blog/we-used-evals-to-improve-ai-feature/). I also hold the dubious distinction of being the company's top AI spender.
 
-I've lived on four continents: Cape Town, Windsor, Dubai and now San Francisco.
+I'm from Cape Town and have lived on four continents, with stints in Windsor and Dubai. I now live in San Francisco with my family.
 
 Email · [LinkedIn](https://www.linkedin.com/in/daviddbwilson/) · [X](https://x.com/daviddbwilson)
 
@@ -28,3 +28,4 @@ Each of these links shows a preview picture with a short caption and a badge on 
 | project | Talk (video) | (Draft) LinkedIn Rewind. Idea to production in four days. |
 | generative data apps | Blog post | My first product launch at Hex |
 | evals | Blog post | (Draft) Wrong chart edits: 21% down to 3%. |
+| family | none (picture only, not a link) | none |

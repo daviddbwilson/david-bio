@@ -74,7 +74,10 @@
         }
         el.classList.add("card-link");
 
-        var text = [kindOf(card), card.caption].filter(Boolean).join(": ");
+        // A picture with no caption is described by its alt text instead.
+        var text = [kindOf(card), card.caption || card.alt]
+            .filter(Boolean)
+            .join(": ");
         if (text) {
             var desc = document.createElement("span");
             desc.id = "card-desc-" + key;
@@ -151,6 +154,8 @@
 
         figure.style.setProperty("--tone", card.tone || "#161616");
         figure.classList.toggle("no-image", !card.image);
+        figure.classList.toggle("no-caption", !card.caption);
+        img.style.objectPosition = card.focus || "";
         media.classList.remove("is-loaded");
         img.removeAttribute("src");
         if (card.image) {
@@ -490,6 +495,7 @@
             openLink.hidden = true;
             openLink.removeAttribute("href");
         }
+        drawer.classList.toggle("no-link", !card.url);
 
         if (active) active.classList.remove("is-active");
         active = el;
