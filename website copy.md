@@ -21,7 +21,8 @@ Each of these links shows a preview picture with a short caption and a badge on 
 
 | Link text | Badge | Caption |
 |---|---|---|
-| hardware | Case study | I loved working with Fred and his team to design our sensor |
+| David Wilson (the name at the top; no underline) | none (picture only, not a link) | Good morning! / Good afternoon! / Good evening! with a waving hand, by the visitor's clock |
+| hardware | Case study | I loved working with Fred Bould and his team to design our sensor |
 | software | none (picture only, not a link) | Simple at a glance. More detail as you dig. |
 | Disney | Testimonial (video) | Disney's testimonial. In front of the Falcon! |
 | data tool | Demo (video) | Instant data exploration to stay in flow |

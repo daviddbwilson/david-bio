@@ -52,8 +52,8 @@
             ]
         }
         </script>
-        <link rel="stylesheet" href="assets/fonts/geist.css?v=20261112" />
-        <link rel="stylesheet" href="styles.css?v=20261112" />
+        <link rel="stylesheet" href="assets/fonts/geist.css?v=20261112b" />
+        <link rel="stylesheet" href="styles.css?v=20261112b" />
         <link
             rel="icon"
             type="image/png"
@@ -72,7 +72,7 @@
             href="assets/apple-touch-icon.png"
         />
     </head>
-    <body>
+    <body class="home-body">
         <a href="#main" class="skip-link">Skip to content</a>
         <!--
             The ?v= on the stylesheets and scripts above and below makes
@@ -84,9 +84,11 @@
             drawer on touch). Their caption, image and URL live in cards.js;
             the href here is what works when JavaScript is off.
         -->
+        <!-- .page is the layer that shrinks back when a preview opens on a phone. -->
+        <div class="page">
         <main id="main" class="home">
             <header class="home-header">
-                <h1>David Wilson</h1>
+                <h1><span data-card="hello">David Wilson</span></h1>
                 <p class="tagline">
                     I love making complex software feel simple.
                 </p>
@@ -221,6 +223,7 @@
                 </ul>
             </footer>
         </main>
+        </div>
         <script>
             (function () {
                 var e = "daviddbwilson";
@@ -229,7 +232,7 @@
                 link.href = "mailto:" + e + "@" + d;
             })();
         </script>
-        <script src="cards.js?v=20261112" defer></script>
-        <script src="card-preview.js?v=20261112" defer></script>
+        <script src="cards.js?v=20261112b" defer></script>
+        <script src="card-preview.js?v=20261112b" defer></script>
     </body>
 </html>
