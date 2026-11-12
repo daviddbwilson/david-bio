@@ -205,10 +205,10 @@
     var EDGE = 10; // px kept clear of the window edge
     var FOLLOW = 0.55; // how far the foot goes toward the pointer (0 = stays put)
     var FOOT = { stiffness: 210, damping: 21 }; // settles quickly, tiny overshoot
-    var SWAY = { stiffness: 150, damping: 9 }; // looser: a couple of swings
+    var SWAY = { stiffness: 170, damping: 19 }; // one soft swing back, no ringing
     var POP = { stiffness: 320, damping: 24 }; // growing out of the word
-    var LEAN_PER_SPEED = 0.014; // degrees of lean per px/s of foot speed
-    var MAX_LEAN = 13; // degrees
+    var LEAN_PER_SPEED = 0.007; // degrees of lean per px/s of foot speed
+    var MAX_LEAN = 6; // degrees
     var FADE = 160; // ms; matches the opacity transition in styles.css
 
     var cardEl = null;
@@ -300,7 +300,7 @@
             s.x = pointer ? pointer.x : word.left + word.width / 2;
             s.y = goal.y;
             s.vx = s.vy = 0;
-            s.a = restTilt * 3;
+            s.a = restTilt * 2;
             s.va = 0;
             s.k = 0.6;
             s.vk = 0;
