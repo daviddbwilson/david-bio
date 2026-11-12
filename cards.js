@@ -12,7 +12,13 @@
  *            "Testimonial", "Blog post", "Case study".
  *   icon     "video" or "post": the icon shown beside the badge.
  *   caption  A few words, shown on the image. Keep it to one short line.
- *            Leave it out to show the image on its own.
+ *            Leave it out to show the image on its own. It can also be a
+ *            function that returns the words, for a caption that changes.
+ *   action   Optional. The words on the phone sheet's button. Without it the
+ *            button says "Watch <badge>" for a video and "Read <badge>" for
+ *            anything else.
+ *   quiet    Optional. true leaves the word looking like ordinary text, with
+ *            no dotted underline: a preview for people who happen on it.
  *   image    Path to the image (WebP, about 800px on the long edge).
  *   width, height  The image's pixel size, so the card is the right shape
  *            before the image has loaded.
@@ -24,11 +30,36 @@
  *   alt      Describes the image for people who can't see it.
  */
 window.DB_CARDS = {
+    // An easter egg on the name at the top: a photo and a greeting that
+    // follows the visitor's clock.
+    hello: {
+        quiet: true,
+        caption: function () {
+            var hour = new Date().getHours();
+            var words =
+                hour < 5
+                    ? "Hello, night owl!"
+                    : hour < 7
+                      ? "Hello, early bird!"
+                      : hour < 12
+                        ? "Good morning!"
+                        : hour < 18
+                          ? "Good afternoon!"
+                          : "Good evening!";
+            return words + " \uD83D\uDC4B"; // waving hand
+        },
+        image: "assets/cards/00-david.webp",
+        width: 800,
+        height: 800,
+        tone: "#16191d",
+        focus: "50% 30%",
+        alt: "David, smiling, in a cream cable-knit jumper",
+    },
     hardware: {
         url: "https://www.bould.com/work/aruba",
         badge: "Case study",
         icon: "post",
-        caption: "I loved working with Fred and his team to design our sensor",
+        caption: "I loved working with Fred Bould and his team to design our sensor",
         image: "assets/cards/11-cape-sensor-mounting.webp",
         width: 768,
         height: 432,
@@ -128,8 +159,8 @@ window.DB_CARDS = {
     family: {
         image: "assets/cards/09-family-cards.webp",
         width: 800,
-        height: 929,
-        tone: "#1a1a19",
+        height: 1066,
+        tone: "#1b1a18",
         focus: "50% 8%",
         alt: "My family dressed as playing cards: a king, a queen and two jokers. The children's faces are covered with emoji.",
     },

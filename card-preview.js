@@ -4,7 +4,8 @@
  * Any element with data-card="key", where key exists in cards.js, gets a
  * preview. With a mouse, an image card rises out of the hovered word and
  * sways on a springy stem as the pointer moves. On touch devices, a tap opens
- * the same card in a drawer at the bottom of the screen.
+ * the same picture in a sheet at the bottom of the screen, and the page
+ * shrinks back behind it.
  *
  * Without this script every link is still an ordinary link.
  */
@@ -40,6 +41,12 @@
         return cards[el.getAttribute("data-card")];
     }
 
+    // A caption is usually plain words, but can be a function that makes them.
+    function captionOf(card) {
+        var caption = card.caption;
+        return (typeof caption === "function" ? caption() : caption) || "";
+    }
+
     function isLink(el) {
         return el.tagName === "A";
     }
@@ -72,10 +79,11 @@
             // A card with no link: make the word reachable by keyboard.
             el.tabIndex = 0;
         }
-        el.classList.add("card-link");
+        // A quiet card leaves its word looking like ordinary text.
+        el.classList.add(card.quiet ? "card-quiet" : "card-link");
 
         // A picture with no caption is described by its alt text instead.
-        var text = [kindOf(card), card.caption || card.alt]
+        var text = [kindOf(card), captionOf(card) || card.alt]
             .filter(Boolean)
             .join(": ");
         if (text) {
@@ -137,7 +145,7 @@
     function figureMarkup() {
         return (
             '<div class="preview-figure">' +
-            '<div class="preview-media"><img alt="" decoding="async" /></div>' +
+            '<div class="preview-media"><img alt="" decoding="async" draggable="false" /></div>' +
             '<span class="preview-badge"></span>' +
             '<p class="preview-caption"></p>' +
             "</div>"
@@ -152,9 +160,10 @@
         var badge = figure.querySelector(".preview-badge");
         var caption = figure.querySelector(".preview-caption");
 
+        var words = captionOf(card);
         figure.style.setProperty("--tone", card.tone || "#161616");
         figure.classList.toggle("no-image", !card.image);
-        figure.classList.toggle("no-caption", !card.caption);
+        figure.classList.toggle("no-caption", !words);
         img.style.objectPosition = card.focus || "";
         media.classList.remove("is-loaded");
         img.removeAttribute("src");
@@ -188,7 +197,7 @@
                 badge.insertAdjacentHTML("beforeend", ICONS[card.icon]);
             }
         }
-        caption.textContent = card.caption || "";
+        caption.textContent = words;
     }
 
     /* ---- Mouse: a card on a springy stem ------------------------------
@@ -392,26 +401,65 @@
             "rotate(" + s.a.toFixed(2) + "deg) scale(" + s.k.toFixed(3) + ")";
     }
 
-    /* ---- Touch: drawer ------------------------------------------------ */
+    /* ---- Touch: a sheet over the page ---------------------------------
+     *
+     * A tap opens the picture in a sheet at the bottom of the screen. The
+     * picture runs edge to edge and the sheet carries on below it in the
+     * picture's own tone, so the sheet is as tall as its picture needs.
+     * Behind it the page shrinks back and dims, and slides up if it has to
+     * so that the tapped word stays in view. Dragging the sheet down pulls
+     * the page forward again in step with the finger.
+     */
 
+    var SHEET_MS = 450; // matches the sheet transitions in styles.css
+    var SHEET_MAX = 0.72; // tallest picture, as a share of the screen height
+    var RECEDE_SCALE = 0.94; // how small the page gets behind the sheet
+    var RECEDE_DROP = 12; // px the page drops, so its rounded top shows
+    var RECEDE_RADIUS = 14; // px
+    var SCRIM = 0.45; // how dark the page gets
+    var FLICK = 0.4; // px per ms; a faster downward flick closes the sheet
+    var CLEARANCE = 64; // px kept between the tapped word and the sheet
+
+    var root = document.documentElement;
+    var page = document.querySelector(".page");
     var drawer = null;
+    var scrim = null;
     var openLink = null;
     var closeButton = null;
-    var active = null; // the trigger whose preview is in the drawer
+    var active = null; // the trigger whose preview is in the sheet
     var drag = null;
     var swallowClick = false;
+    var receded = false; // the page is pinned and pushed back
+    var restoreTimer = 0;
+    var sheetHeight = 0;
+    var lift = 0; // px the page slides up to keep the tapped word in view
+    var pageShift = 0; // the page's current vertical offset, in px
+
+    // "Watch demo", "Read blog post": what the button will do.
+    function actionLabel(card) {
+        if (card.action) return card.action;
+        if (!card.badge) return "Open";
+        var verb = card.icon === "video" ? "Watch" : "Read";
+        return verb + " " + card.badge.charAt(0).toLowerCase() + card.badge.slice(1);
+    }
 
     function buildDrawer() {
+        scrim = document.createElement("div");
+        scrim.className = "preview-scrim";
+        document.body.appendChild(scrim);
+
         drawer = document.createElement("div");
         drawer.className = "preview-drawer";
         drawer.setAttribute("role", "dialog");
         drawer.setAttribute("aria-modal", "true");
+        // The close button is for keyboards and screen readers; it only shows
+        // when a keyboard focuses it. On touch: swipe down or tap outside.
         drawer.innerHTML =
             '<div class="preview-drawer-bar">' +
-            '<button type="button" class="preview-close" aria-label="Close preview">&times;</button>' +
+            '<button type="button" class="preview-close">Close</button>' +
             "</div>" +
             figureMarkup() +
-            '<a class="preview-open">Open</a>';
+            '<a class="preview-open" draggable="false"></a>';
         document.body.appendChild(drawer);
         openLink = drawer.querySelector(".preview-open");
         closeButton = drawer.querySelector(".preview-close");
@@ -424,41 +472,17 @@
             setTimeout(closeDrawer, 0);
         });
 
-        // Swipe down to dismiss.
+        // Drag the sheet down to dismiss it. The drag starts on the sheet, but
+        // the finger can leave it, so the rest is followed on the document.
         drawer.addEventListener("pointerdown", function (e) {
-            if (e.button) return;
+            if (e.button || drag) return;
             drag = { id: e.pointerId, y: e.clientY, t: e.timeStamp, dy: 0, moved: false };
+            document.addEventListener("pointermove", onDragMove, true);
+            document.addEventListener("pointerup", onDragEnd, true);
+            document.addEventListener("pointercancel", onDragEnd, true);
         });
-        drawer.addEventListener("pointermove", function (e) {
-            if (!drag || e.pointerId !== drag.id) return;
-            var dy = e.clientY - drag.y;
-            if (!drag.moved) {
-                if (Math.abs(dy) < 6) return;
-                drag.moved = true;
-                drawer.setPointerCapture(e.pointerId);
-                drawer.classList.add("is-dragging");
-            }
-            drag.dy = Math.max(0, dy);
-            drawer.style.transform = "translateY(" + drag.dy + "px)";
-        });
-        function endDrag(e) {
-            if (!drag || e.pointerId !== drag.id) return;
-            var d = drag;
-            drag = null;
-            drawer.classList.remove("is-dragging");
-            if (!d.moved) return;
-            // The gesture was a drag, so it must not also count as a tap.
-            swallowClick = true;
-            setTimeout(function () {
-                swallowClick = false;
-            }, 50);
-            var speed = d.dy / Math.max(1, e.timeStamp - d.t); // px per ms
-            if (d.dy > 70 || (d.dy > 24 && speed > 0.5)) closeDrawer();
-            else drawer.style.transform = "";
-        }
-        drawer.addEventListener("pointerup", endDrag);
-        drawer.addEventListener("pointercancel", endDrag);
-        drawer.addEventListener(
+        // A drag must not also count as a tap, wherever the finger lifts.
+        document.addEventListener(
             "click",
             function (e) {
                 if (swallowClick) {
@@ -470,11 +494,121 @@
         );
     }
 
+    function onDragMove(e) {
+        if (!drag || e.pointerId !== drag.id) return;
+        var dy = e.clientY - drag.y;
+        if (!drag.moved) {
+            if (Math.abs(dy) < 6) return;
+            drag.moved = true;
+            drawer.classList.add("is-dragging");
+            root.classList.add("sheet-dragging");
+        }
+        drag.dy = dy;
+        if (dy >= 0) {
+            // Down: the sheet follows the finger and the page comes forward.
+            drawer.style.transform = "translateY(" + dy + "px)";
+            setRecede(1 - Math.min(1, dy / sheetHeight));
+        } else {
+            // Up: there is nowhere to go, so it gives a little and resists.
+            var give = 28 * (1 - 1 / (-dy / 80 + 1));
+            drawer.style.transform = "translateY(" + (-give).toFixed(1) + "px)";
+            setRecede(1);
+        }
+    }
+
+    function onDragEnd(e) {
+        if (!drag || e.pointerId !== drag.id) return;
+        var d = drag;
+        drag = null;
+        document.removeEventListener("pointermove", onDragMove, true);
+        document.removeEventListener("pointerup", onDragEnd, true);
+        document.removeEventListener("pointercancel", onDragEnd, true);
+        drawer.classList.remove("is-dragging");
+        root.classList.remove("sheet-dragging");
+        if (!d.moved) return;
+        swallowClick = true;
+        setTimeout(function () {
+            swallowClick = false;
+        }, 50);
+        var speed = d.dy / Math.max(1, e.timeStamp - d.t); // px per ms
+        var far = d.dy > sheetHeight * 0.3;
+        var flicked = d.dy > 16 && speed > FLICK;
+        if (far || flicked) {
+            closeDrawer();
+        } else {
+            drawer.style.transform = "";
+            setRecede(1);
+        }
+    }
+
+    // The picture is as wide as the sheet and as tall as its shape needs,
+    // up to a share of the screen. Returns the sheet's resulting height.
+    function sizeSheet(card) {
+        var media = drawer.querySelector(".preview-media");
+        var rest = drawer.offsetHeight - media.offsetHeight;
+        var height = 0;
+        if (card.image && card.width && card.height && !media.hidden) {
+            var natural = (drawer.clientWidth * card.height) / card.width;
+            height = Math.round(Math.min(natural, window.innerHeight * SHEET_MAX));
+            media.style.aspectRatio = "auto";
+            media.style.height = height + "px";
+        } else {
+            media.style.height = "";
+        }
+        return rest + height;
+    }
+
+    // Where the bottom of a word would be if the page were not pushed back.
+    function restingBottom(el) {
+        var bottom = el.getBoundingClientRect().bottom;
+        if (!receded) return bottom;
+        return (bottom - pageShift) / RECEDE_SCALE;
+    }
+
+    // Pin the page in place as a screen-sized layer, so it can be pushed back
+    // as one piece and cannot scroll under the sheet.
+    function pinPage() {
+        if (receded) return;
+        var scrolled = window.scrollY;
+        page.style.height = window.innerHeight + "px";
+        root.classList.add("sheet-open");
+        page.classList.add("is-receded");
+        page.scrollTop = scrolled;
+        receded = true;
+    }
+
+    // Put the page back exactly where it was.
+    function unpinPage() {
+        if (!receded || active) return;
+        var scrolled = page.scrollTop;
+        page.classList.remove("is-receded");
+        root.classList.remove("sheet-open");
+        page.style.height = "";
+        page.style.transform = "";
+        page.style.borderRadius = "";
+        window.scrollTo(0, scrolled);
+        receded = false;
+    }
+
+    // amount: 1 is fully pushed back, 0 is where the page normally sits.
+    function setRecede(amount) {
+        var scale = 1 - (1 - RECEDE_SCALE) * amount;
+        pageShift = (RECEDE_DROP - lift) * amount;
+        page.style.transform = amount
+            ? "translate3d(0," + pageShift.toFixed(1) + "px,0) scale(" + scale.toFixed(4) + ")"
+            : "";
+        page.style.borderRadius = (RECEDE_RADIUS * amount).toFixed(1) + "px";
+        scrim.style.opacity = (SCRIM * amount).toFixed(3);
+    }
+
     function openDrawer(el) {
         if (!drawer) buildDrawer();
         var card = cardFor(el);
         hideCard();
-        fill(drawer, card, makeRoom);
+        var wordBottom = restingBottom(el);
+
+        fill(drawer, card, null);
+        drawer.style.setProperty("--tone", card.tone || "#161616");
         drawer.setAttribute(
             "aria-label",
             el.textContent.replace(/\s+/g, " ").trim() + " preview"
@@ -483,6 +617,10 @@
         if (card.url) {
             openLink.hidden = false;
             openLink.href = card.url;
+            openLink.textContent = actionLabel(card);
+            if (ICONS[card.icon]) {
+                openLink.insertAdjacentHTML("beforeend", ICONS[card.icon]);
+            }
             // Match how the word itself opens: a new tab for other sites.
             if (isLink(el) && el.target) {
                 openLink.target = el.target;
@@ -501,32 +639,19 @@
         active = el;
         el.classList.add("is-active");
 
+        sheetHeight = sizeSheet(card);
+        clearTimeout(restoreTimer);
+        pinPage();
+        // Slide the page up just enough to keep the word, and a couple of
+        // lines after it, clear of the sheet.
+        var room = window.innerHeight - sheetHeight - CLEARANCE;
+        lift = Math.max(0, RECEDE_DROP + RECEDE_SCALE * wordBottom - room);
+        setRecede(1);
+
         drawer.style.transform = "";
         drawer.classList.add("is-open");
-        makeRoom();
         (card.url ? openLink : closeButton).focus({ preventScroll: true });
         warmImages();
-    }
-
-    // Keep the tapped word visible above the drawer.
-    function makeRoom() {
-        if (!active || !drawer) return;
-        var height = drawer.offsetHeight;
-        document.documentElement.style.setProperty(
-            "--drawer-space",
-            height + "px"
-        );
-        var word = active.getBoundingClientRect();
-        var limit = window.innerHeight - height - 16;
-        var delta = 0;
-        if (word.bottom > limit) delta = word.bottom - limit;
-        else if (word.top < 8) delta = word.top - 8;
-        if (delta) {
-            window.scrollBy({
-                top: delta,
-                behavior: reduceMotion.matches ? "auto" : "smooth",
-            });
-        }
     }
 
     function closeDrawer(options) {
@@ -536,7 +661,9 @@
         el.classList.remove("is-active");
         drawer.classList.remove("is-open");
         drawer.style.transform = "";
-        document.documentElement.style.removeProperty("--drawer-space");
+        setRecede(0);
+        clearTimeout(restoreTimer);
+        restoreTimer = setTimeout(unpinPage, reduceMotion.matches ? 0 : SHEET_MS);
         if (!options || options.restoreFocus !== false) {
             el.focus({ preventScroll: true });
         }
@@ -593,10 +720,21 @@
     // under it puts it away.
     window.addEventListener("scroll", hideCard, { passive: true });
     window.addEventListener("blur", hideCard);
+    var lastWidth = window.innerWidth;
     window.addEventListener("resize", function () {
         hideCard();
-        if (!active) return;
-        if (useCard()) closeDrawer();
-        else makeRoom();
+        var turned = window.innerWidth !== lastWidth;
+        lastWidth = window.innerWidth;
+        if (!receded) return;
+        // Phones resize when their toolbars show and hide: keep the pinned
+        // page as tall as the screen. A change of width means the phone was
+        // turned, or the window is now on a mouse: start again.
+        page.style.height = window.innerHeight + "px";
+        if (active && (turned || useCard())) closeDrawer();
+    });
+
+    // Coming back with the Back button can restore the page mid-sheet.
+    window.addEventListener("pageshow", function (e) {
+        if (e.persisted && receded && !active) unpinPage();
     });
 })();
