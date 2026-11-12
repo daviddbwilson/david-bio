@@ -1,82 +1,31 @@
 # David Wilson
 
-> Product founder who designs and ships.
+> I love making complex software feel simple.
 
 ## About
 
-I have been building things since I convinced my 9th grade teacher to let my friend Ross and me mod a video game instead of doing our biology assignment. Neither of us could code. We figured it out – and later founded two startups together.
+I've been designing and building software since 9th grade, when my friend Ross and I talked a teacher into letting us mod a video game instead of doing our biology assignment. Neither of us could code, so it took months longer than the assignment would have! But we were hooked, and later founded two companies together:
 
-I started my first company, Cape Networks, in a basement in Cape Town. We designed and built our own hardware, sold to Aruba/HPE, and moved to San Francisco. I led about fifty people at peak – product, design, engineering, and sales – and grew the business to $10M/y revenue. Aruba's founder offered me a Chief Design Officer role to stay, but my cofounders and I wanted to build something new.
+- **Cape Networks**, acquired by HPE Aruba. Network monitoring hardware and software: >$10M revenue, used by 2,000+ customers including Microsoft, Home Depot, and Disney.
+- **Hunch**: started as a data tool, became an AI workflow builder, then autonomous agents. One project reached 330K users in two weeks. We wound the company down in 2025.
 
-My second company, Hunch, was a deep dive into AI: agents, eval systems, and what it takes to make AI products that work reliably in production. We had real traction – 300K users in two weeks on one project – but couldn't find a venture-scale business model and wound it down.
+Today I'm at Hex, where I work on our generative data apps and evals. I also hold the dubious distinction of being the company's top AI spender.
 
-Two themes run through my career:
+I'm from Cape Town and have lived on four continents. I now live in San Francisco with my family.
 
-Making complex work accessible. Cape gave non-experts instant visibility into network health. Neon Data (pre-Hunch) made data exploration fluid for non-analysts. Hunch put multiple AI models and tools in one place anyone could use. I love making powerful tools feel simple and fun.
+## Links
 
-**Shipping under pressure.** AI is rewriting how every product works, which means a lot of product teams are back in 0→1 mode whether they expected to be or not. I've built agentic systems, eval pipelines, and products that went viral—all while navigating the ambiguity of what "AI product" even means. Iterating fast in uncertain territory is where I'm at my best.
-
-## How I Work Now
-
-I use AI as a force multiplier for product development. My current stack:
-
-- **Claude Code / Cursor**: For prototyping and shipping code directly
-- **Claude Opus**: Thinking partner for hard product and strategy problems
-- **Figma**: Design work, still hands-on
-- **Hunch**: Orchestrating complex AI workflows across models
-
-This approach accelerates development by collapsing the idea → artifact → feedback loop from weeks to hours.
-
-## Work
-
-### Hunch / Overclock
-
-Visual AI workspace and background AI agents. Started with Hunch, a visual canvas for creating workflows with any AI models—still used by thousands.
-
-Evolved into Overclock: production system where AI agents review each other's work, learn from human feedback, and maintain reliability at scale. Built the eval pipelines and feedback loops that kept agent output quality high.
-
-This taught me what most AI products get wrong: they ship demos, not systems. Evals and reliability are the hard part—and I know how to build them.
-
-- Hunch: https://app.hunch.tools
-- Demo (Latent Space AI UX award): https://x.com/Scobleizer/status/1784743064541757913
-
-### LinkedIn Rewind / Coauthor
-
-Viral year-in-review product. 300K users in two weeks (2024). Idea to production in 4 days, then 60+ versions in 17 days—most of which I personally shipped using Claude Code and Cursor, iterating multiple times per day. Rebuilt it in 2025, charged for it, and drove $150K ARR to Coauthor in two weeks.
-
-This is my operating model now: AI tools as force multipliers, fast cycles, direct ownership of what ships.
-
-- Rewind: https://rewind.coauthor.studio
-- Coauthor: https://coauthor.studio
-- Carousel Generator: https://coauthor.studio/carousel
-- 60+ versions video: https://www.youtube.com/watch?v=gTQG0SfJb9Y
-
-### Neon Data
-Super fast data exploration for regular humans. Automatic visualization, instant cross-filtering, auto-joins.
-- Demo: https://neon.ac/preview
-- Latency is the Mind Killer: https://www.youtube.com/watch?v=B6qqvzac4z0
-
-### Cape Networks
-Hardware + SaaS for network performance management. Founder/CEO. Acquired by HPE/Aruba. $10M/y revenue. 2,000+ customers including Microsoft, Amazon, Home Depot, and Disney.
-- Disney testimonial: https://vimeo.com/738368274
-
-## Personal
-
-I live in San Francisco with my wife and two daughters. Grew up in Cape Town. Also lived in Windsor, Johannesburg, and Dubai. Outside work: piano, Star Wars LEGO and other projects with my kids, sneaking in cricket and rugby highlights when I can, and movies at the Alamo Drafthouse.
+- Bould Design's case study on the sensor we designed together: https://www.bould.com/work/aruba
+- Disney's testimonial for Cape Networks (video): https://vimeo.com/738368274
+- Neon, the data tool Hunch started as (video): https://neon.ac/preview
+- Hunch, the AI workflow builder (video): https://x.com/Scobleizer/status/1784743064541757913
+- Lessons from Building Reliable Background Agents (blog post): https://david.bio/blog/reliable-background-agents/
+- LinkedIn Rewind, the project that reached 330K users (video): https://www.youtube.com/watch?v=gTQG0SfJb9Y
+- Hex: https://hex.tech
+- Introducing generative data apps (blog post): https://hex.tech/blog/introducing-generative-data-apps/
+- How we used evals to improve an AI feature (blog post): https://hex.tech/blog/we-used-evals-to-improve-ai-feature/
 
 ## Get in touch
 
 - LinkedIn: https://www.linkedin.com/in/daviddbwilson/
-- Twitter/X: https://x.com/daviddbwilson
-
-## What I Am Looking For
-
-I'm a product leader who ships. Using AI tools (Claude Code, Cursor, Figma), I prototype, iterate, and deliver production-quality work at a pace that used to require a team. I want a role where building is a part of the job, not only leading others.
-
-**The ideal role:**
-- 0-to-1 or early-stage product within a Series B–C+ company
-- High autonomy to prototype and ship using AI-native workflows
-- Scope spanning product, design, and early engineering decisions
-- Fast cycles, ambitious problems, ownership
-
-**Open to:** Product Builder, AI Builder PM, Head of Product (hands-on), or Director/VP roles where I'm expected to personally ship, not just manage.
+- X: https://x.com/daviddbwilson

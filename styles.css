@@ -9,15 +9,21 @@
     --color-accent: #3d6b84;
     --color-accent-hover: #3d6b84;
     --color-accent-subtle: rgba(61, 107, 132, 0.08);
-    --color-shine-1: #3d6b84;
-    --color-shine-2: #5a9aba;
-    --color-shine-3: #98c5dc;
+    --color-surface: #ffffff;
+    --color-hairline: rgba(33, 32, 28, 0.1);
 
     /* Typography */
     --font-sans: "Geist", -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: "Geist Mono", monospace;
     --max-width: 640px;
     --spacing-unit: 1rem;
+
+    /* One line of body text on the home page. Every gap there is a whole
+       number of lines, so all text sits on a 27px baseline grid. It is set in
+       px because the root size is a fixed 17px, and because the 1.588235
+       multiplier used elsewhere lands a hair under 27px and drifts off the
+       grid as the page goes on. */
+    --line: 27px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -32,9 +38,8 @@
         --color-accent: #7eb8d6;
         --color-accent-hover: #7eb8d6;
         --color-accent-subtle: rgba(126, 184, 214, 0.1);
-        --color-shine-1: #7eb8d6;
-        --color-shine-2: #9dcbe5;
-        --color-shine-3: #c8e4f2;
+        --color-surface: #1c1c1b;
+        --color-hairline: rgba(238, 238, 236, 0.12);
     }
 }
 
@@ -72,33 +77,12 @@ main {
     margin: 0 auto;
 }
 
-/* Hero */
-.hero {
-    margin-bottom: calc(var(--spacing-unit) * 3 + 2px);
-}
-
-.profile-photo {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: calc(var(--spacing-unit) * 1.5);
-}
-
 h1 {
     font-weight: 600;
     font-size: 2rem;
     letter-spacing: -0.02em;
     margin-bottom: calc(var(--spacing-unit) * 0.5 + 6px);
     color: var(--color-text-heading);
-    text-wrap: balance;
-}
-
-.tagline {
-    font-size: 1.25rem;
-    font-weight: 500;
-    color: var(--color-text-heading);
-    letter-spacing: -0.015em;
     text-wrap: balance;
 }
 
@@ -117,130 +101,6 @@ h2 {
     text-wrap: balance;
 }
 
-/* tl;dr */
-.tldr {
-    position: relative;
-    top: 5px;
-    margin-bottom: calc(var(--spacing-unit) * 2.5 + 22px);
-    padding: calc(var(--spacing-unit) * 1.25);
-    padding-left: calc(var(--spacing-unit) * 1.5);
-    background: var(--color-card);
-    border-radius: 8px;
-    border-left: 3px solid var(--color-accent);
-}
-
-.tldr h2 {
-    text-transform: lowercase;
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0;
-    color: var(--color-text);
-    margin-bottom: 0;
-}
-
-.tldr ul {
-    list-style: disc;
-    padding-left: 1.2em;
-    margin-top: 0;
-}
-
-.tldr li {
-    margin-bottom: 0;
-}
-
-/* Intro */
-.intro p {
-    margin-bottom: var(--spacing-unit);
-}
-
-.intro p:last-child {
-    margin-bottom: 0;
-}
-
-/* Projects */
-.project {
-    margin-bottom: calc(var(--spacing-unit) * 2);
-}
-
-.project:last-child {
-    margin-bottom: 0;
-}
-
-.project h3 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    margin-bottom: calc(var(--spacing-unit) * 0.5);
-}
-
-.project h3 a {
-    color: var(--color-text);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.09s ease;
-}
-
-.project h3 a:hover {
-    border-bottom-color: var(--color-accent);
-    color: var(--color-accent);
-}
-
-.project p {
-    color: var(--color-text);
-}
-
-.stat {
-    font-weight: 600;
-}
-
-/* Next */
-.next p {
-    margin-bottom: var(--spacing-unit);
-}
-
-.next strong {
-    font-weight: 600;
-    color: var(--color-text-heading);
-}
-
-.next p:last-child {
-    margin-bottom: 0;
-}
-
-/* Contact */
-.contact ul {
-    list-style: none;
-}
-
-.contact li {
-    margin-bottom: calc(var(--spacing-unit) * 0.5);
-}
-
-.contact a {
-    color: var(--color-text);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.09s ease;
-}
-
-.contact a:hover {
-    border-bottom-color: var(--color-accent);
-    color: var(--color-accent);
-}
-
-/* Project links */
-.project p a {
-    color: var(--color-text);
-    text-decoration: none;
-    border-bottom: 1px solid var(--color-text-secondary);
-    transition: border-color 0.09s ease;
-}
-
-.project p a:hover {
-    border-bottom-color: var(--color-accent);
-    color: var(--color-accent);
-}
-
 /* Responsive */
 @media (max-width: 480px) {
     body {
@@ -250,16 +110,6 @@ h2 {
     h1 {
         font-size: 1.75rem;
     }
-
-    .tagline {
-        font-weight: 500;
-        font-size: 1.125rem;
-    }
-
-    .profile-photo {
-        width: 100px;
-        height: 100px;
-    }
 }
 
 /* Footer */
@@ -268,76 +118,12 @@ footer {
     padding-top: calc(var(--spacing-unit) * 2);
 }
 
-.llms-link {
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--color-text-secondary);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.09s ease;
-}
-
-.llms-link:hover {
-    border-bottom-color: var(--color-text-secondary);
-}
-
-/* Toolbox */
-.toolbox-card {
-    background: var(--color-card);
-    border-radius: 8px;
-    padding: calc(var(--spacing-unit) * 1.25);
-    position: relative;
-}
-
-.toolbox-card table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.9rem;
-}
-
-.toolbox-card td {
-    padding: calc(var(--spacing-unit) * 0.35) 0;
-    vertical-align: top;
-}
-
-.toolbox-card td:first-child {
-    color: var(--color-text-secondary);
-    padding-right: var(--spacing-unit);
-}
-
-.toolbox-card td:last-child {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    text-align: right;
-    white-space: nowrap;
-}
-
-.toolbox-updated {
-    display: block;
-    margin-top: calc(var(--spacing-unit) * 0.75);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--color-text-secondary);
-    text-align: right;
-}
-
 /* Focus styles */
-a:focus-visible {
+a:focus-visible,
+button:focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
     border-radius: 2px;
-}
-
-.contact a:focus-visible,
-.project h3 a:focus-visible,
-.project p a:focus-visible,
-.next a:focus-visible {
-    border-bottom-color: var(--color-accent);
-    color: var(--color-accent);
-}
-
-.llms-link:focus-visible {
-    border-bottom-color: var(--color-text-secondary);
 }
 
 /* Skip to content */
@@ -358,223 +144,480 @@ a:focus-visible {
     top: 1rem;
 }
 
-/* Link icons */
-.icon {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    margin-left: 3px;
-    vertical-align: middle;
-    position: relative;
-    top: -1px;
-    color: var(--color-icon);
+/* ------------------------------------------------------------------
+   Home page
+   ------------------------------------------------------------------ */
+
+.home {
+    /* The body's top padding is not a whole number of lines; this starts the
+       column on a grid line, three lines down. */
+    margin-top: calc(var(--line) * 3 - var(--spacing-unit) * 4);
+    line-height: var(--line);
+    /* Room for the page to scroll while the preview drawer is open. */
+    padding-bottom: var(--drawer-space, 0px);
 }
 
-/* Toolkit */
-.toolkit-intro {
+/* Vertical rhythm, counted baseline to baseline in 27px lines:
+     name -> tagline              2
+     tagline -> first paragraph   3
+     paragraph -> paragraph       2  (one blank line; same between bullets)
+     last paragraph -> footer     3
+   To check it, add class="show-grid" to <html>: see the end of this file. */
+
+.home-header {
+    margin-bottom: calc(var(--line) * 2);
+}
+
+.home h1 {
+    font-size: 1.5rem;
+    line-height: var(--line);
+    margin-bottom: var(--line);
+}
+
+.tagline {
+    font-size: 1.125rem;
+    line-height: var(--line);
     color: var(--color-text-secondary);
-    font-size: 0.9rem;
-    margin-bottom: calc(var(--spacing-unit) * 0.75);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
 }
 
-.toolkit-box {
-    background: var(--color-card);
-    border-radius: 8px;
-    padding: calc(var(--spacing-unit) * 1.25);
+/* Larger type sits lower in a line of the same height. In Geist the name's
+   baseline lands 3px below the grid line and the tagline's 1px below, at both
+   the desktop and phone sizes, so lift each by that much. If a size or the
+   typeface changes, turn on the grid overlay and re-measure. */
+.home h1,
+.tagline {
+    position: relative;
 }
 
-.toolkit-list {
+.home h1 {
+    top: -3px;
+}
+
+.tagline {
+    top: -1px;
+}
+
+.home > p,
+.companies {
+    margin-bottom: var(--line);
+}
+
+.companies {
     list-style: none;
 }
 
-.toolkit-list li {
+.companies li {
+    position: relative;
+    padding-left: 1.25em;
+}
+
+.companies li + li {
+    margin-top: var(--line);
+}
+
+.companies li::before {
+    content: "";
+    position: absolute;
+    left: 0.3em;
+    top: 0.72em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-icon);
+}
+
+.home strong {
+    font-weight: 600;
+    color: var(--color-text-heading);
+}
+
+/* Links: plain links are underlined; links with a preview are dotted. */
+.home a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    text-decoration-color: var(--color-icon);
+    transition:
+        color 0.09s ease,
+        text-decoration-color 0.09s ease;
+}
+
+.home a:hover,
+.home .card-link:hover {
+    color: var(--color-accent);
+    text-decoration-color: currentColor;
+}
+
+.home .card-link {
+    text-decoration-style: dotted;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--color-icon);
+    border-radius: 2px;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+}
+
+/* Preview words that are not links (cards with no URL). */
+.home span.card-link {
+    cursor: default;
+}
+
+/* The word whose preview is open in the drawer. */
+.home .card-link.is-active {
+    color: var(--color-accent);
+    text-decoration-color: currentColor;
+    background: var(--color-accent-subtle);
+    box-shadow: 0 0 0 3px var(--color-accent-subtle);
+}
+
+.home-footer {
+    margin-top: calc(var(--line) * 2);
+    padding-top: 0;
+}
+
+.contact {
+    list-style: none;
     display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: calc(var(--spacing-unit) * 0.35) 0;
-    font-size: 0.9rem;
+    flex-wrap: wrap;
 }
 
-.toolkit-use {
-    color: var(--color-text-secondary);
-    padding-right: var(--spacing-unit);
+.contact li {
+    display: flex;
 }
 
-.toolkit-tool {
-    font-family: var(--font-mono);
-    font-size: 0.85rem;
-    white-space: nowrap;
+.contact li + li::before {
+    content: "·";
+    margin: 0 0.6em;
+    color: var(--color-icon);
 }
 
-.toolkit-updated {
-    margin-top: calc(var(--spacing-unit) * 0.75);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--color-text-secondary);
-    text-align: right;
-}
-
-/* Keep last word with icon */
-.nowrap {
-    white-space: nowrap;
-}
-
-/* Next section links */
-.next a {
-    color: var(--color-text);
-    text-decoration: none;
-    border-bottom: 1px solid var(--color-text-secondary);
-    transition: border-color 0.09s ease;
-}
-
-.next a:hover {
-    border-bottom-color: var(--color-accent);
-    color: var(--color-accent);
-}
-
-/* Icon hover color */
-a:hover .icon {
-    color: var(--color-accent);
-    opacity: 0.75;
-}
-
-/* Show arrow icon on project title links hover */
-
-/* Toolkit intro links */
-.toolkit-intro a {
-    color: var(--color-text);
-    text-decoration: none;
-    border-bottom: 1px solid var(--color-text-secondary);
-    transition:
-        border-color 0.09s ease,
-        color 0.09s ease;
-}
-
-.toolkit-intro a:hover {
-    border-bottom-color: var(--color-accent);
-    color: var(--color-accent);
-}
-
-/* Show arrow icon on project title links hover */
-.project h3 a {
-    position: relative;
-}
-
-.project h3 a::after {
-    content: "";
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    margin-left: 4px;
-    vertical-align: middle;
-    position: relative;
-    top: -1px;
-    opacity: 0;
-    width: 0;
-    transition:
-        opacity 0.09s ease,
-        width 0.09s ease;
-    background-color: var(--color-accent);
-    -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.5 9.39362V2.5M11.5 2.5H4.60638M11.5 2.5L2.5 11.5' stroke='%23000' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    mask-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.5 9.39362V2.5M11.5 2.5H4.60638M11.5 2.5L2.5 11.5' stroke='%23000' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    -webkit-mask-size: contain;
-    mask-size: contain;
-}
-
-.project h3 a:hover::after {
-    opacity: 1;
-    width: 14px;
-}
-
-/* Show icons on contact links hover */
-.contact a {
-    position: relative;
-}
-
-.contact a::after {
-    content: "";
-    display: inline-block;
-    width: 0;
-    height: 14px;
-    margin-left: 4px;
-    vertical-align: middle;
-    position: relative;
-    top: -1px;
-    opacity: 0;
-    transition:
-        opacity 0.09s ease,
-        width 0.09s ease;
-}
-
-.contact a:hover::after {
-    opacity: 1;
-    width: 14px;
-}
-
-#email-link::after {
-    background-color: var(--color-accent);
-    -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='1.5' y='2.5' width='11' height='8' rx='1' stroke='%23000'/%3E%3Cpath d='M2 3C2 3 3 4 5 6C7 8 7 8 9 6C11 4 12 3 12 3' stroke='%23000'/%3E%3C/svg%3E");
-    mask-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='1.5' y='2.5' width='11' height='8' rx='1' stroke='%23000'/%3E%3Cpath d='M2 3C2 3 3 4 5 6C7 8 7 8 9 6C11 4 12 3 12 3' stroke='%23000'/%3E%3C/svg%3E");
-    -webkit-mask-size: contain;
-    mask-size: contain;
-}
-
-#linkedin-link::after {
-    background-color: var(--color-accent);
-    -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.4625 1.75H2.5375C2.32864 1.75 2.12834 1.83297 1.98066 1.98066C1.83297 2.12834 1.75 2.32864 1.75 2.5375V11.4625C1.75 11.6713 1.83297 11.8717 1.98066 12.0194C2.12834 12.1671 2.32864 12.25 2.5375 12.25H11.4625C11.6713 12.25 11.8717 12.1671 12.0194 12.0194C12.1671 11.8717 12.25 11.6713 12.25 11.4625V2.5375C12.25 2.32864 12.1671 2.12834 12.0194 1.98066C11.8717 1.83297 11.6713 1.75 11.4625 1.75ZM4.9 10.675H3.325V5.95H4.9V10.675ZM4.1125 5.03125C3.93199 5.02609 3.75702 4.96785 3.60942 4.86382C3.46183 4.75978 3.34816 4.61455 3.28263 4.44628C3.2171 4.27801 3.20261 4.09417 3.24097 3.91771C3.27933 3.74126 3.36884 3.58001 3.49831 3.45414C3.62778 3.32826 3.79148 3.24333 3.96895 3.20995C4.14641 3.17658 4.32978 3.19624 4.49614 3.26649C4.66249 3.33672 4.80446 3.45444 4.9043 3.6049C5.00414 3.75537 5.05742 3.93192 5.0575 4.1125C5.05335 4.35943 4.95162 4.59468 4.77455 4.76684C4.59748 4.939 4.35945 5.03406 4.1125 5.03125ZM10.675 10.675H9.1V8.1865C9.1 7.441 8.785 7.17325 8.3755 7.17325C8.25545 7.18124 8.13814 7.21286 8.03034 7.26635C7.92254 7.31978 7.82635 7.39404 7.74731 7.48475C7.66832 7.57552 7.60795 7.68098 7.5698 7.79508C7.53165 7.90918 7.51642 8.0297 7.525 8.14975C7.52237 8.17419 7.52237 8.19881 7.525 8.22325V10.675H5.95V5.95H7.4725V6.6325C7.62609 6.39887 7.83708 6.20859 8.08529 6.07991C8.3335 5.95122 8.61058 5.8884 8.89 5.8975C9.70375 5.8975 10.654 6.349 10.654 7.819L10.675 10.675Z' fill='%23000'/%3E%3C/svg%3E");
-    mask-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.4625 1.75H2.5375C2.32864 1.75 2.12834 1.83297 1.98066 1.98066C1.83297 2.12834 1.75 2.32864 1.75 2.5375V11.4625C1.75 11.6713 1.83297 11.8717 1.98066 12.0194C2.12834 12.1671 2.32864 12.25 2.5375 12.25H11.4625C11.6713 12.25 11.8717 12.1671 12.0194 12.0194C12.1671 11.8717 12.25 11.6713 12.25 11.4625V2.5375C12.25 2.32864 12.1671 2.12834 12.0194 1.98066C11.8717 1.83297 11.6713 1.75 11.4625 1.75ZM4.9 10.675H3.325V5.95H4.9V10.675ZM4.1125 5.03125C3.93199 5.02609 3.75702 4.96785 3.60942 4.86382C3.46183 4.75978 3.34816 4.61455 3.28263 4.44628C3.2171 4.27801 3.20261 4.09417 3.24097 3.91771C3.27933 3.74126 3.36884 3.58001 3.49831 3.45414C3.62778 3.32826 3.79148 3.24333 3.96895 3.20995C4.14641 3.17658 4.32978 3.19624 4.49614 3.26649C4.66249 3.33672 4.80446 3.45444 4.9043 3.6049C5.00414 3.75537 5.05742 3.93192 5.0575 4.1125C5.05335 4.35943 4.95162 4.59468 4.77455 4.76684C4.59748 4.939 4.35945 5.03406 4.1125 5.03125ZM10.675 10.675H9.1V8.1865C9.1 7.441 8.785 7.17325 8.3755 7.17325C8.25545 7.18124 8.13814 7.21286 8.03034 7.26635C7.92254 7.31978 7.82635 7.39404 7.74731 7.48475C7.66832 7.57552 7.60795 7.68098 7.5698 7.79508C7.53165 7.90918 7.51642 8.0297 7.525 8.14975C7.52237 8.17419 7.52237 8.19881 7.525 8.22325V10.675H5.95V5.95H7.4725V6.6325C7.62609 6.39887 7.83708 6.20859 8.08529 6.07991C8.3335 5.95122 8.61058 5.8884 8.89 5.8975C9.70375 5.8975 10.654 6.349 10.654 7.819L10.675 10.675Z' fill='%23000'/%3E%3C/svg%3E");
-    -webkit-mask-size: contain;
-    mask-size: contain;
-}
-
-#x-link::after {
-    background-color: var(--color-accent);
-    -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.2463 1.89583H11.9769L8.19609 6.21996L12.6439 12.1042H9.16133L6.4336 8.53544L3.31252 12.1042H1.58089L5.62484 7.47903L1.35803 1.89583H4.92905L7.39465 5.15778L10.2463 1.89583ZM9.63896 11.0676H10.5979L4.40799 2.87792H3.37896L9.63896 11.0676Z' fill='%23000'/%3E%3C/svg%3E");
-    mask-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.2463 1.89583H11.9769L8.19609 6.21996L12.6439 12.1042H9.16133L6.4336 8.53544L3.31252 12.1042H1.58089L5.62484 7.47903L1.35803 1.89583H4.92905L7.39465 5.15778L10.2463 1.89583ZM9.63896 11.0676H10.5979L4.40799 2.87792H3.37896L9.63896 11.0676Z' fill='%23000'/%3E%3C/svg%3E");
-    -webkit-mask-size: contain;
-    mask-size: contain;
-}
-
-/* Shiny text hover effect for contact links */
-@keyframes shine {
-    from {
-        background-position: 200% 0;
+@media (max-width: 480px) {
+    .home {
+        /* The body's top padding is smaller here; start two lines down. */
+        margin-top: calc(var(--line) * 2 - var(--spacing-unit) * 2);
     }
-    to {
-        background-position: 0% 0;
+
+    .home h1 {
+        font-size: 1.375rem;
+    }
+
+    .tagline {
+        font-size: 1.0625rem;
     }
 }
 
-.contact a:hover,
-.project h3 a:hover,
-.project p a:hover,
-.next a:hover {
+/* ------------------------------------------------------------------
+   Link previews. With a mouse, an image card rises out of the hovered
+   word; on touch, the same picture opens in a drawer at the bottom of
+   the screen. Built by card-preview.js from the data in cards.js.
+   ------------------------------------------------------------------ */
+
+/* The picture: an image with its badge and caption laid over it. The image
+   fades into --tone, a dark colour taken from its own bottom edge, and the
+   card carries on a little below the image in that colour, so the caption
+   sits on the fade and not on the picture itself. */
+.preview-figure {
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 18px;
+    border-radius: 12px;
+    background: var(--tone, #161616);
+    color: #fff;
+}
+
+.preview-media {
+    background: var(--tone, #161616);
+}
+
+.preview-media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.preview-media.is-loaded img {
+    opacity: 1;
+}
+
+.preview-figure::after {
+    content: "";
+    position: absolute;
+    top: 46%;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    background: linear-gradient(to bottom, transparent, var(--tone, #161616) 90%);
     background: linear-gradient(
-        90deg,
-        var(--color-shine-1) 0%,
-        var(--color-shine-1) 35%,
-        var(--color-shine-2) 45%,
-        var(--color-shine-3) 50%,
-        var(--color-shine-2) 55%,
-        var(--color-shine-1) 65%,
-        var(--color-shine-1) 100%
+        to bottom,
+        transparent,
+        color-mix(in srgb, var(--tone, #161616) 45%, transparent) 42%,
+        color-mix(in srgb, var(--tone, #161616) 88%, transparent) 72%,
+        var(--tone, #161616) 92%
     );
-    background-size: 200% 100%;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: shine 1.2s linear infinite;
+}
+
+/* Glass: a blurred, slightly tinted window onto the image behind it. */
+.preview-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px 4px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 999px;
+    background: rgba(22, 22, 22, 0.36);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    -webkit-backdrop-filter: blur(12px) saturate(1.6);
+    backdrop-filter: blur(12px) saturate(1.6);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: 0.005em;
+    color: #fff;
+}
+
+.preview-badge svg {
+    flex: none;
+    opacity: 0.9;
+}
+
+.preview-caption {
+    position: absolute;
+    right: 14px;
+    bottom: 12px;
+    left: 14px;
+    z-index: 1;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+    text-wrap: balance;
+}
+
+/* No caption: just the picture, with nothing faded or added below it. */
+.preview-figure.no-caption {
+    padding-bottom: 0;
+}
+
+.preview-figure.no-caption::after,
+.preview-figure.no-caption .preview-caption {
+    display: none;
+}
+
+/* No image (or it failed to load): the caption stands on its own. */
+.preview-figure.no-image {
+    padding: 44px 14px 12px;
+}
+
+.preview-figure.no-image::after {
+    display: none;
+}
+
+.preview-figure.no-image .preview-caption {
+    position: static;
+}
+
+.preview-media[hidden],
+.preview-badge[hidden],
+.preview-open[hidden] {
+    display: none;
+}
+
+/* Mouse: the card. card-preview.js moves it with a transform every frame;
+   the only thing CSS animates is the fade. It pivots about its "foot", the
+   middle of the edge nearest the word. */
+.preview-card {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: min(280px, calc(100vw - 20px));
+    border-radius: 12px;
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.06),
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 18px 40px -12px rgba(0, 0, 0, 0.38);
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+    transform-origin: 50% 100%;
+    will-change: transform;
+    transition:
+        opacity 0.16s ease-out,
+        visibility 0s linear 0.16s;
+}
+
+.preview-card.is-below {
+    transform-origin: 50% 0;
+}
+
+.preview-card.is-visible {
+    visibility: visible;
+    opacity: 1;
+    transition:
+        opacity 0.1s ease-out,
+        visibility 0s;
+}
+
+@media (prefers-color-scheme: dark) {
+    .preview-card {
+        box-shadow:
+            0 0 0 1px rgba(255, 255, 255, 0.1),
+            0 2px 4px rgba(0, 0, 0, 0.3),
+            0 18px 40px -12px rgba(0, 0, 0, 0.7);
+    }
+}
+
+/* Touch: the drawer */
+.preview-drawer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 0 12px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: var(--color-surface);
+    border: 1px solid var(--color-hairline);
+    border-bottom: 0;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -10px 36px -8px rgba(0, 0, 0, 0.22);
+    touch-action: none;
+    visibility: hidden;
+    transform: translateY(100%);
+    transition:
+        transform 0.26s cubic-bezier(0.32, 0.72, 0, 1),
+        visibility 0s linear 0.26s;
+}
+
+.preview-drawer.is-open {
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+}
+
+.preview-drawer.is-dragging {
+    transition: none;
+}
+
+.preview-drawer-bar {
+    position: relative;
+    height: 26px;
+}
+
+.preview-drawer-bar::before {
+    content: "";
+    position: absolute;
+    top: 9px;
+    left: 50%;
+    width: 36px;
+    height: 4px;
+    margin-left: -18px;
+    border-radius: 2px;
+    background: var(--color-icon);
+    opacity: 0.45;
+}
+
+.preview-close {
+    position: absolute;
+    top: -2px;
+    right: -8px;
+    width: 44px;
+    height: 30px;
+    border: 0;
+    background: none;
+    color: var(--color-text-secondary);
+    font: inherit;
+    font-size: 1.375rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+/* In the drawer the picture is wide, so cap its height and crop to fit. */
+.preview-drawer .preview-media {
+    width: 100%;
+    max-height: 22vh;
+}
+
+.preview-drawer .preview-caption {
+    font-size: 0.9375rem;
+}
+
+/* With no Open button there is room for a taller picture. */
+.preview-drawer.no-link .preview-media {
+    max-height: 31vh;
+}
+
+.preview-open {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    margin-top: 10px;
+    border-radius: 12px;
+    background: var(--color-text);
+    color: var(--color-bg);
+    font-weight: 500;
+    text-decoration: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .contact a:hover,
-    .project h3 a:hover,
-    .project p a:hover,
-    .next a:hover {
-        animation: none;
-        background: none;
-        color: var(--color-accent);
-        -webkit-background-clip: unset;
-        background-clip: unset;
+    .home a,
+    .preview-card,
+    .preview-card.is-visible,
+    .preview-drawer,
+    .preview-media img {
+        transition: none;
     }
+}
+
+@media print {
+    .preview-card,
+    .preview-drawer {
+        display: none;
+    }
+}
+
+/* ------------------------------------------------------------------
+   Baseline grid overlay, for checking vertical rhythm on the home page.
+   Add class="show-grid" to <html> (in dev tools) to draw a line under
+   every 27px baseline. Nothing on the site turns it on.
+   ------------------------------------------------------------------ */
+
+html.show-grid body {
+    position: relative;
+}
+
+html.show-grid body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    min-height: 100vh;
+    z-index: 5;
+    pointer-events: none;
+    /* Body text's baseline is 19px below the top of its 27px line. */
+    background-image: linear-gradient(
+        to bottom,
+        transparent 19px,
+        rgba(255, 60, 120, 0.55) 19px,
+        rgba(255, 60, 120, 0.55) 20px,
+        transparent 20px
+    );
+    background-size: 100% var(--line);
 }
