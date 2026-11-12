@@ -1,0 +1,9 @@
+/* Geist Mono, served from this site. The file is from the geist npm package
+   (v1.0.0), under the SIL Open Font License: see Geist-LICENSE.txt. */
+@font-face {
+    font-family: "Geist Mono";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("GeistMono-Regular.woff2") format("woff2");
+}
