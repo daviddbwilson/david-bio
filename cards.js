@@ -58,8 +58,7 @@ window.DB_CARDS = {
         url: "/blog/reliable-background-agents/",
         badge: "Blog post",
         icon: "post",
-        // DRAFT caption.
-        caption: "Before OpenClaw. Early is still wrong.",
+        caption: "Before OpenClaw. Early is still wrong :(",
         image: "assets/cards/04-agents-office.webp",
         width: 800,
         height: 600,
