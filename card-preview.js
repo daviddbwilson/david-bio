@@ -412,7 +412,7 @@
      */
 
     var SHEET_MS = 450; // matches the sheet transitions in styles.css
-    var SHEET_MAX = 0.6; // tallest picture, as a share of the screen height
+    var SHEET_MAX = 0.72; // tallest picture, as a share of the screen height
     var RECEDE_SCALE = 0.94; // how small the page gets behind the sheet
     var RECEDE_DROP = 12; // px the page drops, so its rounded top shows
     var RECEDE_RADIUS = 14; // px

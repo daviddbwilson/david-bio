@@ -21,7 +21,7 @@ Each of these links shows a preview picture with a short caption and a badge on 
 
 | Link text | Badge | Caption |
 |---|---|---|
-| David Wilson (the name at the top; no underline) | none (picture only, not a link) | Good morning! / Good afternoon! / Good evening! with a waving hand, by the visitor's clock |
+| David Wilson (the name at the top; no underline) | none (picture only, not a link) | By the visitor's clock, each with a waving hand: Hello, night owl! (midnight to 5am) / Hello, early bird! (5 to 7am) / Good morning! / Good afternoon! / Good evening! |
 | hardware | Case study | I loved working with Fred Bould and his team to design our sensor |
 | software | none (picture only, not a link) | Simple at a glance. More detail as you dig. |
 | Disney | Testimonial (video) | Disney's testimonial. In front of the Falcon! |

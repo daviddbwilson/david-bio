@@ -36,13 +36,17 @@ window.DB_CARDS = {
         quiet: true,
         caption: function () {
             var hour = new Date().getHours();
-            var part =
-                hour >= 5 && hour < 12
-                    ? "morning"
-                    : hour >= 12 && hour < 18
-                      ? "afternoon"
-                      : "evening";
-            return "Good " + part + "! \uD83D\uDC4B";
+            var words =
+                hour < 5
+                    ? "Hello, night owl!"
+                    : hour < 7
+                      ? "Hello, early bird!"
+                      : hour < 12
+                        ? "Good morning!"
+                        : hour < 18
+                          ? "Good afternoon!"
+                          : "Good evening!";
+            return words + " \uD83D\uDC4B"; // waving hand
         },
         image: "assets/cards/00-david.webp",
         width: 800,
@@ -155,8 +159,8 @@ window.DB_CARDS = {
     family: {
         image: "assets/cards/09-family-cards.webp",
         width: 800,
-        height: 929,
-        tone: "#1a1a19",
+        height: 1066,
+        tone: "#1b1a18",
         focus: "50% 8%",
         alt: "My family dressed as playing cards: a king, a queen and two jokers. The children's faces are covered with emoji.",
     },
