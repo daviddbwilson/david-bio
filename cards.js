@@ -24,7 +24,7 @@ window.DB_CARDS = {
         image: "assets/cards/01-disney-falcon.webp",
         width: 800,
         height: 450,
-        alt: "A frame from Disney's testimonial video, filmed in front of the Millennium Falcon",
+        alt: "A Disney cast member speaking to camera in front of the Millennium Falcon",
     },
     neon: {
         url: "https://neon.ac/preview",
@@ -33,8 +33,8 @@ window.DB_CARDS = {
             "Neon. Filter one chart and every other chart responds instantly.",
         image: "assets/cards/02-neon-canvas.webp",
         width: 800,
-        height: 500,
-        alt: "Neon's canvas of linked charts",
+        height: 547,
+        alt: "Neon: a bar chart of sales by state, with one filter highlighted in pink across every other chart",
     },
     hunch: {
         url: "https://x.com/Scobleizer/status/1784743064541757913",
@@ -43,8 +43,8 @@ window.DB_CARDS = {
             "Hunch. A canvas for chaining AI models together. Won Latent Space's AI UX award.",
         image: "assets/cards/03-hunch-canvas.webp",
         width: 800,
-        height: 500,
-        alt: "The Hunch canvas, with AI model blocks connected into a workflow",
+        height: 547,
+        alt: "The Hunch canvas: a meeting video flows through transcription and summary blocks into a finished product brief",
     },
     agents: {
         url: "/blog/reliable-background-agents/",
@@ -53,7 +53,7 @@ window.DB_CARDS = {
         image: "assets/cards/04-agents-office.webp",
         width: 800,
         height: 600,
-        alt: "Illustration of an office staffed by background agents",
+        alt: "An empty office at night, with one old monitor still running tool calls",
     },
     rewind: {
         url: "https://www.youtube.com/watch?v=gTQG0SfJb9Y",
@@ -62,8 +62,8 @@ window.DB_CARDS = {
             "LinkedIn Rewind. Idea to production in four days, then 60+ versions in 17.",
         image: "assets/cards/05-rewind-cards.webp",
         width: 800,
-        height: 600,
-        alt: "A spread of LinkedIn Rewind year-in-review cards",
+        height: 546,
+        alt: "Three overlapping LinkedIn Rewind cards, each summing up a person's year in posts, reactions and a top quote",
     },
     gda: {
         url: "https://hex.tech/blog/introducing-generative-data-apps/",
@@ -74,8 +74,8 @@ window.DB_CARDS = {
         // Placeholder image: has a play button overlaid; clean frame to come.
         image: "assets/cards/07-hex-gda-title-card.webp",
         width: 800,
-        height: 450,
-        alt: "Title card from the launch video for Hex's generative data apps",
+        height: 417,
+        alt: "Title card from the Hex launch video: Introducing Generative Data Apps",
     },
     evals: {
         url: "https://hex.tech/blog/we-used-evals-to-improve-ai-feature/",
@@ -86,7 +86,7 @@ window.DB_CARDS = {
         // Placeholder image: may be replaced by a results chart from the post.
         image: "assets/cards/08-hex-evals-header.webp",
         width: 800,
-        height: 420,
-        alt: "Header image from the Hex blog post on evals",
+        height: 495,
+        alt: "The evals post's header: a mountain road of switchbacks on a purple background",
     },
 };
