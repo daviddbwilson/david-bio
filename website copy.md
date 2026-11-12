@@ -22,12 +22,12 @@ Each of these links shows a preview picture with a short caption and a badge on 
 | Link text | Badge | Caption |
 |---|---|---|
 | hardware | Case study | I loved working with Fred and his team to design our sensor |
-| software | none (picture only, not a link) | (Draft) Simple at a glance. More detail as you dig. |
+| software | none (picture only, not a link) | Simple at a glance. More detail as you dig. |
 | Disney | Testimonial (video) | Disney's testimonial. In front of the Falcon! |
 | data tool | Demo (video) | Instant data exploration to stay in flow |
-| AI workflow builder | Demo (video) | (Draft) Hunch. A canvas for chaining AI models. |
+| AI workflow builder | Demo (video) | Hunch. A canvas for chaining AI models. |
 | agents | Blog post | Before OpenClaw. Early is still wrong :( |
-| project | Talk (video) | (Draft) LinkedIn Rewind. Idea to production in four days. |
+| project | Talk (video) | LinkedIn Rewind. Idea to production in four days. |
 | generative data apps | Blog post | My first product launch at Hex |
-| evals | Blog post | (Draft) Wrong chart edits: 21% down to 3%. |
+| evals | Blog post | Wrong chart edits: 21% down to 3%. |
 | family | none (picture only, not a link) | none |

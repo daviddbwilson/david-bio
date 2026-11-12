@@ -37,7 +37,6 @@ window.DB_CARDS = {
     },
     // No url: a picture and a caption only, on the word "software".
     software: {
-        // DRAFT caption.
         caption: "Simple at a glance. More detail as you dig.",
         image: "assets/cards/10-cape-dashboard.webp",
         width: 800,
@@ -71,7 +70,6 @@ window.DB_CARDS = {
         url: "https://x.com/Scobleizer/status/1784743064541757913",
         badge: "Demo",
         icon: "video",
-        // DRAFT caption.
         caption: "Hunch. A canvas for chaining AI models.",
         image: "assets/cards/03-hunch-canvas.webp",
         width: 800,
@@ -94,7 +92,6 @@ window.DB_CARDS = {
         url: "https://www.youtube.com/watch?v=gTQG0SfJb9Y",
         badge: "Talk",
         icon: "video",
-        // DRAFT caption.
         caption: "LinkedIn Rewind. Idea to production in four days.",
         image: "assets/cards/05-rewind-cards.webp",
         width: 800,
@@ -107,7 +104,7 @@ window.DB_CARDS = {
         badge: "Blog post",
         icon: "post",
         caption: "My first product launch at Hex",
-        // Placeholder image: has a play button overlaid; clean frame to come.
+        // A frame from the launch video, with the player's play button on it.
         image: "assets/cards/07-hex-gda-title-card.webp",
         width: 800,
         height: 417,
@@ -118,9 +115,8 @@ window.DB_CARDS = {
         url: "https://hex.tech/blog/we-used-evals-to-improve-ai-feature/",
         badge: "Blog post",
         icon: "post",
-        // DRAFT caption.
         caption: "Wrong chart edits: 21% down to 3%.",
-        // Placeholder image: may be replaced by a results chart from the post.
+        // The post's header image.
         image: "assets/cards/08-hex-evals-header.webp",
         width: 800,
         height: 495,
