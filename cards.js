@@ -9,7 +9,7 @@
  *            Keep the href in index.html the same as this, because that href
  *            is what works when JavaScript is off.
  *   badge    One or two words for what the link is: "Demo", "Talk",
- *            "Testimonial", "Blog post".
+ *            "Testimonial", "Blog post", "Case study".
  *   icon     "video" or "post": the icon shown beside the badge.
  *   caption  A few words, shown on the image. Keep it to one short line.
  *            Leave it out to show the image on its own.
@@ -24,6 +24,27 @@
  *   alt      Describes the image for people who can't see it.
  */
 window.DB_CARDS = {
+    hardware: {
+        url: "https://www.bould.com/work/aruba",
+        badge: "Case study",
+        icon: "post",
+        caption: "I loved working with Fred and his team to design our sensor",
+        image: "assets/cards/11-cape-sensor-mounting.webp",
+        width: 768,
+        height: 432,
+        tone: "#1a1a1a",
+        alt: "Five steps of mounting the sensor: a wall plate, a bracket, a yellow network cable, and the white ribbed sensor clipping on",
+    },
+    // No url: a picture and a caption only, on the word "software".
+    software: {
+        // DRAFT caption.
+        caption: "Simple at a glance. More detail as you dig.",
+        image: "assets/cards/10-cape-dashboard.webp",
+        width: 800,
+        height: 435,
+        tone: "#161d18",
+        alt: "The Cape dashboard on a laptop, with a green smiley for each part of the network, in front of a monitor showing detailed WiFi charts",
+    },
     disney: {
         url: "https://vimeo.com/738368274",
         badge: "Testimonial",

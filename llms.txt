@@ -15,6 +15,7 @@ I'm from Cape Town and have lived on four continents, with stints in Windsor and
 
 ## Links
 
+- Bould Design's case study on the sensor we designed together: https://www.bould.com/work/aruba
 - Disney's testimonial for Cape Networks (video): https://vimeo.com/738368274
 - Neon, the data tool Hunch started as (video): https://neon.ac/preview
 - Hunch, the AI workflow builder (video): https://x.com/Scobleizer/status/1784743064541757913
