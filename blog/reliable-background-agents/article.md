@@ -271,4 +271,4 @@ But right now, if you're building background agents, these patterns will help ma
 
 ---
 
-*This is based on work building [Overclock.work](https://overclock.work)'s background agents in late 2025. The team included [Ross Douglas](https://www.linkedin.com/in/rsdouglas) and [Alex Leibhammer](https://www.linkedin.com/in/alexleibhammer/).*
+*This is based on work building Overclock's background agents in late 2025. The team included [Ross Douglas](https://www.linkedin.com/in/rsdouglas) and [Alex Leibhammer](https://www.linkedin.com/in/alexleibhammer/).*
