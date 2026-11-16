@@ -9,7 +9,7 @@ My buddy Ross and I started building software in 9th grade, modding video games 
 - **Cape Networks**, acquired by HPE Aruba. Network monitoring hardware and software: >$10M revenue, used by 2,000+ customers including Microsoft, Home Depot, and Disney. After the acquisition, I ran the business inside Aruba as Senior Director of Product Management.
 - **Hunch**: started as a data tool, became an AI workflow builder, then autonomous agents. One project reached 330K users in two weeks. We wound the company down in 2025.
 
-Today I'm at Hex, where the cofounders brought me in to work out their next dashboard builder. I took our generative data apps from first prototype to launch in two months. Since then I've worked on the last mile: the AI builds the whole app, but people still need precise control over the details. I designed and built generative chart controls, and used evals to make edits fast and accurate with small models. I also hold the dubious distinction of being the company's top AI spender.
+Today I'm at Hex, where the cofounders brought me in to work out their next dashboard builder. I took our generative data apps from first prototype to launch in two months, including building the evals. Since then I've worked on the last mile: the AI builds the app, but people still need precise control over the details. I also hold the dubious distinction of being the company's top AI spender.
 
 I'm from Cape Town and have lived on four continents. I now live in San Francisco with my family.
 
