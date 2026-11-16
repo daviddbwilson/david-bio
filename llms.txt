@@ -1,10 +1,10 @@
 # David Wilson
 
-> Product builder and two-time founder-CEO.
+> Product builder and founder-CEO.
 
 ## About
 
-My buddy Ross and I started building software in 9th grade, modding video games before either of us could code, and later founded two companies together:
+I started building software in 9th grade, modding video games before I could code, and later founded two companies:
 
 - **Cape Networks**, acquired by HPE Aruba. Network monitoring hardware and software: >$10M revenue, used by 2,000+ customers including Microsoft, Home Depot, and Disney. After the acquisition, I ran the business inside Aruba as Senior Director of Product Management.
 - **Hunch**: started as a data tool, became an AI workflow builder, then autonomous agents. One project reached 330K users in two weeks. We wound the company down in 2025.
@@ -13,7 +13,7 @@ Today I'm at Hex, where the cofounders brought me in to work out their next dash
 
 I also make side projects. The latest is Takeoff, a short interactive story. I wrote about how I made it.
 
-I'm from Cape Town and have lived on four continents. I now live in San Francisco with my family.
+I'm from Cape Town and have lived on four continents. I now live in San Francisco with my wife and two daughters.
 
 ## Links
 

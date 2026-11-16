@@ -161,7 +161,7 @@ window.DB_CARDS = {
         tone: "#05070b",
         alt: "A plan of the ship's rooms in thin green lines on black, with the route a test run took traced through them",
     },
-    // No url: this one is a picture only, on the word "family".
+    // No url: this one is a picture only, on "wife and two daughters".
     // The children's faces are covered in the image file itself.
     family: {
         image: "assets/cards/09-family-cards.webp",
