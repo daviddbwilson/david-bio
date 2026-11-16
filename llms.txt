@@ -9,11 +9,11 @@ I started building software in 9th grade, modding video games before I could cod
 - **Cape Networks**, acquired by HPE Aruba. Network monitoring hardware and software: >$10M revenue, used by 2,000+ customers including Microsoft, Home Depot, and Disney. After the acquisition, I ran the business inside Aruba for a little under three years.
 - **Hunch**: started as a data tool, became an AI workflow builder, then autonomous agents. One project reached 330K users in two weeks. We wound the company down in 2025.
 
-Today I'm at Hex, where the cofounders brought me in to work out their next dashboard builder. I took our generative data apps from first prototype to launch in two months, including building the evals. Since then I've worked on the last mile: the AI builds the app, but people still need precise control over the details. I also hold the dubious distinction of being the company's top AI spender.
+I joined Hex in early 2026 to reimagine how we build dashboards. I took our generative data apps from first prototype to launch in two months, including building the evals. Since then I've worked on the last mile: the AI builds the app, but people still need precise control over the details. I also hold the somewhat dubious distinction of being the company's top AI spender.
 
-I also make side projects. The latest is Takeoff, a short interactive story. I wrote about how I made it.
+I also work on side projects. The latest is Takeoff, a short interactive story. I wrote about how I made it.
 
-I'm from Cape Town and have lived on four continents. I now live in San Francisco with my wife and two daughters.
+I'm from Cape Town and have lived on four continents. I now live in San Francisco with my wife and two kids.
 
 ## Links
 
