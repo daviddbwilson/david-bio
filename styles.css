@@ -386,6 +386,17 @@ button:focus-visible {
     color: #fff;
 }
 
+/* On a mostly white picture the glass needs more tint to hold white text. */
+.preview-figure.on-light .preview-badge {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(22, 22, 22, 0.62);
+}
+
+.preview-figure.badge-bottom .preview-badge {
+    top: auto;
+    bottom: 10px;
+}
+
 .preview-badge svg {
     flex: none;
     opacity: 0.9;

@@ -10,7 +10,7 @@
  *            is what works when JavaScript is off.
  *   badge    One or two words for what the link is: "Demo", "Talk",
  *            "Testimonial", "Blog post", "Case study".
- *   icon     "video" or "post": the icon shown beside the badge.
+ *   icon     "video", "post" or "play": the icon shown beside the badge.
  *   caption  A few words, shown on the image. Keep it to one short line.
  *            Leave it out to show the image on its own.
  *   image    Path to the image (WebP, about 800px on the long edge).
@@ -21,6 +21,11 @@
  *   focus    Optional. Which part of the image to keep when it has to be
  *            cropped (the drawer crops tall images), as a CSS object-position
  *            value such as "50% 10%" for "the top middle".
+ *   light    Optional. Set to true when the image is mostly white, so the
+ *            badge gets a darker glass and stays readable.
+ *   badgeAt  Optional. "bottom" puts the badge in the bottom left corner, for
+ *            a picture with something in its top left. Only for cards with
+ *            no caption, because the caption sits there.
  *   alt      Describes the image for people who can't see it.
  */
 window.DB_CARDS = {
@@ -122,6 +127,33 @@ window.DB_CARDS = {
         height: 495,
         tone: "#1d1320",
         alt: "The evals post's header: a mountain road of switchbacks on a purple background",
+    },
+    // No caption: the picture carries its own title. It is the game's link
+    // preview image, which is mostly white paper, hence light.
+    takeoff: {
+        url: "https://takeoff.david.bio/",
+        badge: "Play",
+        icon: "play",
+        image: "assets/cards/12-takeoff-title.webp",
+        width: 800,
+        height: 420,
+        tone: "#f6f6f6",
+        light: true,
+        // The title's handwriting runs through the top left corner.
+        badgeAt: "bottom",
+        alt: "Takeoff's title card: the words 'a short story about takeoff' handwritten above a pencil sketch of a small round probe on white paper",
+    },
+    makingof: {
+        url: "/blog/how-i-made-takeoff/",
+        badge: "Blog post",
+        icon: "post",
+        caption: "Made in under a week of evenings",
+        // A figure from the post: the autopilot's route through the ship.
+        image: "assets/cards/13-takeoff-paths.webp",
+        width: 800,
+        height: 482,
+        tone: "#05070b",
+        alt: "A plan of the ship's rooms in thin green lines on black, with the route a test run took traced through them",
     },
     // No url: this one is a picture only, on the word "family".
     // The children's faces are covered in the image file itself.

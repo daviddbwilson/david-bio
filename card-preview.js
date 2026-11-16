@@ -34,6 +34,10 @@
             '<path d="M3.5 1.5h7a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-7a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1Z"/>' +
             '<path d="M5 4.75h4M5 7h4M5 9.25h2.25"/>' +
             "</svg>",
+        play:
+            '<svg viewBox="0 0 14 14" width="14" height="14" fill="none" stroke="currentColor" stroke-linejoin="round" aria-hidden="true">' +
+            '<path d="M4.25 2.9v8.2c0 .45.5.72.88.48l6.3-4.1a.57.57 0 0 0 0-.96l-6.3-4.1a.57.57 0 0 0-.88.48Z"/>' +
+            "</svg>",
     };
 
     function cardFor(el) {
@@ -155,6 +159,11 @@
         figure.style.setProperty("--tone", card.tone || "#161616");
         figure.classList.toggle("no-image", !card.image);
         figure.classList.toggle("no-caption", !card.caption);
+        figure.classList.toggle("on-light", Boolean(card.light));
+        figure.classList.toggle(
+            "badge-bottom",
+            card.badgeAt === "bottom" && !card.caption
+        );
         img.style.objectPosition = card.focus || "";
         media.classList.remove("is-loaded");
         img.removeAttribute("src");
