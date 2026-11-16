@@ -1,15 +1,15 @@
 # David Wilson
 
-> I love making complex software feel simple.
+> Product builder and two-time founder-CEO.
 
 ## About
 
-I've been designing and building software since 9th grade, when my friend Ross and I talked a teacher into letting us mod a video game instead of doing our biology assignment. Neither of us could code, so it took months longer than the assignment would have! But we were hooked, and later founded two companies together:
+Ross and I started building software in 9th grade, before either of us could code, and later founded two companies together:
 
-- **Cape Networks**, acquired by HPE Aruba. Network monitoring hardware and software: >$10M revenue, used by 2,000+ customers including Microsoft, Home Depot, and Disney.
+- **Cape Networks**, acquired by HPE Aruba. Network monitoring hardware and software: >$10M revenue, used by 2,000+ customers including Microsoft, Home Depot, and Disney. After the acquisition, I ran the business inside Aruba as Senior Director of Product Management.
 - **Hunch**: started as a data tool, became an AI workflow builder, then autonomous agents. One project reached 330K users in two weeks. We wound the company down in 2025.
 
-Today I'm at Hex, where I work on our generative data apps and evals. I also hold the dubious distinction of being the company's top AI spender.
+Today I'm at Hex, where the cofounders brought me in to work out their next app builder. I took our generative data apps from first prototype to launch in two months, and built the evals behind them. I also hold the dubious distinction of being the company's top AI spender.
 
 I'm from Cape Town and have lived on four continents. I now live in San Francisco with my family.
 
