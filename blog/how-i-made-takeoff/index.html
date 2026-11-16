@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How I made Takeoff</title>
+<meta name="description" content="Takeoff is an interactive short story you play like a game. How I made it in under a week of evenings with Fable 5.2, my own piano and a lot of tiny tools.">
+<meta property="og:title" content="How I made Takeoff">
+<meta property="og:description" content="An interactive short story you play like a game, made in under a week of evenings with Fable 5.2.">
+<meta property="og:image" content="https://david.bio/blog/how-i-made-takeoff/img/play_title.jpg">
+<meta property="og:url" content="https://david.bio/blog/how-i-made-takeoff/">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://david.bio/blog/how-i-made-takeoff/">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+/* Matches david.bio's article style: Radix Sand neutrals, Geist for headings and small text, Source Serif 4 for reading, a 680px column with wider figures. Four text sizes: 36 / 22 / 18 / 14. */
+:root{
+  --text:#21201c; --heading:#21201c; --secondary:#63635e; --bg:#fdfdfc; --card:#f1f0ef;
+  --accent:#3d6b84; --hairline:rgba(33,32,28,.1);
+  --game:#0b1016; --mint:#7ef0c8; --game-text:#e8e1cf; --game-dim:#8d939b;
+  --sans:"Geist",-apple-system,BlinkMacSystemFont,sans-serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --xl:36px; --l:22px; --m:18px; --s:14px;
+  /* layout: one 680px reading column; galleries and the play card widen to 960px */
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--text:#e0e0dc;--heading:#eeeeec;--secondary:#a1a09a;--bg:#111110;--card:#1c1c1b;--accent:#7eb8d6;--hairline:rgba(238,238,236,.12);color-scheme:dark}}
+:root[data-theme="dark"]{--text:#e0e0dc;--heading:#eeeeec;--secondary:#a1a09a;--bg:#111110;--card:#1c1c1b;--accent:#7eb8d6;--hairline:rgba(238,238,236,.12);color-scheme:dark}
+
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--text);font:400 var(--m)/1.72 var(--serif);font-feature-settings:"kern" 1,"liga" 1,"onum" 1;-webkit-font-smoothing:antialiased}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+p,ul,figure,h1,h2,h3{margin:0}
+
+.col{max-width:680px;margin-left:auto;margin-right:auto;padding:0 16px}
+.wide{max-width:992px;margin-left:auto;margin-right:auto;padding:0 16px}
+.stack{display:grid;gap:1.5em}
+.stack > h2,.stack > h3{margin-bottom:-.6em}
+.fig-block{margin-top:48px}
+section{margin-top:80px}
+
+.back{font:400 var(--s)/1.6 var(--sans);color:var(--secondary);text-decoration:none}
+.back:hover{color:var(--accent)}
+h1{font:600 var(--xl)/1.2 var(--sans);letter-spacing:-.025em;color:var(--heading);text-wrap:balance;margin:32px 0 6px}
+.meta{font:400 var(--s)/1.6 var(--sans);color:var(--secondary)}
+h2{font:600 var(--l)/1.35 var(--sans);letter-spacing:-.015em;color:var(--heading);text-wrap:balance;margin-bottom:.8em}
+h3{font:600 var(--m)/1.4 var(--sans);letter-spacing:-.01em;color:var(--heading);margin-bottom:.35em}
+.lede{font-size:var(--l);line-height:1.55;letter-spacing:-.01em;color:var(--heading)}
+.body-sub{color:var(--secondary);font-size:var(--m)}
+.prose a{text-decoration:none;border-bottom:1px solid var(--secondary)}
+.prose a:hover{color:var(--accent);border-color:var(--accent)}
+.prose ul{padding-left:1.3em;display:grid;gap:.5em}
+.pull{font-size:var(--l);line-height:1.5;font-style:italic;color:var(--heading);padding:4px 0}
+
+/* play card: a wide banner (1:4). Copy at the left, vertically centred; the game hung off the right edge and the foot, its words and the drone whole (stageshow corner bleed). One 28px gutter. */
+.playcard{position:relative;display:block;height:240px;border-radius:16px;overflow:hidden;text-decoration:none;color:#fff;background:var(--game);
+  box-shadow:0 0 0 1px rgba(50,50,93,.06),0 24px 48px -24px rgba(50,50,93,.28);transition:box-shadow .2s ease}
+.playcard:hover{box-shadow:0 0 0 1px rgba(50,50,93,.08),0 30px 56px -24px rgba(50,50,93,.4)}
+.pc-copy{position:absolute;left:32px;top:0;bottom:0;width:400px;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.pc-title{font:600 var(--l)/1.3 var(--sans);letter-spacing:-.015em;color:#fff}
+.pc-text{font:400 var(--s)/1.55 var(--sans);color:var(--game-dim)}
+.pc-btn{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:11px 18px;border-radius:999px;background:var(--mint);color:#0b1016;font:600 var(--s)/1 var(--sans)}
+.playcard:hover .pc-btn{background:#9af5d6}
+.pc-art{position:absolute;left:488px;right:-40px;top:28px;border-radius:12px 0 0 0;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 30px 60px -12px rgba(0,0,0,.6)}
+.pc-art img{width:100%;border-radius:0;box-shadow:none}
+.ping{position:absolute;left:49.2%;top:48.1%;width:0;height:0;pointer-events:none}
+.ping::before,.ping::after{content:"";position:absolute;width:240px;height:240px;margin:-120px 0 0 -120px;border:1.5px solid rgba(42,44,53,.5);border-radius:50%;transform:scale(.05);opacity:0;animation:ping 4.2s cubic-bezier(.2,.6,.3,1) infinite}
+.ping::after{animation-delay:.18s;border-color:rgba(31,122,92,.45)}
+@keyframes ping{0%{transform:scale(.05);opacity:.9}70%{opacity:.25}100%{transform:scale(1.25);opacity:0}}
+@media (prefers-reduced-motion:reduce){.ping::before,.ping::after{animation:none;opacity:0}.playcard{transition:none}}
+@media (max-width:860px){
+  .playcard{height:auto;padding:0 0 24px}
+  .pc-art{position:relative;left:auto;right:auto;top:auto;aspect-ratio:1155/440;margin:20px -24px 0 20px}
+  .ping{top:80.7%}
+  .pc-copy{position:static;width:auto;padding:20px 20px 0}
+}
+
+/* figures */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+figure img{border-radius:8px;box-shadow:0 0 0 1px var(--hairline)}
+figcaption{font:400 var(--s)/1.5 var(--sans);color:var(--secondary);margin-top:8px}
+figcaption b{font-weight:600;color:var(--heading)}
+.fig-block{margin-top:40px}
+.fig-block .col{margin-bottom:20px}
+
+/* numbers */
+.numbers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--hairline)}
+.numbers div{padding:16px 16px 16px 0;border-bottom:1px solid var(--hairline)}
+.numbers strong{display:block;font:600 var(--l)/1.3 var(--sans);color:var(--heading);letter-spacing:-.015em}
+.numbers span{font:400 var(--s)/1.5 var(--sans);color:var(--secondary)}
+
+/* notes */
+.notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.notes div{background:var(--card);border-radius:8px;padding:18px 20px}
+.notes q{display:block;font:600 var(--m)/1.4 var(--sans);color:var(--heading);quotes:"\201C" "\201D"}
+.notes p{font:400 var(--s)/1.55 var(--sans);color:var(--secondary);margin-top:8px}
+
+/* audio */
+.tracks-wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.tracks{background:var(--card);border-radius:8px;padding:8px 18px}
+.tracks h3{font:600 var(--s)/1.5 var(--sans);color:var(--secondary);margin:10px 0 4px}
+.track{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--hairline)}
+.track button{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;display:grid;place-items:center;padding:0}
+.track button:hover{background:var(--hairline)}
+.track button svg{width:12px;height:12px}
+.track .t{font:600 var(--s)/1.4 var(--sans);color:var(--heading)}
+.track .d{font:400 var(--s)/1.4 var(--sans);color:var(--secondary)}
+.track .len{font:400 var(--s)/1 var(--sans);color:var(--secondary);font-variant-numeric:tabular-nums}
+.track.on .t{color:var(--accent)}
+.bar{height:2px;background:var(--hairline);margin-top:6px;border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent)}
+
+footer{font:400 var(--s)/1.6 var(--sans);color:var(--secondary);margin-top:40px;padding-bottom:64px}
+
+@media (max-width:860px){
+  .g4,.numbers{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g3,.notes,.tracks-wrap{grid-template-columns:1fr}
+}
+@media (max-width:480px){
+  :root{--xl:28px}
+  .g2,.g4{grid-template-columns:1fr}
+  .lede,.pull{font-size:20px}
+}
+.tools img{aspect-ratio:16/10;object-fit:cover;object-position:top left;height:auto}
+@media (max-width:900px){.tools{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.tools{grid-template-columns:1fr}}
+.suite-top{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--hairline)}
+.suite .sp{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--accent);background:transparent;color:var(--accent);cursor:pointer;display:grid;place-items:center;padding:0}
+.suite .sp svg{width:12px;height:12px}
+.suite .t{font:600 var(--s)/1.4 var(--sans);color:var(--heading)}
+.suite .d{font:400 var(--s)/1.4 var(--sans);color:var(--secondary);font-variant-numeric:tabular-nums}
+.suite.on .t{color:var(--accent)}
+.snext{font:500 var(--s)/1 var(--sans);color:var(--accent);background:transparent;border:1.5px solid var(--accent);border-radius:16px;padding:7px 12px;cursor:pointer}
+.snext:hover,.suite .sp:hover{background:var(--hairline)}
+.sbar{height:6px;background:var(--hairline);border-radius:3px;overflow:hidden;cursor:pointer;margin:2px 0 12px}
+.sbar i{display:block;height:100%;width:0;background:var(--accent)}
+.chapters{list-style:none;margin:0 0 10px;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.chapters button{font:400 13px/1 var(--sans);color:var(--text);background:transparent;border:1px solid var(--hairline);border-radius:14px;padding:6px 10px;cursor:pointer;display:flex;gap:6px;align-items:baseline}
+.chapters button:hover{border-color:var(--accent)}
+.chapters .ct{color:var(--secondary);font-variant-numeric:tabular-nums;font-size:12px}
+.chapters button.cur{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+
+<header class="col" style="padding-top:40px">
+  <a class="back" href="https://david.bio">&larr; David Wilson</a>
+  <h1>How I made Takeoff</h1>
+  <p class="meta">November 2026 · 10 min read</p>
+</header>
+
+<section class="col prose stack" style="margin-top:32px">
+<p>Takeoff is an interactive short story that you play like a game.</p>
+<p>It's amazing that I could make it after-hours in less than a week! Working on it was a joy, and I could happily keep going for a lot longer, but it's a little side project and it's time to call it a day.</p>
+<p>I'd like to walk you through how I made it using Claude Projects, Fable 5.2 (with a little Opus 5.5), and a personal Claude Max plan.</p>
+<p>But first, the story: a small probe drone wakes up on a derelict spaceship. It learns to see, then to fly, then... well, I suggest you play it for yourself, because I think it's pretty surprising and there are <em>spoilers ahead</em>.</p>
+<p>You need 5–10 minutes, a laptop, and sound on:</p>
+</section>
+
+<div class="wide" style="margin-top:32px">
+  <a class="playcard" href="https://takeoff.david.bio">
+    <div class="pc-art">
+      <img src="img/play_title.jpg" width="1155" height="710" alt="Takeoff's title screen: a pencil sketch of the probe drone on white paper, under 'a short story about takeoff'.">
+      <div class="ping" aria-hidden="true"></div>
+    </div>
+    <div class="pc-copy">
+      <div class="pc-title">Play it first</div>
+      <p class="pc-text">5–10 minutes, on a laptop, with sound on. Everything below gives the ending away.</p>
+      <span class="pc-btn">Play at takeoff.david.bio <span aria-hidden="true">&rarr;</span></span>
+    </div>
+  </a>
+</div>
+
+<section class="col prose stack">
+<h2>An interactive short story</h2>
+<p>Ok, spoilers from here. After the probe learns to fly, it learns to fight, and it keeps learning until nothing on the ship, or anywhere else, can stop it.</p>
+<p>Every time the probe learns something, the game changes how it looks, how it sounds, and how it plays.</p>
+<p>In retrospect, there's some unintentional shared DNA with <a target="_blank" rel="noopener" href="https://www.decisionproblem.com/paperclips/">Universal Paperclips</a>.</p>
+<p>But it's almost an anti-game. Instead of letting you master it and enjoy that mastery, the gameplay keeps evolving as you play: the probe gets more powerful and you get less direct control. You start by controlling the exact rotation and amount of thrust, and end up barely deciding which galaxies to move through.</p>
+<p>The core idea was to capture a feeling many people have when they work with AI tools: even though you can do much more than before, there's an ennui for some about the work you used to enjoy and just don't need to do anymore.</p>
+</section>
+
+<section class="col prose stack">
+<h2>Eight ways to play one game</h2>
+<p>The camera, the look and the controls all follow what the drone can do and the level it thinks at.</p>
+<p>So you start seeing almost nothing, then fly with momentum in pencil, then fly precisely in full light, then aim by hand, until the gun aims and fires itself. Then the ship becomes a map you step through room to room, and then it doesn't need you to step. I think the evolving play style is the most novel thing about Takeoff. Each stage is a small game of its own, and they share one engine. I wouldn't have tried building eight small games in a week before this.</p>
+</section>
+
+<div class="wide grid g4" style="margin-top:32px">
+  <figure><img src="img/l1.jpg" width="960" height="540" alt="The dock sketched in pencil: everything the drone's pings have touched so far." loading="lazy"><figcaption><b>1</b> · Waking: you see only what your pings touch</figcaption></figure>
+  <figure><img src="img/l2.jpg" width="960" height="540" alt="The drone drifting in pencil toward a girder that turns in the middle of the room." loading="lazy"><figcaption><b>2</b> · Drift: turn and thrust, in pencil</figcaption></figure>
+  <figure><img src="img/l3.jpg" width="960" height="540" alt="Rendered room in full colour and light." loading="lazy"><figcaption><b>3</b> · Flight: direct control, full light</figcaption></figure>
+  <figure><img src="img/l4.jpg" width="960" height="540" alt="The garden: rows of glowing rods, the drone among scattered mites." loading="lazy"><figcaption><b>4</b> · The cutter: aim by flying</figcaption></figure>
+  <figure><img src="img/l5.jpg" width="960" height="540" alt="The hangar gone clinical white, red mites swarming a black nest." loading="lazy"><figcaption><b>5</b> · Weakness, tracking, then auto fire</figcaption></figure>
+  <figure><img src="img/l6.jpg" width="960" height="540" alt="The ship from higher up, rooms washed in mint, red dots in the room being cleared." loading="lazy"><figcaption><b>6</b> · The ship as a map, room by room</figcaption></figure>
+  <figure><img src="img/l7.jpg" width="960" height="540" alt="Four other ships over a planet, linked by lines to yours." loading="lazy"><figcaption><b>7</b> · Your ship among the others</figcaption></figure>
+  <figure><img src="img/l8.jpg" width="960" height="540" alt="A star system drawn as thin mint orbits on black." loading="lazy"><figcaption><b>8</b> · A star system, then nowhere left</figcaption></figure>
+</div>
+
+<section class="col prose stack">
+<h2>Why I made it</h2>
+<p>I'd seen a few impressive Fable 5.2 demos, including <a target="_blank" rel="noopener" href="https://x.com/felixrieseberg/status/2119925633564463609">a first-person shooter Felix Rieseberg made with a single prompt</a>, and I was curious how well Fable 5.2 could one-shot one of the game ideas I've been carrying around: a game about getting around in space by turning, thrusting, and drifting.</p>
+<p>I enjoy pushing new models to see what they're capable of, and this seemed like a great way to put Fable and Claude Projects through their paces.</p>
+<p>I typically use <a target="_blank" rel="noopener" href="https://conductor.build">Conductor</a> – I love my custom plugins that allow Anthropic and OpenAI agents to collaborate and review each other's work. But for this project I tried Claude Projects, at the urging of a few friends and folks like <a target="_blank" rel="noopener" href="https://x.com/clairevo/status/2114012293105430813">Claire Vo</a>. I've really enjoyed how easy Projects make it to switch between my phone and the desktop app, and the way memory and shared context work is excellent.</p>
+</section>
+
+<section class="col prose stack">
+<h2>How it started</h2>
+<p>Fable 5.2's attempt to one-shot my game idea was a mixed bag. The graphics were freakishly good and the core mechanic worked, but the game wasn't fun at all.</p>
+<p>While I was drifting around in that prototype, though, the idea for Takeoff arrived almost fully formed.</p>
+<p>I described the idea to Claude in a long, rambling voice note – my preferred way to prompt.</p>
+<p>Eighty minutes later there was a playable slice of the story: one deck of a ship, drawn as a pencil sketch. You get around by rotating and thrusting until the drone learns to fly, and then the same deck is fully 3D rendered.</p>
+<p>After that, I mostly worked in a loop: I played it, dictated or wrote what I felt was wrong, Claude changed it, and I played it again.</p>
+<p>I ran separate sessions side by side for the main build, level design, sound design and music. The level, sound and music sessions each worked on their own branch, and I played the risky changes before they were merged.</p>
+</section>
+
+<div class="wide" style="margin-top:32px">
+  <div class="numbers" role="list">
+    <div role="listitem"><strong>One week</strong><span>9–15 November, evenings and a weekend</span></div>
+    <div role="listitem"><strong>22</strong><span>chat sessions, many running side by side</span></div>
+    <div role="listitem"><strong>~15k</strong><span>words of my own prompts, many of them dictated</span></div>
+    <div role="listitem"><strong>1.5+ hours</strong><span>of talking, for the dictated ones</span></div>
+    <div role="listitem"><strong>179</strong><span>commits on 22 branches</span></div>
+    <div role="listitem"><strong>45</strong><span>test scenarios that drive the game headlessly</span></div>
+    <div role="listitem"><strong>~580 KB</strong><span>of code, no libraries</span></div>
+    <div role="listitem"><strong>21</strong><span>music loops, starting from my own piano takes</span></div>
+    <div role="listitem"><strong>9</strong><span>evolutions of one sound, the probe's ping</span></div>
+  </div>
+</div>
+
+<section class="col prose stack">
+<h2>Fable 5.2, almost exclusively</h2>
+<p>I experimented with having Fable hand "easier" work to cheaper Opus agents and keep the design and review for itself. But one early job, adding windows overlooking a planet, took an Opus agent about seventy minutes and cost more than Fable had spent building the whole first part of the game. After that Fable did the work and Fable sub-agents did the critique. All of it ran on my personal Claude Max plan ($100/month). I used up one week's Fable allowance and about a quarter of the next.</p>
+<p>The game uses no libraries. The first sandbox couldn't download three.js, so Fable wrote a WebGL2 renderer from scratch, with shadows, bloom, and various other procedural effects, like the pencil sketch. The sound effects are all synthesized in Web Audio. The whole game is one HTML file.</p>
+</section>
+
+<section class="col prose stack">
+<h2>Theme as the slop filter</h2>
+<p>For every creative decision, I had Claude ask: does it make the story more fun, or does it reinforce the theme? Ideally it did both. Anything that did neither was filler (slop!) and mercilessly cut.</p>
+<p>Before we could do that, we needed to define the theme, or <a target="_blank" rel="noopener" href="https://www.screenplayology.com/content-sections/paths-problems-in-screenplay-studies/2-5/">controlling idea</a> in Robert McKee's sense: one sentence that says what the story means. I used Claude as a thought partner to crystallize it, and I was surprised how much Fable struggled. It kept coming up with empty, mannered, or overcomplicated phrases.</p>
+<p>We stopped iterating at: "If we get strong enough that nothing can stop us, the only thing left to want is something that we can't control." I kept around some earlier versions with more detail on how the player should feel at each stage.</p>
+<p>The theme was a very useful shortcut for keeping all those sessions pointed the same way. It also gave me something to check every element of the game against.</p>
+<p>I had Claude keep a 650-entry inventory of every creative decision. Sub-agents reviewed it, most of them playing a film head of department (story, editor, play, places, picture, character, sound), plus one first-time player. They judged whether each decision rang true to the theme and brainstormed how to make it better.</p>
+<p>A few examples:</p>
+<ul>
+<li>The probe's ping starts as a high-pitched, optimistic rising fifth (A to E), like a call. As the drone gets more powerful, the ping gets lower and less musical. The ring that reaches you at the very end is the sound of the first ping again.</li>
+<li>The drone's headlamp wanders while it's young, and goes still once the gun fires itself.</li>
+<li>The camera stays overhead and pulls back a little more with each thing the drone learns, so you watch from further and further away.</li>
+<li>After learning auto fire, the drone's vision turns clinical white, like a self-driving car's display, and the mites (the invaders you fight) become red points on it. By then they're all the drone sees.</li>
+<li>Mites don't just swarm: some of them <em>pounce</em>, jumping off surfaces at the probe. That has nothing to do with the theme, but it makes the gameplay more varied and fun.</li>
+<li>The score has two motifs. The empty one (C, B, E, B) becomes more prominent as the probe's power grows and you operate at a higher level of abstraction, until eventually even that motif disappears.</li>
+<li>The small sound effects are pitched on A or E too. The mites answer on B♭, which clashes.</li>
+</ul>
+</section>
+
+<section class="col prose stack">
+<h2>The sound and music were as hard as the rest put together</h2>
+<p>Fable's first attempt at the sound and music was generic. I suspect it's a combination of less training data and sound being harder to give feedback on in words.</p>
+<p>The probe pings all the way through, because I wanted the ping there for the ending. That meant the ping had to follow the story, so it went through six versions. Some felt too synthetic; some felt too musical and not enough like a sound from a probe. I experimented with two plucked guitar strings followed by a long reverb, with interesting things happening in the reverb. For some versions I wanted a brassy swell in the reverb, like the seismic charge in <em>Attack of the Clones</em>.</p>
+<p>The final ping has nine stages. At various points it drops an octave, picks up a buzz, and becomes less musical.</p>
+<p>Does all that add to the experience? And could I have prompted Fable to come up with its own ideas more efficiently? I don't know, but it was really fun to channel my inner <a target="_blank" rel="noopener" href="https://www.npr.org/transcripts/131968222">Ben Burtt</a> and try so many ideas so quickly.</p>
+</section>
+
+<div class="wide tracks-wrap" style="margin-top:32px">
+  <div class="tracks">
+    <h3>The ping, version by version</h3>
+    <div class="track"><button aria-label="Play version 1"></button><div><div class="t">v1 · a blip with an echo</div><div class="d">The placeholder from the first build</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/ping_v1.mp3"></audio></div>
+    <div class="track"><button aria-label="Play version 2"></button><div><div class="t">v2 · a plucked heartbeat</div><div class="d">"Doesn't feel like a ping"</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/ping_v2.mp3"></audio></div>
+    <div class="track"><button aria-label="Play version 3"></button><div><div class="t">v3 · two plucks, then reverb</div><div class="d">The echo replaced by a tail</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/ping_v3.mp3"></audio></div>
+    <div class="track"><button aria-label="Play version 4"></button><div><div class="t">v4 · a rising fifth</div><div class="d">A to E, on a modelled string</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/ping_v4.mp3"></audio></div>
+    <div class="track"><button aria-label="Play version 5"></button><div><div class="t">v5 · a softer pickup</div><div class="d">The first note almost a grace note</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/ping_v5.mp3"></audio></div>
+    <div class="track"><button aria-label="Play version 6"></button><div><div class="t">v6 · as shipped</div><div class="d">Waking, the first thing you hear</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/ping_v6.mp3"></audio></div>
+  </div>
+  <div class="tracks">
+    <h3>The ping, stage by stage</h3>
+    <div class="track"><button aria-label="Play stage 0"></button><div><div class="t">0 · waking, drift</div><div class="d">A then E, high and small</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/stage_0.mp3"></audio></div>
+    <div class="track"><button aria-label="Play stage 1"></button><div><div class="t">1 · flight</div><div class="d">Fuller</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/stage_1.mp3"></audio></div>
+    <div class="track"><button aria-label="Play stage 2"></button><div><div class="t">2 · the cutter learns</div><div class="d">An octave down, the fullest room</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/stage_2.mp3"></audio></div>
+    <div class="track"><button aria-label="Play stage 3"></button><div><div class="t">3 · auto fire</div><div class="d">The swell in the reverb</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/stage_3.mp3"></audio></div>
+    <div class="track"><button aria-label="Play stage 4"></button><div><div class="t">4 · the ship as a map</div><div class="d">Another octave down, half the fifth, a buzz</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/stage_4.mp3"></audio></div>
+    <div class="track"><button aria-label="Play stage 5"></button><div><div class="t">5 · the way out</div><div class="d">Most buzz</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/stage_5.mp3"></audio></div>
+    <div class="track"><button aria-label="Play stage 6"></button><div><div class="t">6 · further out</div><div class="d">The buzz dying</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/stage_6.mp3"></audio></div>
+    <div class="track"><button aria-label="Play stage 7"></button><div><div class="t">7 · further still</div><div class="d">An octave down again, clean, no room</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/stage_7.mp3"></audio></div>
+    <div class="track"><button aria-label="Play stage 8"></button><div><div class="t">8 · nowhere left</div><div class="d">A and A, one pure tone</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/stage_8.mp3"></audio></div>
+  </div>
+</div>
+
+<section class="col prose stack">
+<h3>I recorded the music myself</h3>
+<p>The first score was the weakest part of the game. I half-heartedly tried Suno but didn't get it working in the time I had. So I played around with some musical ideas on my digital piano and saved them as MIDI files.</p>
+<p>Initially I saved just a minute or two as a proof of concept, for Claude to render through some free sampled instruments and orchestras (VSCO 2, VCSL and Sonatina).</p>
+<p>It turned out really well and I got carried away: I recorded four more takes, about 10 minutes of original music, then extracted and arranged loops for each stretch of the game. The loops all share the same 4-bar structure, so the game can crossfade between them as you move through levels and grow in power.</p>
+<p>Picking instruments and mixing levels was tricky and manual, because I have a crucial advantage over Claude: I can actually hear the music. Although I suppose Beethoven managed fine without that. I did rely on Claude to build me little artifacts that made each step of that process easier.</p>
+<p>My 9-year-old daughter wanted to listen to the music again in the car today, and asked me to write some more like it for her, so that was a pleasant surprise!</p>
+</section>
+
+<div class="col" style="margin-top:24px">
+  <div class="tracks">
+    <h3>From my piano to the game</h3>
+    <div class="track"><button aria-label="Play my first take"></button><div><div class="t">My first take</div><div class="d">The MIDI as I played it, on a sampled grand</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/take_raw.mp3"></audio></div>
+    <div class="track"><button aria-label="Play drift"></button><div><div class="t">Drift, after the corner</div><div class="d">Closest to the take: its chords on bowed vibraphone, the celeste on the empty motif</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/loop_drift.mp3"></audio></div>
+    <div class="track"><button aria-label="Play auto fire"></button><div><div class="t">Auto fire</div><div class="d">The other end: the climax, soaring but no busier</div><div class="bar"><i></i></div></div><span class="len"></span><audio preload="none" src="audio/loop_auto.mp3"></audio></div>
+  </div>
+  <div class="tracks suite" style="margin-top:16px">
+    <h3>The Takeoff suite</h3>
+    <div class="suite-top">
+      <button class="sp" aria-label="Play the suite"></button>
+      <div><div class="t"><span class="now">Every loop in the game, in running order</span></div><div class="d"><span class="pos">0:00</span> / 7:47</div></div>
+      <button class="snext" aria-label="Next chapter">Next &rarr;</button>
+    </div>
+    <div class="sbar" role="slider" aria-label="Position in the suite" tabindex="0"><i></i></div>
+    <ol class="chapters">
+      <li><button data-t="0.00"><span class="cn">Drift</span><span class="ct">0:00</span></button></li>
+      <li><button data-t="13.91"><span class="cn">After the corner</span><span class="ct">0:13</span></button></li>
+      <li><button data-t="41.74"><span class="cn">Arc gates</span><span class="ct">0:41</span></button></li>
+      <li><button data-t="69.57"><span class="cn">Flight</span><span class="ct">1:09</span></button></li>
+      <li><button data-t="111.30"><span class="cn">Quiet rooms</span><span class="ct">1:51</span></button></li>
+      <li><button data-t="139.13"><span class="cn">Mites</span><span class="ct">2:19</span></button></li>
+      <li><button data-t="166.96"><span class="cn">Weakness</span><span class="ct">2:46</span></button></li>
+      <li><button data-t="222.61"><span class="cn">The court</span><span class="ct">3:42</span></button></li>
+      <li><button data-t="250.43"><span class="cn">Auto fire</span><span class="ct">4:10</span></button></li>
+      <li><button data-t="306.09"><span class="cn">Hangar flood</span><span class="ct">5:06</span></button></li>
+      <li><button data-t="347.83"><span class="cn">Hangar emptied</span><span class="ct">5:47</span></button></li>
+      <li><button data-t="361.74"><span class="cn">Chart room</span><span class="ct">6:01</span></button></li>
+      <li><button data-t="389.57"><span class="cn">Room by room</span><span class="ct">6:29</span></button></li>
+      <li><button data-t="403.48"><span class="cn">The way out</span><span class="ct">6:43</span></button></li>
+    </ol>
+    <audio preload="none" src="audio/suite.mp3"></audio>
+  </div>
+</div>
+
+<section class="col prose stack">
+<h2>Tiny tools for single decisions</h2>
+<p>No surprise: Claude did a great job making custom tools that made the tricky manual work easier. Whenever I had to judge something by ear or by eye, I asked for an artifact that let me compare the options side by side.</p>
+</section>
+
+<div class="wide grid g3 tools" style="margin-top:32px">
+  <figure><img src="img/f_auditions.jpg" width="900" height="1180" alt="The instrument auditions page: a table of sixteen sounds against three excerpts of David's piano take, each cell a play button." loading="lazy"><figcaption><b>The sample selector.</b> My piano take played by sixteen different instruments, in three excerpts each. The notes, timing and pedal are mine; only the instrument changes.</figcaption></figure>
+  <figure><img src="img/f_mixer.jpg" width="1440" height="860" alt="The score mixer: one panel per loop, a lane per instrument with its notes and a draggable level line." loading="lazy"><figcaption><b>The mixer.</b> A panel per loop, a lane per instrument with its notes. I dragged the levels by ear and sent them back.</figcaption></figure>
+  <figure><img src="img/f_ping.jpg" width="1280" height="1014" alt="A page of buttons: each ping stage, and score layers to play under it." loading="lazy"><figcaption><b>The ping board.</b> Every stage of the ping, playable over any layer of the score, using the game's own sound code.</figcaption></figure>
+  <figure><img src="img/f_paths.jpg" width="1440" height="869" alt="The ship's plan drawn as mint outlines on black, with one route winding through the rooms." loading="lazy"><figcaption><b>The tester map.</b> Where each playtester went, on the ship's plan: a colour per tester, an x for each death, an o for each press of the "huh" key. Shown here with the autopilot's route.</figcaption></figure>
+  <figure><img src="img/f_tests.jpg" width="1720" height="806" alt="A contact sheet of automated screenshots of rooms in the game." loading="lazy"><figcaption><b>The autopilot.</b> A headless browser plays the whole game and photographs the story moments, so I only looked at changes that already worked.</figcaption></figure>
+  <figure><img src="img/f_chapters.jpg" style="object-position:center" width="1280" height="720" alt="The chapter menu over the game, listing every section." loading="lazy"><figcaption><b>The chapter menu.</b> Tab jumps to any part of the game, so I could replay one moment twenty times.</figcaption></figure>
+</div>
+
+<section class="col prose stack">
+<p>There were more: listening pages for each draft of the score, MP3 suites of each motif option so I could hear the whole arc at once, a sound board for every effect, and hotkeys to switch looks and versions while playing.</p>
+</section>
+
+<section class="col prose stack">
+<h2>A lot more than a prompt</h2>
+<p>It took a lot of effort to get what I wanted – much more than one prompt! But I still find it amazing that I could make this in less than a week of evenings and a weekend.</p>
+</section>
+
+<section class="col prose stack">
+<h2>Appendix: more of the process</h2>
+<p>Ok, Claude really wants to share more of the process. Here you go:</p>
+</section>
+
+<div class="fig-block">
+  <div class="col"><h3>The first slice, on day one</h3><p class="body-sub">Pencil while you drift, a wash as you get better, then full light. The schematic look was there from the start, before the game had a use for it.</p></div>
+  <div class="wide grid g4">
+    <figure><img src="img/s1.jpg" width="960" height="540" alt="Pencil sketch of a corridor with the drone and floating debris." loading="lazy"><figcaption>Drift, in pencil</figcaption></figure>
+    <figure><img src="img/s2.jpg" width="960" height="540" alt="The same sketch half washed in, a girder across the room." loading="lazy"><figcaption>Learning, in wash</figcaption></figure>
+    <figure><img src="img/s3.jpg" width="960" height="540" alt="The girder room fully rendered: dark metal floor, a headlamp pool, warm lamps." loading="lazy"><figcaption>Flight learned, full light</figcaption></figure>
+    <figure><img src="img/s4.jpg" width="960" height="540" alt="The girder room drawn as mint lines on black." loading="lazy"><figcaption>Schematic</figcaption></figure>
+  </div>
+</div>
+
+<div class="fig-block">
+  <div class="col"><h3>The title screen, six times</h3><p class="body-sub">The first was labelled a working title. The last says what it is.</p></div>
+  <div class="wide grid g3">
+    <figure><img src="img/t1.jpg" width="960" height="540" alt="Title over a sketched room, with 'working title · a slice of the first two beats'." loading="lazy"><figcaption><b>Tue</b> · "working title"</figcaption></figure>
+    <figure><img src="img/t2.jpg" width="960" height="540" alt="Title over the sketched room, with a chapters hint." loading="lazy"><figcaption><b>Wed</b> · a chapter menu for testing</figcaption></figure>
+    <figure><img src="img/t3.jpg" width="960" height="540" alt="Title over a sketch of a dock with probe cradles, and a 'sound on' note." loading="lazy"><figcaption><b>Fri</b> · a dock of eight cradles, "sound on"</figcaption></figure>
+    <figure><img src="img/t4.jpg" width="960" height="540" alt="Title alone on blank paper." loading="lazy"><figcaption><b>Fri</b> · nothing until you press a key</figcaption></figure>
+    <figure><img src="img/t5.jpg" width="960" height="540" alt="'what if nothing could stop your takeoff' above the sketched drone." loading="lazy"><figcaption><b>Sat</b> · a question</figcaption></figure>
+    <figure><img src="img/t6.jpg" width="960" height="540" alt="'a short story about takeoff' above the sketched drone on white paper." loading="lazy"><figcaption><b>Sun</b> · "a short story about"</figcaption></figure>
+  </div>
+</div>
+
+<div class="fig-block">
+  <div class="col"><h3>The other ships, three times</h3><p class="body-sub">Near the end the view pulls back far enough to see your ship docking with others. It took three goes to make them look like spaceships.</p></div>
+  <div class="wide grid g3">
+    <figure><img src="img/sh1.jpg" width="960" height="540" alt="Grey floor-plan shapes on black, linked by lines." loading="lazy"><figcaption><b>v1</b> · looked like floor plans</figcaption></figure>
+    <figure><img src="img/sh2.jpg" width="960" height="540" alt="Flat grey tiled hull shapes over a planet." loading="lazy"><figcaption><b>v2</b> · "the worst spaceship designs ever" (me)</figcaption></figure>
+    <figure><img src="img/sh3.jpg" width="1280" height="720" alt="An asteroid miner, an ark with domes, twin spheres and a cradle ship over a planet." loading="lazy"><figcaption><b>v3</b> · from reference images I liked</figcaption></figure>
+  </div>
+</div>
+
+<div class="fig-block">
+  <div class="col"><h3>Trials on branches</h3><p class="body-sub">Anything uncertain went on its own branch for me to play. Five trials were merged into one build so I could play them together, and those all stayed. The ones I dropped were the trials meant to make players say "wow".</p></div>
+  <div class="wide notes">
+    <div><q>Both kind of suck.</q><p>On two of the "wow" trials: the ping as a weapon, and a silent hangar that read as a bug.</p></div>
+    <div><q>Sounds right on paper.</q><p>On mites that answer the drone's ping. I was skeptical. It's in the game.</p></div>
+    <div><q>The middle isn't fun.</q><p>After an early playtest. It went from visceral to conceptual too fast. Eleven rooms replaced the original six.</p></div>
+  </div>
+</div>
+
+<div class="wide" style="margin-top:56px">
+  <a class="playcard" href="https://takeoff.david.bio">
+    <div class="pc-art">
+      <img src="img/play_title.jpg" width="1155" height="710" alt="" loading="lazy">
+      <div class="ping" aria-hidden="true"></div>
+    </div>
+    <div class="pc-copy">
+      <div class="pc-title">Play Takeoff</div>
+      <p class="pc-text">A short story by david.bio. 5–10 minutes, on a laptop, with sound on.</p>
+      <span class="pc-btn">Play at takeoff.david.bio <span aria-hidden="true">&rarr;</span></span>
+    </div>
+  </a>
+</div>
+
+
+<footer class="col">Screenshots rendered from the game's own commits. Sounds recorded from the game's own audio code. Music samples: VSCO 2 Community Edition and Versilian Community Sample Library (Versilian Studios, CC0), Sonatina Symphonic Orchestra (Mattias Westlund, CC Sampling Plus 1.0), Salamander Grand Piano (Alexander Holm, CC BY 3.0).</footer>
+
+<script>
+(function(){
+  var PLAY='<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5v11l9-5.5z" fill="currentColor"/></svg>';
+  var STOP='<svg viewBox="0 0 14 14" aria-hidden="true"><rect x="2.5" y="2.5" width="9" height="9" fill="currentColor"/></svg>';
+  var cur=null;
+  function fmt(s){if(!isFinite(s))return'';s=Math.round(s);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+  function stop(t){if(!t)return;var a=t.querySelector('audio');a.pause();a.currentTime=0;t.classList.remove('on');t.querySelector('button').innerHTML=PLAY;t.querySelector('.bar i').style.width='0';}
+  document.querySelectorAll('.track').forEach(function(t){
+    var b=t.querySelector('button'),a=t.querySelector('audio'),bar=t.querySelector('.bar i'),len=t.querySelector('.len');
+    b.innerHTML=PLAY;
+    a.addEventListener('loadedmetadata',function(){len.textContent=fmt(a.duration);});
+    a.addEventListener('timeupdate',function(){if(a.duration)bar.style.width=(100*a.currentTime/a.duration)+'%';});
+    a.addEventListener('ended',function(){stop(t);if(cur===t)cur=null;});
+    a.addEventListener('pause',function(){if(cur===t&&a.currentTime>0&&!a.ended){t.classList.remove('on');b.innerHTML=PLAY;cur=null;}});
+    b.addEventListener('click',function(){
+      if(cur===t){stop(t);cur=null;return;}
+      stop(cur);cur=t;t.classList.add('on');b.innerHTML=STOP;
+      var p=a.play();if(p&&p.catch)p.catch(function(){stop(t);cur=null;});
+    });
+  });
+})();
+
+(function(){
+  document.addEventListener('play',function(e){document.querySelectorAll('audio').forEach(function(a){if(a!==e.target&&!a.paused)a.pause();});},true);
+  var S=document.querySelector('.suite');if(!S)return;
+  var PLAY='<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5v11l9-5.5z" fill="currentColor"/></svg>';
+  var PAUSE='<svg viewBox="0 0 14 14" aria-hidden="true"><rect x="2.5" y="2" width="3.2" height="10" fill="currentColor"/><rect x="8.3" y="2" width="3.2" height="10" fill="currentColor"/></svg>';
+  var a=S.querySelector('audio'),sp=S.querySelector('.sp'),nx=S.querySelector('.snext'),bar=S.querySelector('.sbar'),fill=bar.querySelector('i'),now=S.querySelector('.now'),pos=S.querySelector('.pos');
+  var chips=[].slice.call(S.querySelectorAll('.chapters button')),T=chips.map(function(c){return +c.dataset.t;}),TOTAL=467;
+  function fmt(s){s=Math.max(0,Math.floor(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+  function idx(t){var i=0;for(var k=0;k<T.length;k++)if(t>=T[k]-0.05)i=k;return i;}
+  function paint(){var t=a.currentTime||0,d=a.duration||TOTAL,i=idx(t);fill.style.width=(100*t/d)+'%';pos.textContent=fmt(t);
+    if(!a.paused||t>0){now.textContent=chips[i].querySelector('.cn').textContent;}chips.forEach(function(c,k){c.classList.toggle('cur',(!a.paused||t>0)&&k===i);});}
+  function go(t){var p=a.play();a.currentTime=t;if(p&&p.catch)p.catch(function(){});paint();}
+  sp.innerHTML=PLAY;
+  a.addEventListener('play',function(){sp.innerHTML=PAUSE;S.classList.add('on');});
+  a.addEventListener('pause',function(){sp.innerHTML=PLAY;S.classList.remove('on');});
+  a.addEventListener('timeupdate',paint);a.addEventListener('loadedmetadata',paint);
+  sp.addEventListener('click',function(){if(a.paused){var p=a.play();if(p&&p.catch)p.catch(function(){});}else a.pause();});
+  nx.addEventListener('click',function(){var i=idx(a.currentTime||0);var j=(a.paused&&!a.currentTime)?0:i+1;if(j<T.length)go(T[j]);});
+  chips.forEach(function(c){c.addEventListener('click',function(){go(+c.dataset.t);});});
+  bar.addEventListener('click',function(e){var r=bar.getBoundingClientRect();go((a.duration||TOTAL)*(e.clientX-r.left)/r.width);});
+  bar.addEventListener('keydown',function(e){if(e.key==='ArrowRight')go((a.currentTime||0)+10);if(e.key==='ArrowLeft')go((a.currentTime||0)-10);});
+})();
+</script>
+</body>
+</html>

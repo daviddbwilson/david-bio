@@ -139,7 +139,6 @@
     padding: calc(var(--spacing-unit) * 1.5);
     padding-left: calc(var(--spacing-unit) * 2.5);
     margin-bottom: 1.75em !important;
-    border-left: 3px solid var(--color-accent);
 }
 
 .thesis li {
