@@ -170,6 +170,7 @@ window.DB_CARDS = {
         url: "https://takeoff.david.bio/",
         badge: "Play",
         icon: "play",
+        action: "Play Takeoff",
         image: "assets/cards/12-takeoff-trailer.webp",
         video: "assets/cards/12-takeoff-trailer.mp4",
         width: 600,

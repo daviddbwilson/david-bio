@@ -668,6 +668,17 @@ button:focus-visible {
     text-decoration: none;
 }
 
+/* A mostly white picture: the grabber and the button go dark to show up. */
+.preview-drawer:has(.on-light) .preview-drawer-bar::before {
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: none;
+}
+
+.preview-drawer:has(.on-light) .preview-open {
+    background: #161616;
+    color: #fff;
+}
+
 /* Behind the sheet: the page is pinned as a screen-sized layer, shrinks back
    and dims. card-preview.js sets the transform and the scrim's opacity. */
 html.sheet-open,
