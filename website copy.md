@@ -32,6 +32,6 @@ Each of these links shows a preview picture with a short caption and a badge on 
 | project | Talk (video) | LinkedIn Rewind. Idea to production in four days. |
 | generative data apps | Blog post | My first product launch at Hex |
 | evals | Blog post | Wrong chart edits: 21% down to 3%. |
-| Takeoff | Play | none |
+| Takeoff | Play | none (a looping silent trailer plays) |
 | how I made it | Blog post | Made in under a week of evenings |
 | family | none (picture only, not a link) | none |

@@ -119,6 +119,17 @@
     /* ---- Images: nothing is fetched until someone shows interest ----- */
 
     var warmed = false;
+    var warmVideos = [];
+
+    // Take the looping video, if there is one, out of a figure.
+    function stopVideo(root) {
+        var video = root && root.querySelector(".preview-media video");
+        if (!video) return;
+        video.pause();
+        video.removeAttribute("src");
+        video.load();
+        video.remove();
+    }
 
     // After the first hover or tap, fetch the other images in the background
     // so later previews appear without a wait.
@@ -133,6 +144,14 @@
         idle(function () {
             Object.keys(cards).forEach(function (key) {
                 if (cards[key].image) new Image().src = cards[key].image;
+                if (cards[key].video && !reduceMotion.matches) {
+                    // Fetched here so the browser has it cached when asked.
+                    var v = document.createElement("video");
+                    v.muted = true;
+                    v.preload = "auto";
+                    v.src = cards[key].video;
+                    warmVideos.push(v);
+                }
             });
         });
     }
@@ -165,8 +184,10 @@
             card.badgeAt === "bottom" && !card.caption
         );
         img.style.objectPosition = card.focus || "";
+        figure.classList.toggle("has-video", Boolean(card.video));
         media.classList.remove("is-loaded");
         img.removeAttribute("src");
+        stopVideo(root);
         if (card.image) {
             media.hidden = false;
             media.style.aspectRatio =
@@ -184,6 +205,26 @@
                 if (onResize) onResize();
             };
             img.src = card.image;
+            // The image stays underneath as the poster; the video fades in
+            // over it once it is playing. If it can't play, the image stays.
+            if (card.video && !reduceMotion.matches) {
+                var video = document.createElement("video");
+                video.muted = true;
+                video.loop = true;
+                video.playsInline = true;
+                video.setAttribute("muted", "");
+                video.setAttribute("playsinline", "");
+                video.setAttribute("aria-hidden", "true");
+                video.preload = "auto";
+                video.style.objectPosition = card.focus || "";
+                video.addEventListener("playing", function () {
+                    video.classList.add("is-playing");
+                });
+                video.src = card.video;
+                media.appendChild(video);
+                var playing = video.play();
+                if (playing && playing.catch) playing.catch(function () {});
+            }
         } else {
             media.hidden = true;
         }
@@ -328,7 +369,11 @@
         shown = null;
         pointer = null;
         hiddenAt = performance.now();
-        if (cardEl) cardEl.classList.remove("is-visible");
+        if (cardEl) {
+            cardEl.classList.remove("is-visible");
+            var video = cardEl.querySelector(".preview-media video");
+            if (video) video.pause();
+        }
     }
 
     // Start the animation loop if it isn't running.
@@ -545,6 +590,7 @@
         el.classList.remove("is-active");
         drawer.classList.remove("is-open");
         drawer.style.transform = "";
+        stopVideo(drawer);
         document.documentElement.style.removeProperty("--drawer-space");
         if (!options || options.restoreFocus !== false) {
             el.focus({ preventScroll: true });

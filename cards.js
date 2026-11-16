@@ -14,6 +14,10 @@
  *   caption  A few words, shown on the image. Keep it to one short line.
  *            Leave it out to show the image on its own.
  *   image    Path to the image (WebP, about 800px on the long edge).
+ *   video    Optional. Path to a short silent MP4 that plays in a loop over the
+ *            image. The image should be the video's first frame, at the same
+ *            shape: it shows until the video starts, and on its own for
+ *            people who have asked for reduced motion.
  *   width, height  The image's pixel size, so the card is the right shape
  *            before the image has loaded.
  *   tone     A dark colour taken from the bottom edge of the image. The image
@@ -128,20 +132,22 @@ window.DB_CARDS = {
         tone: "#1d1320",
         alt: "The evals post's header: a mountain road of switchbacks on a purple background",
     },
-    // No caption: the picture carries its own title. It is the game's link
-    // preview image, which is mostly white paper, hence light.
+    // No caption: the picture carries its own title. The video is the game's
+    // portrait trailer, cut down and silent; the image is its first frame,
+    // which is mostly white paper, hence light.
     takeoff: {
         url: "https://takeoff.david.bio/",
         badge: "Play",
         icon: "play",
-        image: "assets/cards/12-takeoff-title.webp",
-        width: 800,
-        height: 420,
+        image: "assets/cards/12-takeoff-trailer.webp",
+        video: "assets/cards/12-takeoff-trailer.mp4",
+        width: 600,
+        height: 800,
         tone: "#f6f6f6",
         light: true,
         // The title's handwriting runs through the top left corner.
         badgeAt: "bottom",
-        alt: "Takeoff's title card: the words 'a short story about takeoff' handwritten above a pencil sketch of a small round probe on white paper",
+        alt: "Takeoff's trailer. It opens on the title card: 'a short story about takeoff' handwritten above a pencil sketch of a small round probe on white paper",
     },
     makingof: {
         url: "/blog/how-i-made-takeoff/",
