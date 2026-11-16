@@ -4,7 +4,7 @@ Product builder and founder-CEO.
 
 I started building software in 9th grade, modding video games before I could code, and later founded two companies:
 
-- **Cape Networks**, acquired by HPE Aruba. Network monitoring [hardware](https://www.bould.com/work/aruba) and software: >$10M revenue, used by 2,000+ customers including Microsoft, Home Depot, and [Disney](https://vimeo.com/738368274). After the acquisition, I ran the business inside Aruba as Senior Director of Product Management.
+- **Cape Networks**, acquired by HPE Aruba. Network monitoring [hardware](https://www.bould.com/work/aruba) and software: >$10M revenue, used by 2,000+ customers including Microsoft, Home Depot, and [Disney](https://vimeo.com/738368274). After the acquisition, I ran the business inside Aruba for a little under three years.
 - **Hunch**: started as a [data tool](https://neon.ac/preview), became an [AI workflow builder](https://x.com/Scobleizer/status/1784743064541757913), then autonomous [agents](https://david.bio/blog/reliable-background-agents/). One [project](https://www.youtube.com/watch?v=gTQG0SfJb9Y) reached 330K users in two weeks. We wound the company down in 2025.
 
 Today I'm at [Hex](https://hex.tech), where the cofounders brought me in to work out their next dashboard builder. I took our [generative data apps](https://hex.tech/blog/introducing-generative-data-apps/) from first prototype to launch in two months, including building the evals. Since then I've worked on the last mile: the AI builds the app, but people still need [precise control](https://hex.tech/blog/generative-chart-controls/) over [the details](https://hex.tech/blog/we-used-evals-to-improve-ai-feature/). I also hold the dubious distinction of being the company's top AI spender.
