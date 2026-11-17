@@ -186,12 +186,13 @@ window.DB_CARDS = {
         badge: "Blog post",
         icon: "post",
         caption: "Made in under a week of evenings",
-        // A figure from the post: the autopilot's route through the ship.
-        image: "assets/cards/13-takeoff-paths.webp",
+        // A figure from the post: the first four pictures on the autopilot's
+        // contact sheet.
+        image: "assets/cards/13-takeoff-autopilot.webp",
         width: 800,
-        height: 482,
-        tone: "#05070b",
-        alt: "A plan of the ship's rooms in thin green lines on black, with the route a test run took traced through them",
+        height: 497,
+        tone: "#101216",
+        alt: "Four automated screenshots of rooms in the game, each with its test's file name underneath",
     },
     // No url: this one is a picture only, on "wife and two kids".
     // The children's faces are covered in the image file itself.
