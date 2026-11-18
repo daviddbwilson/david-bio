@@ -52,7 +52,8 @@ window.DB_CARDS = {
         caption: function () {
             var wave = " \uD83D\uDC4B"; // waving hand
             var weather = window.DB_SF_WEATHER;
-            if (weather) {
+            // An hour-old phrase in a tab left open is out of date.
+            if (weather && Date.now() - (window.DB_SF_WEATHER_AT || 0) < 60 * 60 * 1000) {
                 var sfHour = Number(
                     new Intl.DateTimeFormat("en-US", {
                         timeZone: "America/Los_Angeles",
@@ -264,6 +265,25 @@ window.DB_CARDS = {
     var URL = "https://api.weather.gov/gridpoints/MTR/85,105/forecast";
     var KEY = "db-sf-weather-3";
 
+    // The forecast calls 6am to 6pm "day" all year, so "sunny" would show
+    // after a winter sunset. Work it out from the sun over San Francisco
+    // instead (the US Naval Observatory's low-precision formulas, good to a
+    // few minutes).
+    function sunIsUp(date) {
+        var rad = Math.PI / 180;
+        var d = (date.getTime() - Date.UTC(2000, 0, 1, 12)) / 864e5;
+        var g = (357.529 + 0.98560028 * d) * rad;
+        var q = 280.459 + 0.98564736 * d;
+        var l = (q + 1.915 * Math.sin(g) + 0.02 * Math.sin(2 * g)) * rad;
+        var e = (23.439 - 0.00000036 * d) * rad;
+        var ra = Math.atan2(Math.cos(e) * Math.sin(l), Math.cos(l));
+        var dec = Math.asin(Math.sin(e) * Math.sin(l));
+        var hourAngle = (18.697374558 + 24.06570982441908 * d) * 15 * rad - 122.4194 * rad - ra;
+        var lat = 37.7749 * rad;
+        var altitude = Math.asin(Math.sin(lat) * Math.sin(dec) + Math.cos(lat) * Math.cos(dec) * Math.cos(hourAngle));
+        return altitude > -0.833 * rad;
+    }
+
     function normalFor(normals, isoDate) {
         var month = Number(isoDate.slice(5, 7)) - 1;
         var day = Number(isoDate.slice(8, 10));
@@ -418,7 +438,7 @@ window.DB_CARDS = {
         });
         var offC = null;
         var period = twelve && twelve.properties.periods[0];
-        if (period) {
+        if (period && typeof period.temperature === "number") {
             var tempC = ((period.temperature - 32) * 5) / 9;
             offC = tempC - normalFor(period.isDaytime ? NORMAL_HIGH : NORMAL_LOW, period.startTime);
         }
@@ -430,8 +450,8 @@ window.DB_CARDS = {
             }).format(new Date())
         );
         return describeWeather({
-            icon: first[0] + "/" + codes.join("/"),
-            day: hours[0].isDaytime,
+            icon: (sunIsUp(new Date()) ? "day" : "night") + "/" + codes.join("/"),
+            day: sunIsUp(new Date()),
             short: shorts.join(" then "),
             pop: pop,
             wind: Math.min.apply(null, winds) + " to " + Math.max.apply(null, winds) + " mph",
@@ -441,10 +461,11 @@ window.DB_CARDS = {
         });
     }
 
-    function remember(phrase) {
+    function remember(phrase, at) {
         window.DB_SF_WEATHER = phrase;
+        window.DB_SF_WEATHER_AT = at;
         try {
-            sessionStorage.setItem(KEY, JSON.stringify({ phrase: phrase, at: Date.now() }));
+            sessionStorage.setItem(KEY, JSON.stringify({ phrase: phrase, at: at }));
         } catch (e) {}
     }
 
@@ -452,6 +473,7 @@ window.DB_CARDS = {
         var saved = JSON.parse(sessionStorage.getItem(KEY) || "null");
         if (saved && Date.now() - saved.at < 30 * 60 * 1000) {
             window.DB_SF_WEATHER = saved.phrase;
+            window.DB_SF_WEATHER_AT = saved.at;
             return;
         }
     } catch (e) {}
@@ -469,7 +491,7 @@ window.DB_CARDS = {
         }),
     ])
         .then(function (both) {
-            remember(describe(both[0], both[1]));
+            remember(describe(both[0], both[1]), Date.now());
         })
         .catch(function () {});
 })();

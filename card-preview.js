@@ -67,13 +67,30 @@
         return captionOptions(card)[0] || "";
     }
 
+    // What screen readers hear. A picture-only card keeps its alt text beside
+    // the caption, and "(!!!)" isn't read out.
+    function descriptionOf(card) {
+        var caption = captionOf(card).replace(/\(!+\)/g, "");
+        return [kindOf(card), card.url ? caption || card.alt : [String(card.alt || "").replace(/\.$/, ""), caption].filter(Boolean).join(". ")]
+            .filter(Boolean)
+            .join(": ");
+    }
+
+    // A caption can change after the page loads (the time, the weather).
+    function refreshDescription(el) {
+        var desc = document.getElementById("card-desc-" + el.getAttribute("data-card"));
+        if (desc) desc.textContent = descriptionOf(cardFor(el));
+    }
+
     // Use the first version that fits on two lines. A caption never runs to
     // three: the card is too small for it.
     function fitCaption(el, options) {
         var lineHeight = parseFloat(getComputedStyle(el).lineHeight);
         for (var i = 0; i < options.length; i++) {
             el.textContent = options[i];
-            if (!lineHeight || el.getBoundingClientRect().height <= lineHeight * 2.5) return;
+            // offsetHeight ignores the card's tilt and scale, which change while it's
+            // moving between words.
+            if (!lineHeight || el.offsetHeight <= lineHeight * 2.5) return;
         }
     }
 
@@ -112,14 +129,10 @@
         // A quiet card leaves its word looking like ordinary text.
         el.classList.add(card.quiet ? "card-quiet" : "card-link");
 
-        // A picture with no caption is described by its alt text instead.
-        var text = [kindOf(card), captionOf(card) || card.alt]
-            .filter(Boolean)
-            .join(": ");
-        if (text) {
+        if (descriptionOf(card)) {
             var desc = document.createElement("span");
             desc.id = "card-desc-" + key;
-            desc.textContent = text;
+            desc.textContent = descriptionOf(card);
             descriptions.appendChild(desc);
             el.setAttribute("aria-describedby", desc.id);
         }
@@ -366,6 +379,7 @@
             performance.now() - hiddenAt > FADE;
         shown = el;
         pointer = e ? { x: e.clientX, y: e.clientY } : null;
+        refreshDescription(el);
         fill(cardEl, cardFor(el), function () {
             setGoal();
             wake();
@@ -687,6 +701,7 @@
         if (!drawer) buildDrawer();
         var card = cardFor(el);
         hideCard();
+        refreshDescription(el);
         var wordBottom = restingBottom(el);
 
         fill(drawer, card, null);
