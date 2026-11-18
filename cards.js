@@ -242,38 +242,43 @@ window.DB_CARDS = {
 
 /*
  * San Francisco's weather for the greeting on the name, as a phrase such as
- * "a foggy" or "an unusually warm". Fetched once a visit from Open-Meteo (no
- * key needed) and kept for half an hour. If it fails, the greeting falls
- * back to the visitor's own clock.
+ * "a foggy" or "an unusually warm". Fetched once a visit from the US National
+ * Weather Service's forecast for downtown San Francisco (free, no key) and
+ * kept for half an hour. If it fails, the greeting falls back to the
+ * visitor's own clock.
  */
 (function () {
-    // Normal daily highs for San Francisco by month, in °C (1991-2020, rounded).
+    // Normal highs and lows for downtown San Francisco by month, in °C
+    // (1991-2020, rounded).
     var NORMAL_HIGH = [14.4, 15.9, 16.9, 17.8, 18.9, 20.3, 20.5, 20.9, 22.2, 21.7, 18.3, 14.4];
-    var URL =
-        "https://api.open-meteo.com/v1/forecast?latitude=37.7749&longitude=-122.4194" +
-        "&current=weather_code,is_day&daily=temperature_2m_max" +
-        "&timezone=America%2FLos_Angeles&forecast_days=1";
+    var NORMAL_LOW = [8.0, 9.2, 9.6, 10.3, 11.3, 12.4, 13.2, 13.8, 14.1, 13.1, 10.5, 8.1];
+    // The forecast for the grid square over downtown (37.7749, -122.4194).
+    var URL = "https://api.weather.gov/gridpoints/MTR/85,105/forecast";
     var KEY = "db-sf-weather";
 
     // The longest phrase here sets the longest caption, which must fit on two
     // lines on the card and on a 320px phone. Check before adding a longer one.
     function describe(data) {
-        var code = data.current.weather_code;
-        var day = data.current.is_day === 1;
-        var high = data.daily.temperature_2m_max[0];
-        var month = Number(data.daily.time[0].slice(5, 7)) - 1;
-        var off = high - NORMAL_HIGH[month];
+        var now = data.properties.periods[0];
+        var day = now.isDaytime;
+        // "Mostly Cloudy then Showers And Thunderstorms": the part before
+        // "then" is what it's like now.
+        var sky = now.shortForecast.toLowerCase().split(" then ")[0];
+        var maybe = /^(slight )?chance\b/.test(sky);
+        var temp = ((now.temperature - 32) * 5) / 9;
+        var month = Number(now.startTime.slice(5, 7)) - 1;
+        var off = temp - (day ? NORMAL_HIGH[month] : NORMAL_LOW[month]);
 
-        if (code === 45 || code === 48) return "a foggy";
-        if (code >= 95) return "a stormy";
-        if ((code >= 71 && code <= 77) || code === 85 || code === 86) return "a snowy";
-        if (code >= 51 && code <= 57) return "a drizzly";
-        if ((code >= 61 && code <= 67) || (code >= 80 && code <= 82)) return "a rainy";
+        if (/fog/.test(sky)) return "a foggy";
+        if (!maybe && /thunder/.test(sky)) return "a stormy";
+        if (!maybe && /snow/.test(sky)) return "a snowy";
+        if (!maybe && /drizzle/.test(sky)) return "a drizzly";
+        if (!maybe && /rain|showers/.test(sky)) return "a rainy";
         if (off >= 6) return "an unusually warm";
         if (off <= -5) return "an unusually chilly";
-        if (code <= 1) return day ? "a sunny" : "a clear";
-        if (code === 2) return "a partly cloudy";
-        if (code === 3) return "a grey";
+        if (/partly/.test(sky)) return "a partly cloudy";
+        if (/sunny|clear/.test(sky)) return day ? "a sunny" : "a clear";
+        if (/cloudy/.test(sky)) return "a grey";
         return "";
     }
 
