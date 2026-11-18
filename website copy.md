@@ -35,4 +35,4 @@ Each of these links shows a preview picture with a short caption and a badge on 
 | evals | Blog post | Wrong chart edits: 21% down to 3%. |
 | Takeoff | Play | none (a looping silent trailer plays) |
 | how I made it | Blog post | Six evenings, and a joy to make |
-| wife and two kids (no underline) | none (picture only, not a link) | Trick or treat! 🃏 |
+| wife and two kids (no underline) | none (picture only, not a link) | Trick or treat 🃏 |

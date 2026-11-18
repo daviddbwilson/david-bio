@@ -203,7 +203,7 @@ window.DB_CARDS = {
     family: {
         quiet: true,
         fullBleed: true,
-        caption: "Trick or treat! \uD83C\uDCCF", // joker
+        caption: "Trick or treat \uD83C\uDCCF", // joker
         image: "assets/cards/09-family-cards.webp",
         width: 800,
         height: 1066,
