@@ -1,3 +1,5 @@
+> Based on building Overclock's background agents in late 2025, for models like Claude Sonnet 4. Models have improved a lot since, and I'd do some of this differently today. Read it as a snapshot of what worked then.
+
 # Lessons from Building Reliable Background Agents
 
 *15 min read*

@@ -17,6 +17,19 @@
 }
 
 /* Header */
+/* A note above the title that dates the post. */
+.dated-note {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+    margin: 0 0 calc(var(--spacing-unit) * 1.5);
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: var(--color-card);
+    text-wrap: pretty;
+}
+
 .article-header {
     margin-bottom: calc(var(--spacing-unit) * 3);
 }
