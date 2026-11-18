@@ -87,9 +87,10 @@ window.DB_CARDS = {
                           : "Good evening!";
             return words + wave;
         },
-        image: "assets/cards/00-david.webp",
-        width: 800,
-        height: 800,
+        // ?v= because the photo was recropped under the same name.
+        image: "assets/cards/00-david.webp?v=2",
+        width: 720,
+        height: 744,
         tone: "#16191d",
         focus: "50% 30%",
         fullBleed: true,
