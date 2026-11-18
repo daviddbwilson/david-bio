@@ -5,8 +5,9 @@
  * when it returns nothing.
  *
  * The weather is the next three hours of the US National Weather Service's
- * hourly forecast for downtown (free, no key), fetched once a visit and kept
- * for half an hour. describeWeather() turns it into one phrase from PHRASES.
+ * hourly forecast for downtown, plus SFO airport's latest reports for
+ * thunder (both free, no key), fetched once a visit and kept for half an
+ * hour. describeWeather() turns it into one phrase from PHRASES.
  * The list is fixed so every caption can be checked to fit on two lines.
  * The test harness loads this file under node, so it exports its pieces.
  */
@@ -28,7 +29,11 @@
     var NORMAL_LOW = [8.0, 9.2, 9.6, 10.3, 11.3, 12.4, 13.2, 13.8, 14.1, 13.1, 10.5, 8.1];
     // The grid square over downtown (37.7749, -122.4194).
     var URL = "https://api.weather.gov/gridpoints/MTR/85,105/forecast/hourly";
-    var KEY = "db-sf-weather-5";
+    // What SFO airport is reporting now. Forecasts call any shower in a
+    // stormy pattern "Showers And Thunderstorms", so thunder is only said
+    // when the airport has actually heard it.
+    var OBSERVED = "https://api.weather.gov/stations/KSFO/observations?limit=3";
+    var KEY = "db-sf-weather-6";
     var CACHE_FOR = 30 * 60 * 1000;
     var GOOD_FOR = 60 * 60 * 1000;
 
@@ -129,6 +134,8 @@
     // w = {
     //   day:     the sun is up
     //   hour:    San Francisco's hour, 0-24 (morning fog and frost burn off)
+    //   thunder, pouring: thunder or heavy rain reported at SFO in the last
+    //            90 minutes
     //   pop:     highest chance of rain or snow, 0-100
     //   windAvg, windMax: mph, the average and the strongest
     //   tempC:   temperature now, °C, or null when unknown
@@ -155,7 +162,7 @@
         var surelyWet = all.some(function (e) { return /^(rain|tsra)/.test(e.code) && e.likely && !e.hedged; });
         if (all.some(function (e) { return /^(snow|blizzard)$/.test(e.code) && e.likely && !(e.hedged && surelyWet); })) return "a snowy(!!!)";
         if (any(/sleet|fzra|rain_snow/) || (fog && /freezing fog/.test(words))) return "an icy(!!!)";
-        if (any(/^tsra/)) return "a thundery(!)";
+        if (w.thunder && any(/^tsra/)) return "a thundery(!)";
         if (w.windMax >= 35) return "a very windy(!)";
         if (has(/^dust$/) || /blowing dust/.test(words)) return "a dusty";
 
@@ -166,7 +173,7 @@
         if (all.slice(0, 2).some(function (e) { return /drizzle/.test(e.words) && !/chance/.test(e.words); })) return "a drizzly";
         if (anySoon(WET)) {
             if (/drizzle/.test(words)) return "a drizzly";
-            if (/heavy rain/.test(words) || (w.pop >= 90 && /^rain\b/.test(now.words))) return "a soggy";
+            if (w.pouring || /heavy rain/.test(words) || (w.pop >= 90 && /^rain\b/.test(now.words))) return "a soggy";
             if (all.slice(0, 2).some(function (e) { return /showers/.test(e.code) && e.likely; })) return "a showery";
             return "a rainy";
         }
@@ -231,9 +238,11 @@
     }
 
     // The next three hours of the hourly forecast, as describeWeather's input.
-    function fromHourly(periods, date) {
+    // observations: the airport's recent reports, or null when unknown.
+    function fromHourly(periods, date, observations) {
+        // An hour with less than 20 minutes left is mostly over.
         var hours = periods
-            .filter(function (p) { return Date.parse(p.endTime) > date.getTime(); })
+            .filter(function (p) { return Date.parse(p.endTime) > date.getTime() + 20 * 60 * 1000; })
             .slice(0, 3);
         if (!hours.length) return null;
         var pop = 0;
@@ -246,7 +255,16 @@
             return entry(code, p.shortForecast, chance);
         });
         var temp = hours[0].temperature;
+        var reported = function (code, words) {
+            return (observations || []).some(function (o) {
+                var recent = date.getTime() - Date.parse(o.timestamp) < 90 * 60 * 1000;
+                var said = (o.presentWeather || []).some(function (pw) { return code.test(pw.rawString || ""); }) || words.test(o.textDescription || "");
+                return recent && said;
+            });
+        };
         return {
+            thunder: reported(/TS/, /thunder/i),
+            pouring: reported(/^\+(RA|SHRA)/, /heavy rain/i),
             day: sunIsUp(date),
             hour: sfClock(date).hour,
             pop: pop,
@@ -295,14 +313,23 @@
         } catch (e) {}
         if (!root.fetch) return;
         loading = true;
-        fetch(URL)
-            .then(function (r) {
-                if (!r.ok) throw new Error("HTTP " + r.status);
+        var get = function (url) {
+            return fetch(url).then(function (r) {
+                if (!r.ok) throw new Error("HTTP " + r.status + " from " + url);
                 return r.json();
-            })
-            .then(function (data) {
+            });
+        };
+        Promise.all([
+            get(URL),
+            // Without the airport's reports the card just won't say thundery.
+            get(OBSERVED).catch(function () {
+                return null;
+            }),
+        ])
+            .then(function (both) {
                 var now = new Date();
-                var w = fromHourly(data.properties.periods, now);
+                var observed = both[1] && both[1].features.map(function (f) { return f.properties; });
+                var w = fromHourly(both[0].properties.periods, now, observed);
                 if (!w) throw new Error("no hours left in the forecast");
                 weather = w;
                 weatherAt = now.getTime();
