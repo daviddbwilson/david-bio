@@ -28,7 +28,7 @@
     var NORMAL_LOW = [8.0, 9.2, 9.6, 10.3, 11.3, 12.4, 13.2, 13.8, 14.1, 13.1, 10.5, 8.1];
     // The grid square over downtown (37.7749, -122.4194).
     var URL = "https://api.weather.gov/gridpoints/MTR/85,105/forecast/hourly";
-    var KEY = "db-sf-weather-4";
+    var KEY = "db-sf-weather-5";
     var CACHE_FOR = 30 * 60 * 1000;
     var GOOD_FOR = 60 * 60 * 1000;
 
@@ -113,7 +113,8 @@
             code: code,
             chance: chance,
             hedged: hedged,
-            likely: chance >= needs,
+            // Only rain, snow and storms can be likely; a sky code never is.
+            likely: PRECIP.test(code) && chance >= needs,
             windy: /^wind_/.test(m[1] || ""),
             words: words,
         };
@@ -130,7 +131,8 @@
     //   hour:    San Francisco's hour, 0-24 (morning fog and frost burn off)
     //   pop:     highest chance of rain or snow, 0-100
     //   windAvg, windMax: mph, the average and the strongest
-    //   offC:    temperature minus normal, °C, or null when unknown
+    //   tempC:   temperature now, °C, or null when unknown
+    //   offC:    tempC minus the normal for now, or null
     //   entries: what's forecast, earliest first, each from entry()
     // }
     function describeWeather(w) {
@@ -142,6 +144,7 @@
         var morning = day && w.hour < 11;
         var words = all.map(function (e) { return e.words; }).join(" | ");
         var any = function (re) { return all.some(function (e) { return re.test(e.code) && e.likely; }); };
+        var anySoon = function (re) { return all.slice(0, 2).some(function (e) { return re.test(e.code) && e.likely; }); };
         var has = function (re) { return all.some(function (e) { return re.test(e.code); }); };
         var soon = all.slice(0, 2);
         var fog = soon.some(function (e) { return e.code === "fog" || /\bfog\b/.test(e.words); });
@@ -158,10 +161,13 @@
 
         // 2. Rain worth mentioning. Dry now and wet soon is "clouding over".
         if (later && !now.likely && /^rain$/.test(later.code) && later.likely) return "a clouding-over";
-        if (any(WET)) {
+        // Drizzle is forecast at low chances ("Patchy Drizzle", 15%) but it's
+        // what SF summer mornings do, so the word is enough.
+        if (all.slice(0, 2).some(function (e) { return /drizzle/.test(e.words) && !/chance/.test(e.words); })) return "a drizzly";
+        if (anySoon(WET)) {
             if (/drizzle/.test(words)) return "a drizzly";
             if (/heavy rain/.test(words) || (w.pop >= 90 && /^rain\b/.test(now.words))) return "a soggy";
-            if (all.some(function (e) { return /showers/.test(e.code) && e.likely; })) return "a showery";
+            if (all.slice(0, 2).some(function (e) { return /showers/.test(e.code) && e.likely; })) return "a showery";
             return "a rainy";
         }
 
@@ -176,10 +182,12 @@
             if (off <= -8) return frost ? "a frosty(!!)" : "a frigid(!)";
         }
         if (frost) return "a frosty(!!)";
+        // Each also needs a temperature that feels like it: a foggy 59°F July
+        // afternoon is normal, and a night has to reach 63°F to be balmy.
         if (off != null) {
-            if (off >= 6) return "an unusually warm";
-            if (off <= -5) return "an unusually chilly";
-            if (!day && off >= 4) return "a balmy";
+            if (off >= 6 && w.tempC >= 20) return "an unusually warm";
+            if (off <= -5 && w.tempC <= 12) return "an unusually chilly";
+            if (!day && off >= 2 && w.tempC >= 17) return "a balmy";
         }
         if (now.code === "hot") return "a sweltering(!)";
         if (now.code === "cold") return "a frigid(!)";
@@ -191,10 +199,8 @@
         if (has(/^smoke$/)) return "a smoky";
         if (has(/^haze$/)) return "a hazy";
 
-        // 7. Changing skies: a real chance of rain that clears, or fair weather
-        //    that turns to likely rain.
+        // 7. A real chance of rain that clears.
         if (later && PRECIP.test(now.code) && now.chance >= 45 && CLEARISH.test(later.code)) return "a clearing";
-        if (later && CLEARISH.test(now.code) && PRECIP.test(later.code) && later.likely) return "a clouding-over";
 
         if (w.windAvg >= 22) return "a breezy";
 
@@ -246,40 +252,49 @@
             pop: pop,
             windAvg: winds.length ? winds.reduce(function (a, b) { return a + b; }, 0) / winds.length : 0,
             windMax: winds.length ? Math.max.apply(null, winds) : 0,
+            tempC: typeof temp === "number" ? ((temp - 32) * 5) / 9 : null,
             offC: typeof temp === "number" ? ((temp - 32) * 5) / 9 - normalAt(date) : null,
             entries: entries,
         };
     }
 
     // The greeting as [long, short], or null when the weather isn't known.
-    // The short one is for a card too narrow for the long one.
-    var phrase = "";
-    var phraseAt = 0;
+    // The short one is for a card too narrow for the long one. The forecast
+    // is kept, not the phrase, so day, night and morning are worked out at
+    // the moment of the hover.
+    var weather = null;
+    var weatherAt = 0;
+    var loading = false;
 
     function greeting() {
-        // An hour-old phrase in a tab left open is out of date.
-        if (!phrase || Date.now() - phraseAt > GOOD_FOR) return null;
-        var h = sfClock(new Date()).hour;
+        // An hour-old forecast in a tab left open is out of date: fall back
+        // to the visitor's clock and fetch again for the next hover.
+        if (!weather || Date.now() - weatherAt > GOOD_FOR) {
+            if (weatherAt && !loading) load();
+            return null;
+        }
+        var now = new Date();
+        var h = sfClock(now).hour;
+        var phrase = describeWeather(Object.assign({}, weather, { day: sunIsUp(now), hour: h }));
+        if (PHRASES.indexOf(phrase) < 0) return null;
         var hello = h < 5 || h >= 23 ? "Hello" : h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
-        var wave = " 👋"; // waving hand
+        var wave = " \uD83D\uDC4B"; // waving hand
         return [hello + " from " + phrase + " San Francisco" + wave, hello + " from San Francisco" + wave];
-    }
-
-    function remember(p, at) {
-        if (PHRASES.indexOf(p) < 0) return;
-        phrase = p;
-        phraseAt = at;
-        try {
-            sessionStorage.setItem(KEY, JSON.stringify({ phrase: p, at: at }));
-        } catch (e) {}
     }
 
     function load() {
         try {
+            // A saved forecast still good enough to use is used straight away;
+            // past half an hour it's also fetched again.
             var saved = JSON.parse(sessionStorage.getItem(KEY) || "null");
-            if (saved && Date.now() - saved.at < CACHE_FOR) return remember(saved.phrase, saved.at);
+            if (saved && saved.w && Date.now() - saved.at < GOOD_FOR) {
+                weather = saved.w;
+                weatherAt = saved.at;
+                if (Date.now() - saved.at < CACHE_FOR) return;
+            }
         } catch (e) {}
         if (!root.fetch) return;
+        loading = true;
         fetch(URL)
             .then(function (r) {
                 if (!r.ok) throw new Error("HTTP " + r.status);
@@ -288,18 +303,26 @@
             .then(function (data) {
                 var now = new Date();
                 var w = fromHourly(data.properties.periods, now);
-                if (w) remember(describeWeather(w), now.getTime());
+                if (!w) throw new Error("no hours left in the forecast");
+                weather = w;
+                weatherAt = now.getTime();
+                try {
+                    sessionStorage.setItem(KEY, JSON.stringify({ w: w, at: weatherAt }));
+                } catch (e) {}
             })
             .catch(function (e) {
                 // The greeting quietly falls back to the visitor's clock; this
                 // is the only sign the weather stopped working.
                 console.warn("david.bio: no San Francisco weather for the name card", e);
+            })
+            .then(function () {
+                loading = false;
             });
     }
 
     root.DB_SF_GREETING = greeting;
     if (typeof module !== "undefined" && module.exports) {
-        module.exports = { PHRASES: PHRASES, entry: entry, describeWeather: describeWeather, fromHourly: fromHourly, normalAt: normalAt, sunIsUp: sunIsUp };
+        module.exports = { PHRASES: PHRASES, entry: entry, describeWeather: describeWeather, fromHourly: fromHourly, normalAt: normalAt, sunIsUp: sunIsUp, greeting: greeting, _set: function (w, at) { weather = w; weatherAt = at; } };
     } else {
         load();
     }
