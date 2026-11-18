@@ -13,7 +13,9 @@
  *   icon     "video", "post", "play" or "game": the icon shown beside the badge.
  *   caption  A few words, shown on the image. Keep it to one short line.
  *            Leave it out to show the image on its own. It can also be a
- *            function that returns the words, for a caption that changes.
+ *            function that returns the words, for a caption that changes,
+ *            or a list of versions, longest first: the card shows the first
+ *            that fits on two lines.
  *   action   Optional. The words on the phone sheet's button. Without it the
  *            button says "Watch <badge>" for a video and "Read <badge>" for
  *            anything else.
@@ -42,11 +44,36 @@
  *   alt      Describes the image for people who can't see it.
  */
 window.DB_CARDS = {
-    // An easter egg on the name at the top: a photo and a greeting that
-    // follows the visitor's clock.
+    // An easter egg on the name at the top: a photo and a greeting. When
+    // San Francisco's weather is known, the greeting comes from David's own
+    // time and weather; otherwise it follows the visitor's clock.
     hello: {
         quiet: true,
         caption: function () {
+            var wave = " \uD83D\uDC4B"; // waving hand
+            var weather = window.DB_SF_WEATHER;
+            if (weather) {
+                var sfHour = Number(
+                    new Intl.DateTimeFormat("en-US", {
+                        timeZone: "America/Los_Angeles",
+                        hour: "numeric",
+                        hourCycle: "h23",
+                    }).format(new Date())
+                );
+                var greeting =
+                    sfHour < 5 || sfHour >= 23
+                        ? "Hello"
+                        : sfHour < 12
+                          ? "Good morning"
+                          : sfHour < 18
+                            ? "Good afternoon"
+                            : "Good evening";
+                // The shorter version is for a card too narrow for the longer.
+                return [
+                    greeting + " from " + weather + " San Francisco!" + wave,
+                    greeting + " from San Francisco!" + wave,
+                ];
+            }
             var hour = new Date().getHours();
             var words =
                 hour < 5
@@ -58,7 +85,7 @@ window.DB_CARDS = {
                         : hour < 18
                           ? "Good afternoon!"
                           : "Good evening!";
-            return words + " \uD83D\uDC4B"; // waving hand
+            return words + wave;
         },
         image: "assets/cards/00-david.webp",
         width: 800,
@@ -212,3 +239,66 @@ window.DB_CARDS = {
         alt: "My family dressed as playing cards: a king, a queen and two jokers. The children's faces are covered with emoji.",
     },
 };
+
+/*
+ * San Francisco's weather for the greeting on the name, as a phrase such as
+ * "a foggy" or "an unusually warm". Fetched once a visit from Open-Meteo (no
+ * key needed) and kept for half an hour. If it fails, the greeting falls
+ * back to the visitor's own clock.
+ */
+(function () {
+    // Normal daily highs for San Francisco by month, in °C (1991-2020, rounded).
+    var NORMAL_HIGH = [14.4, 15.9, 16.9, 17.8, 18.9, 20.3, 20.5, 20.9, 22.2, 21.7, 18.3, 14.4];
+    var URL =
+        "https://api.open-meteo.com/v1/forecast?latitude=37.7749&longitude=-122.4194" +
+        "&current=weather_code,is_day&daily=temperature_2m_max" +
+        "&timezone=America%2FLos_Angeles&forecast_days=1";
+    var KEY = "db-sf-weather";
+
+    // The longest phrase here sets the longest caption, which must fit on two
+    // lines on the card and on a 320px phone. Check before adding a longer one.
+    function describe(data) {
+        var code = data.current.weather_code;
+        var day = data.current.is_day === 1;
+        var high = data.daily.temperature_2m_max[0];
+        var month = Number(data.daily.time[0].slice(5, 7)) - 1;
+        var off = high - NORMAL_HIGH[month];
+
+        if (code === 45 || code === 48) return "a foggy";
+        if (code >= 95) return "a stormy";
+        if ((code >= 71 && code <= 77) || code === 85 || code === 86) return "a snowy";
+        if (code >= 51 && code <= 57) return "a drizzly";
+        if ((code >= 61 && code <= 67) || (code >= 80 && code <= 82)) return "a rainy";
+        if (off >= 6) return "an unusually warm";
+        if (off <= -5) return "an unusually chilly";
+        if (code <= 1) return day ? "a sunny" : "a clear";
+        if (code === 2) return "a partly cloudy";
+        if (code === 3) return "a grey";
+        return "";
+    }
+
+    function remember(phrase) {
+        window.DB_SF_WEATHER = phrase;
+        try {
+            sessionStorage.setItem(KEY, JSON.stringify({ phrase: phrase, at: Date.now() }));
+        } catch (e) {}
+    }
+
+    try {
+        var saved = JSON.parse(sessionStorage.getItem(KEY) || "null");
+        if (saved && Date.now() - saved.at < 30 * 60 * 1000) {
+            window.DB_SF_WEATHER = saved.phrase;
+            return;
+        }
+    } catch (e) {}
+
+    if (!window.fetch) return;
+    fetch(URL)
+        .then(function (r) {
+            return r.ok ? r.json() : Promise.reject();
+        })
+        .then(function (data) {
+            remember(describe(data));
+        })
+        .catch(function () {});
+})();

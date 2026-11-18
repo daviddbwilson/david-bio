@@ -54,10 +54,27 @@
         return cards[el.getAttribute("data-card")];
     }
 
-    // A caption is usually plain words, but can be a function that makes them.
-    function captionOf(card) {
+    // A caption is usually plain words, but can be a function that makes
+    // them, or a list of versions, longest first.
+    function captionOptions(card) {
         var caption = card.caption;
-        return (typeof caption === "function" ? caption() : caption) || "";
+        if (typeof caption === "function") caption = caption();
+        if (!caption) return [];
+        return Array.isArray(caption) ? caption : [caption];
+    }
+
+    function captionOf(card) {
+        return captionOptions(card)[0] || "";
+    }
+
+    // Use the first version that fits on two lines. A caption never runs to
+    // three: the card is too small for it.
+    function fitCaption(el, options) {
+        var lineHeight = parseFloat(getComputedStyle(el).lineHeight);
+        for (var i = 0; i < options.length; i++) {
+            el.textContent = options[i];
+            if (!lineHeight || el.getBoundingClientRect().height <= lineHeight * 2.5) return;
+        }
     }
 
     function isLink(el) {
@@ -192,7 +209,8 @@
         var badge = figure.querySelector(".preview-badge");
         var caption = figure.querySelector(".preview-caption");
 
-        var words = captionOf(card);
+        var captions = captionOptions(card);
+        var words = captions[0] || "";
         figure.style.setProperty("--tone", card.tone || "#161616");
         figure.classList.toggle("no-image", !card.image);
         figure.classList.toggle("no-caption", !words);
@@ -257,7 +275,7 @@
                 badge.insertAdjacentHTML("beforeend", ICONS[card.icon]);
             }
         }
-        caption.textContent = words;
+        fitCaption(caption, captions);
     }
 
     /* ---- Mouse: a card on a springy stem ------------------------------
