@@ -39,6 +39,15 @@
             '<svg viewBox="0 0 14 14" width="14" height="14" fill="none" stroke="currentColor" stroke-linejoin="round" aria-hidden="true">' +
             '<path d="M4.25 2.9v8.2c0 .45.5.72.88.48l6.3-4.1a.57.57 0 0 0 0-.96l-6.3-4.1a.57.57 0 0 0-.88.48Z"/>' +
             "</svg>",
+        // A game controller, drawn on a 24 grid and cropped so it reads at the
+        // same size as the other 14px icons.
+        game:
+            '<svg viewBox="1.5 1.5 21 21" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+            '<path d="M7 6h10a4 4 0 0 1 3.95 3.37l.95 6.1A2.75 2.75 0 0 1 17.2 17.3l-1.8-1.7a2 2 0 0 0-1.37-.55H9.97a2 2 0 0 0-1.37.55L6.8 17.3A2.75 2.75 0 0 1 2.1 15.47l.95-6.1A4 4 0 0 1 7 6Z"/>' +
+            '<path d="M6.5 10.5h3M8 9v3"/>' +
+            '<circle cx="15.5" cy="12" r=".55" fill="currentColor"/>' +
+            '<circle cx="17.6" cy="9.6" r=".55" fill="currentColor"/>' +
+            "</svg>",
     };
 
     function cardFor(el) {

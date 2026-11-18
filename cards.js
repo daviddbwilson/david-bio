@@ -10,7 +10,7 @@
  *            is what works when JavaScript is off.
  *   badge    One or two words for what the link is: "Demo", "Talk",
  *            "Testimonial", "Blog post", "Case study".
- *   icon     "video", "post" or "play": the icon shown beside the badge.
+ *   icon     "video", "post", "play" or "game": the icon shown beside the badge.
  *   caption  A few words, shown on the image. Keep it to one short line.
  *            Leave it out to show the image on its own. It can also be a
  *            function that returns the words, for a caption that changes.
@@ -173,7 +173,7 @@ window.DB_CARDS = {
     takeoff: {
         url: "https://takeoff.david.bio/",
         badge: "Play",
-        icon: "play",
+        icon: "game",
         action: "Play Takeoff",
         image: "assets/cards/12-takeoff-trailer.webp",
         video: "assets/cards/12-takeoff-trailer.mp4",
