@@ -9,7 +9,7 @@ I started building software in 9th grade, modding video games before I could cod
 
 I joined [Hex](https://hex.tech) in early 2026 to reimagine how we build dashboards. I took our [generative data apps](https://hex.tech/blog/introducing-generative-data-apps/) from first prototype to launch in two months, including building the evals. Since then I've worked on the last mile: the AI builds the app, but people still need [precise control](https://hex.tech/blog/generative-chart-controls/) over [the details](https://hex.tech/blog/we-used-evals-to-improve-ai-feature/). I also hold the somewhat dubious distinction of being the company's top AI spender.
 
-I also work on side projects. The latest is [Takeoff](https://takeoff.david.bio/), a short interactive story. I wrote about [how I made it](https://david.bio/blog/how-i-made-takeoff/).
+I also work on personal projects. A fun recent one is [Takeoff](https://takeoff.david.bio/), a short interactive story. I wrote about [how I made it](https://david.bio/blog/how-i-made-takeoff/).
 
 I'm from Cape Town and have lived on four continents. I now live in San Francisco with my wife and two kids.
 
@@ -34,5 +34,5 @@ Each of these links shows a preview picture with a short caption and a badge on 
 | generative data apps | Blog post | My first product launch at Hex |
 | evals | Blog post | Wrong chart edits: 21% down to 3%. |
 | Takeoff | Play | none (a looping silent trailer plays) |
-| how I made it | Blog post | Made in under a week of evenings |
-| wife and two kids | none (picture only, not a link) | none |
+| how I made it | Blog post | Six evenings, and a joy to make |
+| wife and two kids (no underline) | none (picture only, not a link) | Trick or treat! 🃏 |

@@ -399,18 +399,40 @@ button:focus-visible {
 .preview-figure::after {
     content: "";
     position: absolute;
-    top: 46%;
+    top: 55%;
     right: 0;
     bottom: 0;
     left: 0;
     pointer-events: none;
-    background: linear-gradient(to bottom, transparent, var(--tone, #161616) 90%);
+    background: linear-gradient(to bottom, transparent, var(--tone, #161616) 95%);
+    /* Ends solid so the image runs into the band of --tone below it.
+       Stops are measured within the overlay, which starts 55% down the card. */
     background: linear-gradient(
         to bottom,
         transparent,
-        color-mix(in srgb, var(--tone, #161616) 45%, transparent) 42%,
-        color-mix(in srgb, var(--tone, #161616) 88%, transparent) 72%,
-        var(--tone, #161616) 92%
+        color-mix(in srgb, var(--tone, #161616) 35%, transparent) 40%,
+        color-mix(in srgb, var(--tone, #161616) 80%, transparent) 75%,
+        var(--tone, #161616) 95%
+    );
+}
+
+/* Full bleed: photos that run to the bottom edge of the card, with no band
+   of --tone below them and only a light shade behind the caption. Stops
+   are measured within the overlay: 50%, 75% and 100% of it fall at 80%,
+   90% and 100% of the card. */
+.preview-figure.full-bleed,
+.preview-drawer .preview-figure.full-bleed {
+    padding-bottom: 0;
+}
+
+.preview-figure.full-bleed::after {
+    top: 60%;
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        color-mix(in srgb, var(--tone, #161616) 15%, transparent) 50%,
+        color-mix(in srgb, var(--tone, #161616) 35%, transparent) 75%,
+        color-mix(in srgb, var(--tone, #161616) 50%, transparent) 100%
     );
 }
 

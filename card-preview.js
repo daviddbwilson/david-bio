@@ -188,6 +188,7 @@
         figure.classList.toggle("no-image", !card.image);
         figure.classList.toggle("no-caption", !words);
         figure.classList.toggle("on-light", Boolean(card.light));
+        figure.classList.toggle("full-bleed", Boolean(card.fullBleed));
         figure.classList.toggle(
             "badge-bottom",
             card.badgeAt === "bottom" && !words

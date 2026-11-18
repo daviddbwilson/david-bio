@@ -33,6 +33,9 @@
  *            value such as "50% 10%" for "the top middle".
  *   light    Optional. Set to true when the image is mostly white, so the
  *            badge gets a darker glass and stays readable.
+ *   fullBleed  Optional. true runs the photo to the bottom edge of the card,
+ *            with no band of tone below it and only a light shade behind the
+ *            caption. For photos of people, where the fade would hide too much.
  *   badgeAt  Optional. "bottom" puts the badge in the bottom left corner, for
  *            a picture with something in its top left. Only for cards with
  *            no caption, because the caption sits there.
@@ -62,6 +65,7 @@ window.DB_CARDS = {
         height: 800,
         tone: "#16191d",
         focus: "50% 30%",
+        fullBleed: true,
         alt: "David, smiling, in a cream cable-knit jumper",
     },
     hardware: {
@@ -185,7 +189,7 @@ window.DB_CARDS = {
         url: "/blog/how-i-made-takeoff/",
         badge: "Blog post",
         icon: "post",
-        caption: "Made in under a week of evenings",
+        caption: "Six evenings, and a joy to make",
         // A figure from the post: the first four pictures on the autopilot's
         // contact sheet.
         image: "assets/cards/13-takeoff-autopilot.webp",
@@ -197,6 +201,9 @@ window.DB_CARDS = {
     // No url: this one is a picture only, on "wife and two kids".
     // The children's faces are covered in the image file itself.
     family: {
+        quiet: true,
+        fullBleed: true,
+        caption: "Trick or treat! \uD83C\uDCCF", // joker
         image: "assets/cards/09-family-cards.webp",
         width: 800,
         height: 1066,
