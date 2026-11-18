@@ -1,6 +1,6 @@
 # David Wilson
 
-Product builder and founder-CEO.
+Product builder & leader.
 
 I started building software in 9th grade, modding video games before I could code, and later founded two companies:
 
