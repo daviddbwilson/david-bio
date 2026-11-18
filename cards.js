@@ -243,9 +243,9 @@ window.DB_CARDS = {
 
 /*
  * San Francisco's weather for the greeting on the name, as a phrase such as
- * "a foggy" or "a snowy(!!!)". Fetched once a visit from the US National
- * Weather Service's forecast for downtown San Francisco (free, no key) and
- * kept for half an hour. If it fails, the greeting falls back to the
+ * "a foggy" or "a snowy(!!!)", for the next three hours. Fetched once a
+ * visit from the US National Weather Service's forecasts for downtown San
+ * Francisco (free, no key) and kept for half an hour. If it fails, the greeting falls back to the
  * visitor's own clock.
  *
  * describeWeather() turns the forecast into one phrase from a fixed list.
@@ -262,7 +262,7 @@ window.DB_CARDS = {
     var NORMAL_LOW = [8.0, 9.2, 9.6, 10.3, 11.3, 12.4, 13.2, 13.8, 14.1, 13.1, 10.5, 8.1];
     // The forecast for the grid square over downtown (37.7749, -122.4194).
     var URL = "https://api.weather.gov/gridpoints/MTR/85,105/forecast";
-    var KEY = "db-sf-weather-2";
+    var KEY = "db-sf-weather-3";
 
     function normalFor(normals, isoDate) {
         var month = Number(isoDate.slice(5, 7)) - 1;
@@ -392,12 +392,36 @@ window.DB_CARDS = {
         return "";
     }
 
-    // From the forecast's current 12-hour period to describeWeather's input.
-    function describe(data) {
-        var p = data.properties.periods[0];
-        var detail = p.detailedForecast || "";
-        var gust = /gusts as high as (\d+)/.exec(detail);
-        var tempC = ((p.temperature - 32) * 5) / 9;
+    // The next three hours from the hourly forecast decide the weather, so
+    // the card says what it's like now, not what tonight will bring. The
+    // 12-hour forecast is only used to compare the temperature with normal.
+    function describe(hourly, twelve) {
+        var now = Date.now();
+        var hours = hourly.properties.periods
+            .filter(function (p) { return Date.parse(p.endTime) > now; })
+            .slice(0, 3);
+        if (!hours.length) return "";
+        var icon = function (p) {
+            return String(p.icon || "").replace(/^.*\/icons\/land\//, "").replace(/\?.*$/, "").split("/");
+        };
+        var first = icon(hours[0]);
+        var last = icon(hours[hours.length - 1]);
+        var codes = [first[1]];
+        if (last[1] && last[1] !== first[1]) codes.push(last[1]);
+        var shorts = [hours[0].shortForecast];
+        if (hours[hours.length - 1].shortForecast !== shorts[0]) shorts.push(hours[hours.length - 1].shortForecast);
+        var pop = 0;
+        var winds = [];
+        hours.forEach(function (p) {
+            pop = Math.max(pop, (p.probabilityOfPrecipitation && p.probabilityOfPrecipitation.value) || 0);
+            winds = winds.concat((String(p.windSpeed).match(/\d+/g) || []).map(Number));
+        });
+        var offC = null;
+        var period = twelve && twelve.properties.periods[0];
+        if (period) {
+            var tempC = ((period.temperature - 32) * 5) / 9;
+            offC = tempC - normalFor(period.isDaytime ? NORMAL_HIGH : NORMAL_LOW, period.startTime);
+        }
         var sfHour = Number(
             new Intl.DateTimeFormat("en-US", {
                 timeZone: "America/Los_Angeles",
@@ -406,14 +430,13 @@ window.DB_CARDS = {
             }).format(new Date())
         );
         return describeWeather({
-            icon: String(p.icon || "").replace(/^.*\/icons\/land\//, "").replace(/\?.*$/, ""),
-            day: p.isDaytime,
-            short: p.shortForecast,
-            detail: detail,
-            pop: p.probabilityOfPrecipitation && p.probabilityOfPrecipitation.value,
-            wind: p.windSpeed,
-            gust: gust ? Number(gust[1]) : 0,
-            offC: tempC - normalFor(p.isDaytime ? NORMAL_HIGH : NORMAL_LOW, p.startTime),
+            icon: first[0] + "/" + codes.join("/"),
+            day: hours[0].isDaytime,
+            short: shorts.join(" then "),
+            pop: pop,
+            wind: Math.min.apply(null, winds) + " to " + Math.max.apply(null, winds) + " mph",
+            gust: 0,
+            offC: offC,
             hour: sfHour,
         });
     }
@@ -434,12 +457,19 @@ window.DB_CARDS = {
     } catch (e) {}
 
     if (!window.fetch) return;
-    fetch(URL)
-        .then(function (r) {
+    var get = function (url) {
+        return fetch(url).then(function (r) {
             return r.ok ? r.json() : Promise.reject();
-        })
-        .then(function (data) {
-            remember(describe(data));
+        });
+    };
+    Promise.all([
+        get(URL + "/hourly"),
+        get(URL).catch(function () {
+            return null;
+        }),
+    ])
+        .then(function (both) {
+            remember(describe(both[0], both[1]));
         })
         .catch(function () {});
 })();
