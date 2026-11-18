@@ -248,37 +248,54 @@ window.DB_CARDS = {
  * visitor's own clock.
  */
 (function () {
-    // Normal highs and lows for downtown San Francisco by month, in °C
-    // (1991-2020, rounded).
+    // Normal highs and lows for downtown San Francisco, in °C, for the middle
+    // of each month (1991-2020, rounded). normalFor() reads between them, so
+    // "unusual" is judged against the normal for this week of the year.
     var NORMAL_HIGH = [14.4, 15.9, 16.9, 17.8, 18.9, 20.3, 20.5, 20.9, 22.2, 21.7, 18.3, 14.4];
     var NORMAL_LOW = [8.0, 9.2, 9.6, 10.3, 11.3, 12.4, 13.2, 13.8, 14.1, 13.1, 10.5, 8.1];
     // The forecast for the grid square over downtown (37.7749, -122.4194).
     var URL = "https://api.weather.gov/gridpoints/MTR/85,105/forecast";
     var KEY = "db-sf-weather";
 
+    function normalFor(normals, isoDate) {
+        var month = Number(isoDate.slice(5, 7)) - 1;
+        var day = Number(isoDate.slice(8, 10));
+        var t = (day - 15) / 30; // -0.5 to +0.5 of the way to the next month
+        var other = normals[(month + (t < 0 ? 11 : 1)) % 12];
+        return normals[month] + (other - normals[month]) * Math.abs(t);
+    }
+
+    // The forecast's words can't be relied on (the NWS says it has no fixed
+    // list of them), but its icon codes are a fixed set: the icon URL looks
+    // like .../icons/land/night/wind_bkn/tsra_sct,100, where the first code
+    // is what it's like now and ",100" is the chance of it in percent.
     // The longest phrase here sets the longest caption, which must fit on two
     // lines on the card and on a 320px phone. Check before adding a longer one.
     function describe(data) {
         var now = data.properties.periods[0];
-        var day = now.isDaytime;
-        // "Mostly Cloudy then Showers And Thunderstorms": the part before
-        // "then" is what it's like now.
-        var sky = now.shortForecast.toLowerCase().split(" then ")[0];
-        var maybe = /^(slight )?chance\b/.test(sky);
+        var parts = /\/(day|night)\/([a-z_]+)(?:,(\d+))?/.exec(now.icon || "");
+        if (!parts) return "";
+        var day = parts[1] === "day";
+        var windy = /^wind_/.test(parts[2]);
+        var code = parts[2].replace(/^wind_/, "");
+        var likely = !parts[3] || Number(parts[3]) >= 50;
         var temp = ((now.temperature - 32) * 5) / 9;
-        var month = Number(now.startTime.slice(5, 7)) - 1;
-        var off = temp - (day ? NORMAL_HIGH[month] : NORMAL_LOW[month]);
+        var off = temp - normalFor(day ? NORMAL_HIGH : NORMAL_LOW, now.startTime);
 
-        if (/fog/.test(sky)) return "a foggy";
-        if (!maybe && /thunder/.test(sky)) return "a stormy";
-        if (!maybe && /snow/.test(sky)) return "a snowy";
-        if (!maybe && /drizzle/.test(sky)) return "a drizzly";
-        if (!maybe && /rain|showers/.test(sky)) return "a rainy";
+        if (code === "fog") return "a foggy";
+        if (likely && /^(tsra|tornado|hurricane|tropical_storm)/.test(code)) return "a stormy";
+        if (likely && /^(snow|blizzard)$/.test(code)) return "a snowy";
+        if (likely && /sleet|fzra|rain_snow/.test(code)) return "a wintry";
+        if (likely && /^rain/.test(code)) {
+            return /drizzle/i.test(now.shortForecast) ? "a drizzly" : "a rainy";
+        }
         if (off >= 6) return "an unusually warm";
         if (off <= -5) return "an unusually chilly";
-        if (/partly/.test(sky)) return "a partly cloudy";
-        if (/sunny|clear/.test(sky)) return day ? "a sunny" : "a clear";
-        if (/cloudy/.test(sky)) return "a grey";
+        if (windy) return "a windy";
+        if (/^(haze|smoke|dust)$/.test(code)) return "a hazy";
+        if (code === "skc" || code === "few") return day ? "a sunny" : "a clear";
+        if (code === "sct") return "a partly cloudy";
+        if (code === "bkn" || code === "ovc") return "a grey";
         return "";
     }
 
