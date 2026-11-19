@@ -293,9 +293,12 @@
         }
         var now = new Date();
         var h = sfClock(now).hour;
-        var phrase = describeWeather(Object.assign({}, weather, { day: sunIsUp(now), hour: h }));
+        var day = sunIsUp(now);
+        var phrase = describeWeather(Object.assign({}, weather, { day: day, hour: h }));
         if (PHRASES.indexOf(phrase) < 0) return null;
-        var hello = h < 5 || h >= 23 ? "Hello" : h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
+        // Evening starts at sunset or 6pm, whichever comes first: "afternoon"
+        // reads oddly an hour after a 4:55pm winter sunset.
+        var hello = h < 5 || h >= 23 ? "Hello" : h < 12 ? "Good morning" : h < 18 && day ? "Good afternoon" : "Good evening";
         var wave = " \uD83D\uDC4B"; // waving hand
         return [hello + " from " + phrase + " San Francisco" + wave, hello + " from San Francisco" + wave];
     }
