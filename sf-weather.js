@@ -17,10 +17,13 @@
         "a stormy(!!!)", "a snowy(!!!)", "an icy(!!!)", "a frosty(!!)",
         "a thundery(!)", "a sweltering(!)", "a frigid(!)", "a very windy(!)",
         "a foggy", "a drizzly", "a soggy", "a showery", "a rainy",
-        "an unusually warm", "an unusually chilly", "a balmy", "a windy", "a breezy",
-        "a smoky", "a hazy", "a dusty",
+        "a windy", "a breezy", "a smoky", "a hazy", "a dusty",
         "a clearing", "a clouding-over",
-        "a sunny", "a clear", "a mostly sunny", "a partly cloudy", "a cloudy", "a grey",
+        // The sky, coloured by how the temperature feels (see feel()).
+        "a lovely", "a hot, sunny", "a warm, sunny", "a sunny", "a mostly sunny",
+        "a sunny but cool", "a crisp, sunny",
+        "a balmy", "a clear", "a cold, clear",
+        "a warm, grey", "a cloudy", "a grey", "a cool, grey", "a gloomy",
     ];
 
     // Normal highs and lows for downtown San Francisco, in °C, for the middle
@@ -189,13 +192,6 @@
             if (off <= -8) return frost ? "a frosty(!!)" : "a frigid(!)";
         }
         if (frost) return "a frosty(!!)";
-        // Each also needs a temperature that feels like it: a foggy 59°F July
-        // afternoon is normal, and a night has to reach 63°F to be balmy.
-        if (off != null) {
-            if (off >= 6 && w.tempC >= 20) return "an unusually warm";
-            if (off <= -5 && w.tempC <= 12) return "an unusually chilly";
-            if (!day && off >= 2 && w.tempC >= 17) return "a balmy";
-        }
         if (now.code === "hot") return "a sweltering(!)";
         if (now.code === "cold") return "a frigid(!)";
 
@@ -211,8 +207,8 @@
 
         if (w.windAvg >= 22) return "a breezy";
 
-        // 8. The sky now. With only an unlikely chance of rain in the icon, take
-        //    it from the words, and assume some cloud if they don't say.
+        // 8. The sky now, coloured by how it feels. With only an unlikely chance
+        //    of rain in the icon, take the sky from the words.
         var skies = all.filter(function (e) { return SKY.test(e.code); });
         var count = function (e) { return skies.filter(function (o) { return o.code === e.code; }).length; };
         // What most of the hours say, or the first hour if that's clearer:
@@ -222,18 +218,53 @@
         if (skyFrom && SKY.test(now.code) && CLEARNESS.indexOf(now.code) < CLEARNESS.indexOf(skyFrom.code)) skyFrom = now;
         var sky = skyFrom ? skyFrom.code : "";
         var text = sky === "bkn" || sky === "" ? (skyFrom ? mostSaid(skies.filter(function (e) { return e.code === sky; })) : now.words) : "";
-        if (/partly sunny|partly cloudy/.test(text)) return "a partly cloudy";
-        if (/mostly sunny/.test(text)) return "a mostly sunny";
-        if (/mostly clear/.test(text)) return "a clear";
-        if (/mostly cloudy/.test(text)) return "a cloudy";
-        if (!sky && /\bsunny\b/.test(text)) return day ? "a sunny" : "a clear";
-        if (!sky && /\bclear\b/.test(text)) return "a clear";
-        if (!sky && /\bcloudy\b/.test(text)) return "a grey";
-        if (!sky && PRECIP.test(now.code)) return now.chance >= 20 ? "a cloudy" : "a partly cloudy";
-        if (sky === "skc" || sky === "few") return day ? "a sunny" : "a clear";
-        if (sky === "sct") return day ? "a mostly sunny" : "a partly cloudy";
-        if (sky === "bkn") return "a cloudy";
-        if (sky === "ovc") return "a grey";
+        // Sorted into fair (sun or stars), cloudy, grey, or gloomy (grey with
+        // a chance of rain).
+        var kind =
+            /partly sunny|partly cloudy|mostly sunny|mostly clear/.test(text) ? "fair"
+            : /mostly cloudy/.test(text) ? "cloudy"
+            : !sky && /\b(sunny|clear)\b/.test(text) ? "fair"
+            : !sky && /\bcloudy\b/.test(text) ? "grey"
+            : !sky && PRECIP.test(now.code) ? (now.chance >= 20 ? "gloomy" : "cloudy")
+            : sky === "skc" || sky === "few" || sky === "sct" ? "fair"
+            : sky === "bkn" ? "cloudy"
+            : sky === "ovc" ? "grey"
+            : "";
+        var partly = sky === "sct" || /partly|mostly sunny/.test(text);
+        var f = feel(w.tempC, off, day);
+        if (kind === "fair" && day) {
+            if (f === "hot") return "a hot, sunny";
+            if (f === "lovely") return "a lovely";
+            if (f === "warm") return "a warm, sunny";
+            if (f === "cool") return "a sunny but cool";
+            if (f === "cold") return "a crisp, sunny";
+            return partly ? "a mostly sunny" : "a sunny";
+        }
+        if (kind === "fair") {
+            if (f === "hot" || f === "warm") return "a balmy";
+            if (f === "cold") return "a cold, clear";
+            return "a clear";
+        }
+        if (kind) {
+            if (f === "hot" || f === "warm") return "a warm, grey";
+            if (kind === "gloomy" || f === "cold") return "a gloomy";
+            if (f === "cool") return "a cool, grey";
+            return kind === "cloudy" ? "a cloudy" : "a grey";
+        }
+        return "";
+    }
+
+    // How the temperature feels, from both the temperature itself and how it
+    // compares with the normal for now: 53°F where 42°F is usual is mild,
+    // not warm. "" when unremarkable or unknown.
+    function feel(tempC, off, day) {
+        if (tempC == null || off == null) return "";
+        if (tempC >= 30 && off >= 4) return "hot"; // 86°F+
+        if (day && tempC >= 25 && off >= 2) return "lovely"; // 77-85°F and warmer than usual
+        if (tempC >= 21 && off >= 3) return "warm"; // 70°F+
+        if (!day && tempC >= 17 && off >= 2) return "warm"; // a 63°F+ night
+        if (tempC <= 9 && off <= -2) return "cold"; // 48°F or less
+        if (tempC <= 14 && off <= -2) return "cool"; // 57°F or less
         return "";
     }
 
