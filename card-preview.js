@@ -571,7 +571,8 @@
         // Drag the sheet down to dismiss it. The drag starts on the sheet, but
         // the finger can leave it, so the rest is followed on the document.
         drawer.addEventListener("pointerdown", function (e) {
-            if (e.button || drag) return;
+            // The sheet can still be touched while it slides away after closing.
+            if (e.button || drag || !active) return;
             drag = { id: e.pointerId, y: e.clientY, t: e.timeStamp, dy: 0, moved: false };
             document.addEventListener("pointermove", onDragMove, true);
             document.addEventListener("pointerup", onDragEnd, true);
@@ -703,6 +704,10 @@
         hideCard();
         refreshDescription(el);
         var wordBottom = restingBottom(el);
+        // Pinning also brings the sheet back into the page (see styles.css),
+        // so it has to come before the sheet is filled and measured.
+        clearTimeout(restoreTimer);
+        pinPage();
 
         fill(drawer, card, null);
         drawer.style.setProperty("--tone", card.tone || "#161616");
@@ -737,8 +742,6 @@
         el.classList.add("is-active");
 
         sheetHeight = sizeSheet(card);
-        clearTimeout(restoreTimer);
-        pinPage();
         // Slide the page up just enough to keep the word, and a couple of
         // lines after it, clear of the sheet.
         var room = window.innerHeight - sheetHeight - CLEARANCE;

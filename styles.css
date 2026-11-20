@@ -32,7 +32,7 @@
         --color-text: #eeeeec;
         --color-text-heading: #c4c3bd;
         --color-text-secondary: #a1a09a;
-        --color-bg: #111110;
+        --color-bg: #0a0a09;
         --color-card: #1c1c1b;
         --color-icon: #8d8d86;
         --color-accent: #7eb8d6;
@@ -592,6 +592,15 @@ button:focus-visible {
     transition:
         transform 0.45s cubic-bezier(0.32, 0.72, 0, 1),
         visibility 0s linear 0.45s;
+}
+
+/* Closed, the sheet and scrim are taken out of the page altogether. iOS 26
+   Safari tints its status bar and toolbar from fixed elements at the screen
+   edges, and the toolbar kept the sheet's colour after it closed (seen on
+   iOS 26, November 2026). */
+html:not(.sheet-open) .preview-drawer,
+html:not(.sheet-open) .preview-scrim {
+    display: none;
 }
 
 .preview-drawer.is-open {
