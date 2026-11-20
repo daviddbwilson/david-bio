@@ -599,8 +599,21 @@ button:focus-visible {
    edges, and the toolbar kept the sheet's colour after it closed (seen on
    iOS 26, November 2026). */
 html:not(.sheet-open) .preview-drawer,
-html:not(.sheet-open) .preview-scrim {
+html:not(.sheet-open) .preview-scrim,
+html:not(.sheet-open) .preview-edge {
     display: none;
+}
+
+/* 12px tall with 5px on screen: about the least Safari will read. */
+.preview-edge {
+    position: fixed;
+    top: -7px;
+    right: 0;
+    left: 0;
+    z-index: 16;
+    height: 12px;
+    background-color: #000;
+    pointer-events: none;
 }
 
 .preview-drawer.is-open {

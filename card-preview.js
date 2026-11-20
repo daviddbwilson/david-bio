@@ -544,6 +544,13 @@
         scrim.className = "preview-scrim";
         document.body.appendChild(scrim);
 
+        // iOS 26 Safari colours its status bar from a solid fixed element at
+        // the top edge. It skips the scrim and the pinned page because they
+        // fill the screen, so this strip is what turns the bar black.
+        var edge = document.createElement("div");
+        edge.className = "preview-edge";
+        document.body.appendChild(edge);
+
         drawer = document.createElement("div");
         drawer.className = "preview-drawer";
         drawer.setAttribute("role", "dialog");
@@ -685,6 +692,16 @@
         page.style.borderRadius = "";
         window.scrollTo(0, scrolled);
         receded = false;
+        // iOS 26 Safari only looks again at what colour its bars should be
+        // when the page scrolls, so the toolbar keeps the sheet's colour until
+        // then. Scroll by a pixel and back to make it look now.
+        requestAnimationFrame(function () {
+            if (receded) return;
+            window.scrollTo(0, scrolled > 0 ? scrolled - 1 : 1);
+            requestAnimationFrame(function () {
+                if (!receded) window.scrollTo(0, scrolled);
+            });
+        });
     }
 
     // amount: 1 is fully pushed back, 0 is where the page normally sits.
