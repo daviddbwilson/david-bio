@@ -132,7 +132,7 @@ window.DB_CARDS = {
         url: "https://x.com/Scobleizer/status/1784743064541757913",
         badge: "Demo",
         icon: "video",
-        caption: "Hunch. A canvas for chaining AI models.",
+        caption: "Hunch, 2024. A canvas for chaining AI models.",
         image: "assets/cards/03-hunch-canvas.webp",
         width: 800,
         height: 547,
