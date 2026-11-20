@@ -28,7 +28,7 @@ Each of these links shows a preview picture with a short caption and a badge on 
 | software | none (picture only, not a link) | Simple at a glance. More detail as you dig. |
 | Disney | Testimonial (video) | Disney's testimonial. In front of the Falcon! |
 | data tool | Demo (video) | Instant data exploration to stay in flow |
-| AI workflow builder | Demo (video) | Hunch, 2024. A canvas for chaining AI models. |
+| AI workflow builder | Demo (video) | Our canvas for chaining AI models won Latent Space’s AI UX award |
 | agents | Blog post | Before OpenClaw. Early is still wrong :( |
 | project | Talk (video) | LinkedIn Rewind. Idea to production in four days. |
 | Hex | Website (button: "Visit Hex website") | none (the picture carries Hex's headline, "The Analytics platform for humans and agents", and nine customer logos) |
