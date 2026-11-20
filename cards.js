@@ -194,7 +194,12 @@ window.DB_CARDS = {
         badge: "Blog post",
         icon: "post",
         action: "Read Olivia's post",
-        caption: "Breaking the tradeoff between code and control",
+        // The hover card is a few letters too narrow for the full line, so
+        // it shows the second version, which only drops "with".
+        caption: [
+            "Agent-built apps, with (customizable!) point-and-click controls",
+            "Agent-built apps, (customizable!) point-and-click controls",
+        ],
         // The video is the first demo clip from the post, smaller and
         // silent: a chart's title, fill and height changed from the Style
         // panel.

@@ -33,7 +33,7 @@ Each of these links shows a preview picture with a short caption and a badge on 
 | project | Talk (video) | LinkedIn Rewind. Idea to production in four days. |
 | Hex | Website (button: "Visit Hex website") | none (the picture carries Hex's headline, "The Analytics platform for humans and agents", and nine customer logos) |
 | generative data apps | Blog post | My first product launch at Hex |
-| precise control | Blog post (button: "Read Olivia's post") | Breaking the tradeoff between code and control (a looping silent demo clip from the post plays) |
+| precise control | Blog post (button: "Read Olivia's post") | Agent-built apps, with (customizable!) point-and-click controls; the hover card drops "with" to fit (a looping silent demo clip from the post plays) |
 | the details | Blog post | Wrong chart edits: 21% down to 3%. |
 | Takeoff | Play | none (a looping silent trailer plays) |
 | how I made it | Blog post | Six evenings, and a joy to make (the picture drifts across the autopilot's contact sheet) |
