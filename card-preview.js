@@ -520,6 +520,7 @@
     var page = document.querySelector(".page");
     var drawer = null;
     var scrim = null;
+    var foot = null; // tells iOS Safari what colour its toolbar should be
     var openLink = null;
     var closeButton = null;
     var active = null; // the trigger whose preview is in the sheet
@@ -550,6 +551,14 @@
         var edge = document.createElement("div");
         edge.className = "preview-edge";
         document.body.appendChild(edge);
+
+        // The toolbar takes its colour from the fixed element at the bottom
+        // edge, and keeps the last colour it saw if that element just goes
+        // away. So this strip stays for good: the sheet's colour while it is
+        // open, clear once it starts to close, which lets the toolbar go.
+        foot = document.createElement("div");
+        foot.className = "preview-foot";
+        document.body.appendChild(foot);
 
         drawer = document.createElement("div");
         drawer.className = "preview-drawer";
@@ -728,6 +737,7 @@
 
         fill(drawer, card, null);
         drawer.style.setProperty("--tone", card.tone || "#161616");
+        foot.style.setProperty("--tone", card.tone || "#161616");
         drawer.setAttribute(
             "aria-label",
             el.textContent.replace(/\s+/g, " ").trim() + " preview"
@@ -767,6 +777,7 @@
 
         drawer.style.transform = "";
         drawer.classList.add("is-open");
+        foot.classList.add("is-tinted");
         (card.url ? openLink : closeButton).focus({ preventScroll: true });
         warmImages();
     }
@@ -777,6 +788,7 @@
         active = null;
         el.classList.remove("is-active");
         drawer.classList.remove("is-open");
+        foot.classList.remove("is-tinted");
         drawer.style.transform = "";
         stopVideo(drawer);
         setRecede(0);

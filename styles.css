@@ -604,6 +604,26 @@ html:not(.sheet-open) .preview-edge {
     display: none;
 }
 
+/* Never painted (the mask hides it); Safari only reads its background-color.
+   The height changes with the colour so that Safari looks again at once. */
+.preview-foot {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 21;
+    height: 13px;
+    background-color: transparent;
+    -webkit-mask-image: linear-gradient(transparent, transparent);
+    mask-image: linear-gradient(transparent, transparent);
+    pointer-events: none;
+}
+
+.preview-foot.is-tinted {
+    height: 12px;
+    background-color: var(--tone, #161616);
+}
+
 /* 12px tall with 5px on screen: about the least Safari will read. */
 .preview-edge {
     position: fixed;
