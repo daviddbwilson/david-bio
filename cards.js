@@ -214,7 +214,7 @@ window.DB_CARDS = {
         url: "https://hex.tech/blog/we-used-evals-to-improve-ai-feature/",
         badge: "Blog post",
         icon: "post",
-        caption: "Wrong chart edits: 21% down to 3%.",
+        caption: "I built the evals. Wrong chart edits: 21% down to 3%.",
         // The post's header image.
         image: "assets/cards/08-hex-evals-header.webp",
         width: 800,
