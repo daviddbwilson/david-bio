@@ -39,6 +39,11 @@
             '<svg viewBox="0 0 14 14" width="14" height="14" fill="none" stroke="currentColor" stroke-linejoin="round" aria-hidden="true">' +
             '<path d="M4.25 2.9v8.2c0 .45.5.72.88.48l6.3-4.1a.57.57 0 0 0 0-.96l-6.3-4.1a.57.57 0 0 0-.88.48Z"/>' +
             "</svg>",
+        // An arrow pointing up and to the right: a link to a website.
+        site:
+            '<svg viewBox="0 0 14 14" width="14" height="14" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+            '<path d="M11.5 9.39V2.5M11.5 2.5H4.61M11.5 2.5 2.5 11.5"/>' +
+            "</svg>",
         // A game controller, drawn on a 24 grid and cropped so it reads at the
         // same size as the other 14px icons.
         game:
@@ -168,8 +173,11 @@
     var warmed = false;
     var warmVideos = [];
 
-    // Take the looping video, if there is one, out of a figure.
+    // Take the looping video or the panning sheet, if there is one, out of
+    // a figure.
     function stopVideo(root) {
+        var pan = root && root.querySelector(".preview-pan");
+        if (pan) pan.remove();
         var video = root && root.querySelector(".preview-media video");
         if (!video) return;
         video.pause();
@@ -191,6 +199,9 @@
         idle(function () {
             Object.keys(cards).forEach(function (key) {
                 if (cards[key].image) new Image().src = cards[key].image;
+                if (cards[key].pan && !reduceMotion.matches) {
+                    new Image().src = cards[key].pan.image;
+                }
                 if (cards[key].video && !reduceMotion.matches) {
                     // Fetched here so the browser has it cached when asked.
                     var v = document.createElement("video");
@@ -274,6 +285,34 @@
                 media.appendChild(video);
                 var playing = video.play();
                 if (playing && playing.catch) playing.catch(function () {});
+            }
+            // A sheet of pictures, repeated in every direction, drifts up
+            // and to the left under the card. It starts where the image is,
+            // and after moving a whole number of sheets it is back where it
+            // began, so the loop has no join.
+            if (card.pan && !reduceMotion.matches) {
+                var sheet = card.pan;
+                var down = sheet.down || 1;
+                // Two sheets wide, and tall enough to cover the card for the
+                // whole journey.
+                var rows = down + 2;
+                var pan = document.createElement("div");
+                pan.className = "preview-pan";
+                pan.setAttribute("aria-hidden", "true");
+                pan.style.width = sheet.across * 200 + "%";
+                pan.style.aspectRatio =
+                    sheet.width * 2 + " / " + sheet.height * rows;
+                pan.style.backgroundImage = 'url("' + sheet.image + '")';
+                pan.style.backgroundSize = "50% " + 100 / rows + "%";
+                pan.style.setProperty("--pan-x", "-50%");
+                pan.style.setProperty("--pan-y", (-100 * down) / rows + "%");
+                pan.style.animationDuration = (sheet.seconds || 40) + "s";
+                var tile = new Image();
+                tile.onload = function () {
+                    pan.classList.add("is-playing");
+                };
+                tile.src = sheet.image;
+                media.appendChild(pan);
             }
         } else {
             media.hidden = true;

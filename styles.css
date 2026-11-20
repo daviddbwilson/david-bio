@@ -396,6 +396,32 @@ button:focus-visible {
     opacity: 1;
 }
 
+/* A sheet of pictures that drifts under the card (pan in cards.js). Its size
+   and how far it travels are set in card-preview.js. */
+.preview-pan {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-repeat: repeat;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+    will-change: transform;
+}
+
+.preview-pan.is-playing {
+    opacity: 1;
+    animation-name: preview-pan;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes preview-pan {
+    to {
+        transform: translate3d(var(--pan-x), var(--pan-y), 0);
+    }
+}
+
 .preview-figure::after {
     content: "";
     position: absolute;

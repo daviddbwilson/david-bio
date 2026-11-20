@@ -10,7 +10,8 @@
  *            is what works when JavaScript is off.
  *   badge    One or two words for what the link is: "Demo", "Talk",
  *            "Testimonial", "Blog post", "Case study".
- *   icon     "video", "post", "play" or "game": the icon shown beside the badge.
+ *   icon     "video", "post", "play", "game" or "site": the icon shown beside
+ *            the badge.
  *   caption  A few words, shown on the image. Keep it to one short line.
  *            Leave it out to show the image on its own. It can also be a
  *            function that returns the words, for a caption that changes,
@@ -26,6 +27,17 @@
  *            image. The image should be the video's first frame, at the same
  *            shape: it shows until the video starts, and on its own for
  *            people who have asked for reduced motion.
+ *   pan      Optional. A sheet of pictures that drifts diagonally under the
+ *            card for ever, repeated in every direction. The image should be
+ *            the sheet's top left corner, so the drift starts from it.
+ *              image          Path to the sheet. Its right edge has to join
+ *                             up with its left, and its bottom with its top.
+ *              width, height  The sheet's pixel size.
+ *              across         How many card widths one sheet spans.
+ *              down           How many sheets it moves down while moving one
+ *                             across. Pick the number that gets closest to
+ *                             a 45 degree drift.
+ *              seconds        How long one loop takes.
  *   width, height  The image's pixel size, so the card is the right shape
  *            before the image has loaded.
  *   tone     A dark colour taken from the bottom edge of the image. The image
@@ -149,6 +161,21 @@ window.DB_CARDS = {
         tone: "#1b1918",
         alt: "Three overlapping LinkedIn Rewind cards, each summing up a person's year in posts, reactions and a top quote",
     },
+    // The company's home page, so the button names where it goes.
+    hex: {
+        url: "https://hex.tech",
+        badge: "Website",
+        icon: "site",
+        action: "Visit Hex website",
+        // No caption: the picture carries the words. It is put together
+        // from Hex's home page in its dark colours: the logo, the headline,
+        // and nine of the customer logos shown under it.
+        image: "assets/cards/14-hex-home.webp",
+        width: 800,
+        height: 450,
+        tone: "#14151a",
+        alt: "The Hex logo and its headline, 'The Analytics platform for humans and agents', above the logos of nine customers: Anthropic, Sierra, Lovable, Ramp, Figma, Cursor, Mercor, AWS and Notion",
+    },
     gda: {
         url: "https://hex.tech/blog/introducing-generative-data-apps/",
         badge: "Blog post",
@@ -160,6 +187,23 @@ window.DB_CARDS = {
         height: 417,
         tone: "#1b1819",
         alt: "Title card from the Hex launch video: Introducing Generative Data Apps",
+    },
+    // A colleague's post about work of mine, so the button says whose it is.
+    controls: {
+        url: "https://hex.tech/blog/generative-chart-controls/",
+        badge: "Blog post",
+        icon: "post",
+        action: "Read Olivia's post",
+        caption: "Breaking the tradeoff between code and control",
+        // The video is the first demo clip from the post, smaller and
+        // silent: a chart's title, fill and height changed from the Style
+        // panel.
+        image: "assets/cards/15-hex-chart-controls.webp",
+        video: "assets/cards/15-hex-chart-controls.mp4",
+        width: 720,
+        height: 512,
+        tone: "#17171c",
+        alt: "A revenue dashboard in Hex with the Style panel open beside a line chart. In the clip the chart is renamed, filled in and made taller from the panel.",
     },
     evals: {
         url: "https://hex.tech/blog/we-used-evals-to-improve-ai-feature/",
@@ -199,6 +243,16 @@ window.DB_CARDS = {
         // A figure from the post: the first four pictures on the autopilot's
         // contact sheet.
         image: "assets/cards/13-takeoff-autopilot.webp",
+        // The whole contact sheet, twelve pictures, four across. Two sheets
+        // down for each one across is a drift of 43 degrees.
+        pan: {
+            image: "assets/cards/13-takeoff-autopilot-sheet.webp",
+            width: 1712,
+            height: 798,
+            across: 2,
+            down: 2,
+            seconds: 40,
+        },
         width: 800,
         height: 497,
         tone: "#101216",

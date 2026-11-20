@@ -31,8 +31,10 @@ Each of these links shows a preview picture with a short caption and a badge on 
 | AI workflow builder | Demo (video) | Hunch. A canvas for chaining AI models. |
 | agents | Blog post | Before OpenClaw. Early is still wrong :( |
 | project | Talk (video) | LinkedIn Rewind. Idea to production in four days. |
+| Hex | Website (button: "Visit Hex website") | none (the picture carries Hex's headline, "The Analytics platform for humans and agents", and nine customer logos) |
 | generative data apps | Blog post | My first product launch at Hex |
-| evals | Blog post | Wrong chart edits: 21% down to 3%. |
+| precise control | Blog post (button: "Read Olivia's post") | Breaking the tradeoff between code and control (a looping silent demo clip from the post plays) |
+| the details | Blog post | Wrong chart edits: 21% down to 3%. |
 | Takeoff | Play | none (a looping silent trailer plays) |
-| how I made it | Blog post | Six evenings, and a joy to make |
+| how I made it | Blog post | Six evenings, and a joy to make (the picture drifts across the autopilot's contact sheet) |
 | wife and two kids (no underline) | none (picture only, not a link) | Trick or treat 🃏 |

@@ -52,8 +52,8 @@
             ]
         }
         </script>
-        <link rel="stylesheet" href="assets/fonts/geist.css?v=20261120c" />
-        <link rel="stylesheet" href="styles.css?v=20261120c" />
+        <link rel="stylesheet" href="assets/fonts/geist.css?v=20261120d" />
+        <link rel="stylesheet" href="styles.css?v=20261120d" />
         <link
             rel="icon"
             type="image/png"
@@ -161,7 +161,12 @@
             </ul>
             <p>
                 I joined
-                <a href="https://hex.tech" target="_blank" rel="noopener"
+                <a
+                    class="card-link"
+                    data-card="hex"
+                    href="https://hex.tech"
+                    target="_blank"
+                    rel="noopener"
                     >Hex</a
                 >
                 in early 2026 to reimagine how we build dashboards. I took our
@@ -177,6 +182,8 @@
                 the evals. Since then I've worked on the last mile: the AI builds
                 the app, but people still need
                 <a
+                    class="card-link"
+                    data-card="controls"
                     href="https://hex.tech/blog/generative-chart-controls/"
                     target="_blank"
                     rel="noopener"
@@ -250,15 +257,29 @@
         </main>
         </div>
         <script>
+            // The address is not in the page. It is put together, from pieces
+            // written backwards, only when someone points at, touches or
+            // tabs to the Email link, so a program that reads the page (even
+            // one that runs its scripts) doesn't find a mailto: address.
             (function () {
-                var e = "daviddbwilson";
-                var d = "gmail.com";
                 var link = document.getElementById("email-link");
-                link.href = "mailto:" + e + "@" + d;
+                var pieces = ["moc.liamg", "nosliwbddivad"];
+                function back(s) {
+                    return s.split("").reverse().join("");
+                }
+                function arm() {
+                    link.href =
+                        "mailto:" + back(pieces[1]) + "\u0040" + back(pieces[0]);
+                }
+                ["pointerenter", "pointerdown", "touchstart", "focus", "click"].forEach(
+                    function (type) {
+                        link.addEventListener(type, arm, { once: true });
+                    }
+                );
             })();
         </script>
-        <script src="sf-weather.js?v=20261120c" defer></script>
-        <script src="cards.js?v=20261120c" defer></script>
-        <script src="card-preview.js?v=20261120c" defer></script>
+        <script src="sf-weather.js?v=20261120d" defer></script>
+        <script src="cards.js?v=20261120d" defer></script>
+        <script src="card-preview.js?v=20261120d" defer></script>
     </body>
 </html>
