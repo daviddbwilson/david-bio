@@ -5,7 +5,8 @@
  * preview. With a mouse, an image card rises out of the hovered word and
  * sways on a springy stem as the pointer moves. On touch devices, a tap opens
  * the same picture in a sheet at the bottom of the screen, and the page
- * shrinks back behind it.
+ * shrinks back behind it. Swiping the sheet sideways (or the left and right
+ * arrow keys) moves to the next or the previous preview on the page.
  *
  * Without this script every link is still an ordinary link.
  */
@@ -553,6 +554,8 @@
     var RECEDE_RADIUS = 14; // px
     var SCRIM = 0.45; // how dark the page gets
     var FLICK = 0.4; // px per ms; a faster downward flick closes the sheet
+    var SWIPE_OUT_MS = 170; // the sheet leaving sideways for the next preview
+    var SWIPE_IN_MS = 300; // the next preview arriving from the other side
     var CLEARANCE = 64; // px kept between the tapped word and the sheet
 
     var root = document.documentElement;
@@ -564,6 +567,7 @@
     var closeButton = null;
     var active = null; // the trigger whose preview is in the sheet
     var drag = null;
+    var swapping = false; // one preview is sliding out for another
     var swallowClick = false;
     var receded = false; // the page is pinned and pushed back
     var restoreTimer = 0;
@@ -623,12 +627,22 @@
             setTimeout(closeDrawer, 0);
         });
 
-        // Drag the sheet down to dismiss it. The drag starts on the sheet, but
-        // the finger can leave it, so the rest is followed on the document.
+        // Drag the sheet down to dismiss it, or sideways for the next or the
+        // previous preview. The drag starts on the sheet, but the finger can
+        // leave it, so the rest is followed on the document.
         drawer.addEventListener("pointerdown", function (e) {
             // The sheet can still be touched while it slides away after closing.
-            if (e.button || drag || !active) return;
-            drag = { id: e.pointerId, y: e.clientY, t: e.timeStamp, dy: 0, moved: false };
+            if (e.button || drag || swapping || !active) return;
+            drag = {
+                id: e.pointerId,
+                x: e.clientX,
+                y: e.clientY,
+                t: e.timeStamp,
+                dx: 0,
+                dy: 0,
+                moved: false,
+                sideways: false,
+            };
             document.addEventListener("pointermove", onDragMove, true);
             document.addEventListener("pointerup", onDragEnd, true);
             document.addEventListener("pointercancel", onDragEnd, true);
@@ -648,12 +662,25 @@
 
     function onDragMove(e) {
         if (!drag || e.pointerId !== drag.id) return;
+        var dx = e.clientX - drag.x;
         var dy = e.clientY - drag.y;
         if (!drag.moved) {
-            if (Math.abs(dy) < 6) return;
+            if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
             drag.moved = true;
+            // Whichever way the finger set off is the way the sheet goes.
+            drag.sideways = Math.abs(dx) > Math.abs(dy);
             drawer.classList.add("is-dragging");
             root.classList.add("sheet-dragging");
+        }
+        if (drag.sideways) {
+            drag.dx = dx;
+            // Past the first or the last preview there is nothing to bring
+            // in, so the sheet gives a little and resists.
+            if (!neighbour(dx < 0 ? 1 : -1)) {
+                dx = (dx < 0 ? -1 : 1) * 36 * (1 - 1 / (Math.abs(dx) / 80 + 1));
+            }
+            drawer.style.transform = "translateX(" + dx.toFixed(1) + "px)";
+            return;
         }
         drag.dy = dy;
         if (dy >= 0) {
@@ -682,7 +709,19 @@
         setTimeout(function () {
             swallowClick = false;
         }, 50);
-        var speed = d.dy / Math.max(1, e.timeStamp - d.t); // px per ms
+        var held = Math.max(1, e.timeStamp - d.t);
+        if (d.sideways) {
+            var step = d.dx < 0 ? 1 : -1;
+            var next = neighbour(step);
+            var across = Math.abs(d.dx);
+            var swiped =
+                across > drawer.offsetWidth * 0.25 ||
+                (across > 16 && across / held > FLICK);
+            if (next && swiped) swapTo(next, step);
+            else drawer.style.transform = "";
+            return;
+        }
+        var speed = d.dy / held; // px per ms
         var far = d.dy > sheetHeight * 0.3;
         var flicked = d.dy > 16 && speed > FLICK;
         if (far || flicked) {
@@ -691,6 +730,61 @@
             drawer.style.transform = "";
             setRecede(1);
         }
+    }
+
+    // The preview after (step 1) or before (step -1) the open one, in the
+    // order the words come on the page.
+    function neighbour(step) {
+        return triggers[triggers.indexOf(active) + step] || null;
+    }
+
+    // Where the top of a word would be if the page were not pushed back.
+    function restingTop(el) {
+        var top = el.getBoundingClientRect().top;
+        if (!receded) return top;
+        return (top - pageShift) / RECEDE_SCALE;
+    }
+
+    // Change the open preview for another. The sheet leaves to one side and
+    // the new one arrives from the other, as if they sat in a row.
+    function swapTo(el, step) {
+        function show() {
+            // Bring the new word into view if it is above the screen. (One
+            // below it is handled by openDrawer, which slides the page up.)
+            var above = restingTop(el) - 32;
+            if (above < 0) page.scrollTop += above;
+            openDrawer(el);
+        }
+        if (reduceMotion.matches) {
+            show();
+            return;
+        }
+        var width = drawer.offsetWidth;
+        var ease = "cubic-bezier(0.32, 0.72, 0, 1)";
+        swapping = true;
+        drawer.classList.add("is-swapping");
+        drawer.style.transition = "transform " + SWIPE_OUT_MS + "ms ease-in";
+        drawer.style.transform = "translateX(" + -step * width + "px)";
+        setTimeout(function () {
+            if (!active) {
+                // Closed in the meantime.
+                drawer.style.transition = "";
+                drawer.classList.remove("is-swapping");
+                swapping = false;
+                return;
+            }
+            drawer.style.transition = "none";
+            show();
+            drawer.style.transform = "translateX(" + step * width + "px)";
+            void drawer.offsetWidth; // start the slide in from here
+            drawer.style.transition = "transform " + SWIPE_IN_MS + "ms " + ease;
+            drawer.style.transform = "";
+            setTimeout(function () {
+                drawer.style.transition = "";
+                drawer.classList.remove("is-swapping");
+                swapping = false;
+            }, SWIPE_IN_MS);
+        }, SWIPE_OUT_MS);
     }
 
     // The picture is as wide as the sheet and as tall as its shape needs,
@@ -828,6 +922,8 @@
         el.classList.remove("is-active");
         drawer.classList.remove("is-open");
         foot.classList.remove("is-tinted");
+        // In case it is closed part way through a sideways swap.
+        drawer.style.transition = "";
         drawer.style.transform = "";
         stopVideo(drawer);
         setRecede(0);
@@ -868,6 +964,16 @@
         if (e.key === "Escape") {
             if (active) closeDrawer();
             else if (shown) hideCard();
+            return;
+        }
+        // The arrow keys do what a sideways swipe does.
+        if (active && !swapping && (e.key === "ArrowRight" || e.key === "ArrowLeft")) {
+            var step = e.key === "ArrowRight" ? 1 : -1;
+            var next = neighbour(step);
+            if (next) {
+                e.preventDefault();
+                swapTo(next, step);
+            }
             return;
         }
         // Keep Tab inside the drawer while it is open.

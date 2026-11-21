@@ -672,6 +672,12 @@ html:not(.sheet-open) .preview-edge {
     transition: none;
 }
 
+/* While one preview slides out sideways for another, the picture takes its
+   new height at once, out of sight. */
+.preview-drawer.is-swapping .preview-media {
+    transition: none;
+}
+
 .preview-drawer .preview-figure {
     padding-bottom: 6px;
     border-radius: 0;
