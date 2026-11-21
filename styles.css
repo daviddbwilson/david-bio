@@ -662,6 +662,11 @@ html:not(.sheet-open) .preview-edge {
     pointer-events: none;
 }
 
+/* The sheet takes focus when it opens; it needs no ring of its own. */
+.preview-drawer:focus {
+    outline: none;
+}
+
 .preview-drawer.is-open {
     visibility: visible;
     transform: none;

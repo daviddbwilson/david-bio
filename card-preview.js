@@ -607,6 +607,8 @@
         drawer.className = "preview-drawer";
         drawer.setAttribute("role", "dialog");
         drawer.setAttribute("aria-modal", "true");
+        // The sheet itself takes focus when it opens (see openDrawer).
+        drawer.tabIndex = -1;
         // The close button is for keyboards and screen readers; it only shows
         // when a keyboard focuses it. On touch: swipe down or tap outside.
         drawer.innerHTML =
@@ -911,7 +913,10 @@
         drawer.style.transform = "";
         drawer.classList.add("is-open");
         foot.classList.add("is-tinted");
-        (card.url ? openLink : closeButton).focus({ preventScroll: true });
+        // Focus goes to the sheet, not to a button on it. iPhones draw the
+        // keyboard focus ring on a button that a script focuses, which made
+        // the Close button appear on previews with no link.
+        drawer.focus({ preventScroll: true });
         warmImages();
     }
 
